@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/view/Dashbord/widject.dart';
+import 'package:mobile_servies/admin/view/Dashbord/widject.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
