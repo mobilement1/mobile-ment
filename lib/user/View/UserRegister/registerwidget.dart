@@ -29,7 +29,7 @@ Widget buildTextField({
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+            borderSide: const BorderSide(color: Colors.blue, width: 2.0),  
             borderRadius: BorderRadius.circular(12),
           ),
           filled: true,
