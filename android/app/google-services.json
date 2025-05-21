@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "648629070631",
+    "project_id": "mobilemend-aa9c3",
+    "storage_bucket": "mobilemend-aa9c3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648629070631:android:3d36da658841b72a0c5702",
+        "android_client_info": {
+          "package_name": "com.example.mobile_servies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz2f1uIN7zESNIlud1H0c71rLebxsGes8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
