@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/controller/bookingprovider.dart';
+import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
 import 'package:mobile_servies/firebase_options.dart';
 import 'package:mobile_servies/user/View/StartScreen/start.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => BookingProvider())
         ChangeNotifierProvider(create: (context)=>UserAuthProvider())
       ],
       child: MaterialApp(
