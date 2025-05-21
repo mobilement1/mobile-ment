@@ -1,0 +1,2 @@
+C:/Users/Munavar/Desktop/flutter projects/mobile_servies/android/app/.cxx/Debug/w3961i5e/x86/CMakeFiles/edit_cache.dir
+C:/Users/Munavar/Desktop/flutter projects/mobile_servies/android/app/.cxx/Debug/w3961i5e/x86/CMakeFiles/rebuild_cache.dir
