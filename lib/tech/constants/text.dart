@@ -1,0 +1,29 @@
+class TextConsts{
+  static const mobile="Mobile";
+  static const mend="Mend";
+  static const techDashBoard="Technician Dashboard";
+  static const revenueAndCompledtedBookings="Revenue and Completed Bookings Overview";
+  static const monthlyRevenueAndbookingCount="Monthly revenue and completed bookings count";
+  static const assignedTasks= 'Assigned Tasks';
+  static const inProgress= 'In Progress';
+  static const completed= 'Task Completed';
+  static const profile= 'Profile';
+  static const verifiedExpert= 'Verified Expert';
+  static const locationOfTech= "Kakkancherry,Malappuram";
+  static const availableNow= "Available Now";
+  static const online= "Online";
+  static const changeStatus= "Change Status";
+  static const jobsDoneCountProfile= "7";
+  static const ratingsProfile= "4.5";
+  static const experienceProfile= "2";
+  static const jobsDone= "Jobs Done";
+  static const ratings= "Ratings";
+  static const experience= "Experience";
+  static const johnAnderson= "John Anderson";
+  static const kakkancheriMalappuram= "Kakkancheri, Malappuram";
+  static const specializations= "Specializations";
+  static const usuallyRespondsin30minutes="Usually Responds in 30 minutes";
+  static const newtaskassignedbyUser="New task assigned by User";
+  static const currentAvailabilty="Current Availability";
+  static const monFri="Mon-Fri, 9AM-6PM";
+}
