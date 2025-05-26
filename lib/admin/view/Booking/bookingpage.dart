@@ -143,6 +143,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: "Emma Johnson",
                 service: "Screen Replacement",
+                Device:"S23 Ultra",
                 date: "May 10, 2025",
                 amount: 149.99,
                 status: "Completed",
@@ -150,6 +151,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: "Michael Brown",
                 service: "Battery Replacement",
+                Device: "iPhone13",
                 date: "May 11, 2025",
                 amount: 79.99,
                 status: "In Progress",
@@ -158,6 +160,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: "Sarah Davis",
                 service: "Data Recovery",
+                Device: "Nokia",
                 date: "May 12, 2025",
                 amount: 199.99,
                 status: "Scheduled",
@@ -167,6 +170,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: 'Jabeel',
                 service: 'Screen replacement',
+                Device: "Vivo",
                 date: 'May 18,2025',
                 amount: 799,
                 status: 'Pending',
@@ -262,6 +266,7 @@ class _BookingpageState extends State<Bookingpage> {
   Widget _buildBookingCard({
     required String customerName,
     required String service,
+    required String Device,
     required String date,
     required double amount,
     required String status,

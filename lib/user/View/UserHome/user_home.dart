@@ -3,9 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/constants/imageconstants.dart';
-import 'package:mobile_servies/constants/textconstants.dart';
-import 'package:mobile_servies/decoration/decoration.dart';
+import 'package:mobile_servies/user/constants/imageconstants.dart';
+import 'package:mobile_servies/user/constants/textconstants.dart';
+import 'package:mobile_servies/user/decoration/decoration.dart';
 import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';

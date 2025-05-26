@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/constants/textconstants.dart';
 import 'package:mobile_servies/user/View/UserBooking/user_booking.dart';
 import 'package:mobile_servies/user/View/UserDevice/user_device.dart';
 import 'package:mobile_servies/user/View/UserHome/user_home.dart';
 import 'package:mobile_servies/user/View/UserService/user_service.dart';
+import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/view/useraccount/user_profile.dart';
 
 class UserBottom extends StatefulWidget {

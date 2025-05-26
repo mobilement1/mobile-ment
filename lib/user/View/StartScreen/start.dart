@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/constants/imageconstants.dart';
-import 'package:mobile_servies/constants/textconstants.dart';
+import 'package:mobile_servies/user/constants/imageconstants.dart';
+import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/View/UserRegister/user_register.dart';
 import 'package:mobile_servies/user/view/UserHome/user_homewidget.dart';

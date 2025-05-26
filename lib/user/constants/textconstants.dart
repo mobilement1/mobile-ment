@@ -12,7 +12,7 @@ class TextConstants {
  static const homeOroffice='''Professional, convenient repairs at your home or office. No need to visit a store or ship your device.''';
  static const book="Book a Repair Now";
  static const view="View Services";
- static const warranty="90-Day Wrranty";
+ static const warranty="90-Day Warranty";
  static const repair="Fast Repairs";
  static const onsite="On-site Service";
  static const book1="Book a Repair";
