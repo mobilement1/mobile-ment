@@ -5,7 +5,7 @@ import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/View/UserRegister/registerwidget.dart';
 import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
-import 'package:mobile_servies/user/view/UserHome/user_homewidget.dart';
+import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +19,8 @@ class UserRegister extends StatefulWidget {
 class _UserRegisterState extends State<UserRegister> {
   final _formKey = GlobalKey<FormState>();
 
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +65,8 @@ class _UserRegisterState extends State<UserRegister> {
               child: SingleChildScrollView(
                 child: Consumer<UserAuthProvider>(
                   builder: (context, authProvider, child) {
+                    final password = authProvider.passwordController.text;
+
                     return Form(
                       key: _formKey,
                       child: Column(
@@ -72,49 +76,58 @@ class _UserRegisterState extends State<UserRegister> {
                             label: 'Name',
                             controller: authProvider.nameController,
                             hint: 'Name',
-                            validator: (val) => SimpleValidator.validateName(val ?? ''),
+                            validator: (val) =>
+                                SimpleValidator.validateName(val ?? ''),
                           ),
                           const Gap(10),
                           buildTextField(
                             label: 'UserName',
                             controller: authProvider.userNameController,
                             hint: 'UserName',
-                            validator: (val) => SimpleValidator.validateUsername(val ?? ''),
+                            validator: (val) =>
+                                SimpleValidator.validateUsername(val ?? ''),
                           ),
                           const Gap(10),
                           buildTextField(
                             label: 'Phone',
                             controller: authProvider.phoneController,
                             hint: 'Phone',
-                            validator: (val) => SimpleValidator.validatePhone(val ?? ''),
+                            validator: (val) =>
+                                SimpleValidator.validatePhone(val ?? ''),
                           ),
                           const Gap(10),
                           buildTextField(
                             label: 'Email',
                             controller: authProvider.emailController,
                             hint: 'Email',
-                            validator: (val) => SimpleValidator.validateEmail(val ?? ''),
+                            validator: (val) =>
+                                SimpleValidator.validateEmail(val ?? ''),
                           ),
                           const Gap(10),
                           buildTextField(
                             label: 'Password',
                             controller: authProvider.passwordController,
                             obscureText: true,
-                            validator: (val) => SimpleValidator.validatePassword(val ?? ''),
+                            validator: (val) =>
+                                SimpleValidator.validatePassword(val ?? ''),
                             isPasswordHidden: authProvider.isPasswordHidden,
-                          onTogglePassword: authProvider.togglePasswordVisibility,
+                            onTogglePassword:
+                                authProvider.togglePasswordVisibility,
                           ),
                           const Gap(10),
                           buildTextField(
                             label: 'Confirm Password',
                             controller: authProvider.confirmPasswordController,
                             obscureText: true,
-                            validator: (val) => SimpleValidator.validateConfirmPassword(
-                              authProvider.passwordController.text,
+                            validator: (val) =>
+                                SimpleValidator.validateConfirmPassword(
+                              password,
                               val ?? '',
                             ),
-                            isPasswordHidden: authProvider.isConfirmPasswordHidden,
-                          onTogglePassword: authProvider.toggleConfirmPasswordVisibility,
+                            isPasswordHidden:
+                                authProvider.isConfirmPasswordHidden,
+                            onTogglePassword:
+                                authProvider.toggleConfirmPasswordVisibility,
                           ),
                           const Gap(10),
                           if (authProvider.errorMessage.isNotEmpty)
@@ -129,7 +142,10 @@ class _UserRegisterState extends State<UserRegister> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               gradient: const LinearGradient(
-                                colors: [Color(0xFF2980B9), Color(0xFF2C3E50)],
+                                colors: [
+                                  Color(0xFF2980B9),
+                                  Color(0xFF2C3E50)
+                                ],
                               ),
                             ),
                             child: Material(
@@ -137,13 +153,23 @@ class _UserRegisterState extends State<UserRegister> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
                                 onTap: () async {
-                                  if (_formKey.currentState?.validate() ?? false) {
-                                    await authProvider.registerUser(context);
-                                    if (authProvider.errorMessage.isEmpty) {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    final response = await authProvider
+                                        .registerUser(context);
+                                    if (response == 'success') {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => UserBottom(),
+                                          builder: (context) => UserLogin(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(response),
+                                          backgroundColor: Colors.red,
                                         ),
                                       );
                                     }
@@ -158,12 +184,16 @@ class _UserRegisterState extends State<UserRegister> {
                                   }
                                 },
                                 child: Center(
-                                  child: text(
-                                    TextConstants.sighup,
-                                    Colors.white,
-                                    18,
-                                    FontWeight.bold,
-                                  ),
+                                  child: authProvider.isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : text(
+                                          TextConstants.sighup,
+                                          Colors.white,
+                                          18,
+                                          FontWeight.bold,
+                                        ),
                                 ),
                               ),
                             ),
@@ -183,14 +213,14 @@ class _UserRegisterState extends State<UserRegister> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>  UserLogin(),
+                                      builder: (context) => UserLogin(),
                                     ),
                                   );
                                 },
                                 child: text(
                                   TextConstants.sin,
                                   Colors.blue,
-                                  15,
+                                  18,
                                   FontWeight.bold,
                                 ),
                               ),

@@ -12,9 +12,9 @@ Widget buildTextField({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
+      Text(       
         label,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        style:  TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       ),
       const SizedBox(height: 6),
       TextFormField(
@@ -29,7 +29,7 @@ Widget buildTextField({
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+            borderSide: const BorderSide(color: Colors.blue, width: 2.0),  
             borderRadius: BorderRadius.circular(12),
           ),
           filled: true,

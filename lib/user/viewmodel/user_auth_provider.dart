@@ -20,7 +20,7 @@ class UserAuthProvider extends ChangeNotifier {
   final loginPasswordController = TextEditingController();
 
   String errorMessage = '';
-
+  String successMessage = ''; 
   bool isLoading = false;
 
   void setLoading(bool value) {
@@ -28,31 +28,31 @@ class UserAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  bool _isPasswordHidden = true;
-  bool get isPasswordHidden => _isPasswordHidden;
+  bool isPasswordHidden = true;
+ 
   void togglePasswordVisibility() {
-    _isPasswordHidden = !_isPasswordHidden;
+    isPasswordHidden = !isPasswordHidden;
     notifyListeners();
   }
 
-  bool _isConfirmPasswordHidden = true;
-  bool get isConfirmPasswordHidden => _isConfirmPasswordHidden;
+  bool isConfirmPasswordHidden = true;
+ 
   void toggleConfirmPasswordVisibility() {
-    _isConfirmPasswordHidden = !_isConfirmPasswordHidden;
+    isConfirmPasswordHidden = !isConfirmPasswordHidden;
     notifyListeners();
   }
 
   /// Clear any error message
-  void clearError() {
-    if (errorMessage.isNotEmpty) {
-      errorMessage = '';
-      notifyListeners();
-    }
+  void clearMessages() {
+    errorMessage = '';
+    successMessage = '';
+    notifyListeners();
   }
 
   /// Register User
   Future<String> registerUser(BuildContext context) async {
+    setLoading(true);
+     clearMessages();
     final name = nameController.text.trim();
     final username = userNameController.text.trim();
     final phone = phoneController.text.trim();
@@ -72,7 +72,7 @@ class UserAuthProvider extends ChangeNotifier {
     for (final result in validations) {
       if (result != null) {
         errorMessage = result;
-        notifyListeners();
+        setLoading(false);
         return errorMessage;
       }
     }
@@ -86,15 +86,25 @@ class UserAuthProvider extends ChangeNotifier {
     );
 
     final response = await _authService.registerUser(user);
-    errorMessage = response == "success" ? '' : response;
-    notifyListeners();
+     if (response == "success") {
+      successMessage = 'Registration Successful!';
+      errorMessage = '';
+    } else {
+      errorMessage = response;
+      successMessage = '';
+    }
+
+    setLoading(false);
+   notifyListeners();
     return response;
   }
 
   /// Login User
   Future<String> loginUser(BuildContext context) async {
+    setLoading(true);
+    clearMessages();
     final username = loginUserNameController.text.trim();
-    final password = loginPasswordController.text;
+    final password = loginPasswordController.text.trim();
 
     final validations = [
       SimpleValidator.validateUsername(username),
@@ -104,7 +114,8 @@ class UserAuthProvider extends ChangeNotifier {
     for (final result in validations) {
       if (result != null) {
         errorMessage = result;
-        notifyListeners();
+        setLoading(false);
+            notifyListeners();
         return errorMessage;
       }
     }
@@ -112,8 +123,17 @@ class UserAuthProvider extends ChangeNotifier {
     final user = LoginModel(userName: username, password: password);
     final response = await _authService.loginUser(user);
 
-    errorMessage = response == "success" ? '' : response;
+   if (response == "success") {
+      successMessage = 'Login Successful!';
+      errorMessage = '';
+    } else {
+      errorMessage = response;
+      successMessage = '';
+    }
+    setLoading(false);
+
     notifyListeners();
+    
     return response;
   }
 
@@ -125,7 +145,7 @@ class UserAuthProvider extends ChangeNotifier {
   /// Check if user is logged in
   Future<bool> isUserLoggedIn() async {
     final token = await _authService.getToken();
-    return token != null;
+    return token != null&&token.isNotEmpty;
   }
 
   /// Logout
@@ -146,6 +166,19 @@ class UserAuthProvider extends ChangeNotifier {
     loginUserNameController.clear();
     loginPasswordController.clear();
     errorMessage = '';
+      successMessage = '';
     notifyListeners();
   }
+
+  void disposeControllers() {
+  nameController.dispose();
+  userNameController.dispose();
+  phoneController.dispose();
+  emailController.dispose();
+  passwordController.dispose();
+  confirmPasswordController.dispose();
+  loginUserNameController.dispose();
+  loginPasswordController.dispose();
+}
+
 }

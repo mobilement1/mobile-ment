@@ -5,8 +5,8 @@ Widget text(String text,Color color,double size,FontWeight fontWeight){
   fontSize: size,
   fontWeight: fontWeight),);
 }
-Widget icon(IconData icon){
-  return Icon(icon,color: Colors.blue);
+Widget icon(IconData icon,Color color){
+  return Icon(icon,color:color);
 }
 
 
