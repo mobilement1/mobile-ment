@@ -7,6 +7,9 @@ import 'package:mobile_servies/admin/view/Device/devicepage.dart';
 import 'package:mobile_servies/admin/view/Servicess/service.dart';
 import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
 import 'package:mobile_servies/admin/view/Technicians/techician.dart';
+import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
+import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class Dashbordpage extends StatelessWidget {
   const Dashbordpage({super.key});
@@ -249,10 +252,17 @@ class Dashbordpage extends StatelessWidget {
                         builder: (context) => Techniciarequstpage()));
               },
             ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text("Logout", style: TextStyle(color: Colors.white)),
-              onTap: () {},
+            Consumer<UserAuthProvider>(
+              builder: (context,authpro,child) {
+                return ListTile(
+                  leading: Icon(Icons.logout, color: Colors.white),
+                  title: Text("Logout", style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    authpro.logoutUser();
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>UserLogin()), (Route)=>false);
+                  },
+                );
+              }
             ),
           ],
         ),

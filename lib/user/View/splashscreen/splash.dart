@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
 import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
@@ -37,8 +40,10 @@ class _SplashState extends State<Splash> {
     await Future.delayed(const Duration(seconds: 5));
    if (!mounted) return; 
    final prefs = await SharedPreferences.getInstance();
-  final rawToken = prefs.getString('auth_token');
-  debugPrint("🔍 [SharedPrefs] raw auth_token = $rawToken");
+  final token = prefs.getString('auth_token');
+   final userRole = prefs.getString('user_role');
+     log(" [SharedPrefs] user_role = $userRole");
+  log(" [SharedPrefs]  auth_token = $token");
     // Access the UserAuthProvider without listening for rebuilds
     final authProvider = Provider.of<UserAuthProvider>(context, listen: false);
 
@@ -47,11 +52,19 @@ class _SplashState extends State<Splash> {
      debugPrint("🔍 [Provider] isUserLoggedIn = $isLoggedIn");
 if (!mounted) return; 
     // Navigate accordingly
-    if (isLoggedIn) {
-      Navigator.pushReplacement(
+    if (token!=null&&token.isNotEmpty) {
+      if (userRole=='Admin') {
+         Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Dashbordpage()), // 👈 Replace with your actual Admin UI
+      );
+      }else{
+Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) =>  UserBottom()),
       );
+      }
+      
     } else {
       Navigator.pushReplacement(
         context,
