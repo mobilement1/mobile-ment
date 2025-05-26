@@ -5,6 +5,7 @@ import 'package:mobile_servies/user/UserModel/loginmodel.dart';
 import 'package:mobile_servies/user/UserModel/registermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class UserAuthService {
   final Dio dio = Dio();
   final String registerUrl = ApiConstants.registerUrl;
