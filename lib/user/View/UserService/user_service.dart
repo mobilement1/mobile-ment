@@ -35,7 +35,8 @@ class UserService extends StatelessWidget {
                 prefixIcon: icon(Icons.search, Colors.white)
               ),
               
-            )
+            ),
+            Column(children: [],)
           ],
         ),
       )),
