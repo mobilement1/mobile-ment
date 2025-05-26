@@ -97,8 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-<<<<<<< HEAD
-=======
   file:
     dependency: transitive
     description:
@@ -107,7 +105,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
->>>>>>> df3e713785cdfd6923a0e9695b2b5c2bc3e73303
   fl_chart:
     dependency: "direct main"
     description:
