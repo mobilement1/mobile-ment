@@ -30,6 +30,11 @@ class UserService extends StatelessWidget {
             Gap(10),
             TextField(
               controller: searchController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: icon(Icons.search, Colors.white)
+              ),
+              
             )
           ],
         ),
