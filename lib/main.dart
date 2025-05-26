@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget{
           ),
 
           title: 'Flutter Demo',
-          home: Splash()),
+          home: BottomNavTech()),
     );
   }
 }
