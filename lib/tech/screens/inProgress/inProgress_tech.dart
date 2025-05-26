@@ -33,9 +33,9 @@ class InprogressTechPagessss extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  colorContainers(Icons.assignment, ' 12', 'Assigned'),
-                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress'),
-                  colorContainers(Icons.check_circle, ' 20', 'Completed'),
+                colorContainers(Icons.assignment, ' 12', 'Assigned',AppColors.orange,Color(0x25FFA726)),
+                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress',AppColors.appBarMobileTitle,Color(0x3061DAFB)),
+                  colorContainers(Icons.check_circle, ' 20', 'Completed',AppColors.green,Color(0x404CAF50)),
                 ],),
             ),
             const SizedBox(height: 8),

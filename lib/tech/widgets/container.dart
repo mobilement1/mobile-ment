@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 
-Widget colorContainers([ IconData? icon, String? count, String? text]) {
+Widget colorContainers([ IconData? icon, String? count, String? text,Color? color,Color? containerClr]) {
   return Padding(
     padding: const EdgeInsets.all(7.0),
     child: Container(
@@ -22,7 +22,16 @@ Widget colorContainers([ IconData? icon, String? count, String? text]) {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppColors.appBarMobileTitle, size: 35),
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: containerClr,
+                borderRadius: BorderRadius.circular(15),  
+              ),
+              child: Icon(icon, color: color, size: 35),
+            ),
+
             const SizedBox(height: 8),
             Text(
               count ?? '',

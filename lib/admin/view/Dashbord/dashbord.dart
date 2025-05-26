@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_servies/admin/view/Booking/bookingpage.dart';
-import 'package:mobile_servies/admin/view/Dashbord/flchart.dart';
+import 'package:mobile_servies/admin/view/Dashbord/flChart_lines.dart';
+import 'package:mobile_servies/admin/view/Dashbord/flchart_horizonatal.dart';
 import 'package:mobile_servies/admin/view/Dashbord/widject.dart';
 import 'package:mobile_servies/admin/view/Device/devicepage.dart';
 import 'package:mobile_servies/admin/view/Servicess/service.dart';
@@ -131,25 +132,8 @@ class Dashbordpage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
 
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF282845),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Chart Placeholder",
-                    style: TextStyle(
-                      color: Colors.white54,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-
+        
+buildChartContainer(),
               const SizedBox(height: 25),
 
               // Recent Bookings Section
@@ -171,7 +155,9 @@ class Dashbordpage extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: const Color(0xFF61DAFB).withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10)),
-                child: HorizontalBarChart(),
+                child: Container(height: 450,width: double.infinity,decoration: BoxDecoration(),
+                  
+                  child: HorizontalBarChart()),
               ),
               Gap(20),
             ],
@@ -252,7 +238,7 @@ class Dashbordpage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.logout, color: Colors.white),
               title: Text("Logout", style: TextStyle(color: Colors.white)),
-              onTap: () {},
+              onTap: () {}, 
             ),
           ],
         ),

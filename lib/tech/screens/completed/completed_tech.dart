@@ -34,9 +34,9 @@ class CompletedPageTech extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  colorContainers(Icons.assignment, ' 12', 'Assigned'),
-                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress'),
-                  colorContainers(Icons.check_circle, ' 20', 'Completed'),
+                   colorContainers(Icons.assignment, ' 12', 'Assigned',AppColors.orange,Color(0x25FFA726)),
+                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress',AppColors.appBarMobileTitle,Color(0x3061DAFB)),
+                  colorContainers(Icons.check_circle, ' 20', 'Completed',AppColors.green,Color(0x404CAF50)),
                 ],),
             ),
             const SizedBox(height: 8),
@@ -69,8 +69,8 @@ class CompletedPageTech extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.symmetric( horizontal: 20, vertical: 10),
                                     leading: Container( height: 50, width: 50, decoration: BoxDecoration(
-                                        color: const Color(0x3061DAFB),borderRadius: BorderRadius.circular(15),),
-                                      child: const Icon( Icons.phone_android_outlined, size: 30, color: Colors.cyan),
+                                        color: const Color(0x404CAF50),borderRadius: BorderRadius.circular(15),),
+                                      child: const Icon( Icons.phone_android_outlined, size: 30, color: Colors.green),
                                     ),
                                     title: Text(  "Smith",style: const TextStyle(color: AppColors.whiteClr,fontWeight: FontWeight.bold), ),
                                     subtitle: const Text("iPhone 13 - 05/08/2025",style: TextStyle(color: Colors.white70), ),

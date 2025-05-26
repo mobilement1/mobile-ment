@@ -9,8 +9,8 @@ class AppColors{
   static const grey=Color.fromARGB(255, 153, 153, 153);
   static const pinkGraph=Color(0xFFFF6B8B);
   static const greenGraph=Color(0xFF61DAFB);
-  static const green=Colors.green;
-  static const orange=Colors.orange;
+  static const green=Color(0xFF4CAF50);
+  static const orange=Color.fromARGB(255, 252, 175, 60);
   static const blue=Colors.blue;
 
 }
