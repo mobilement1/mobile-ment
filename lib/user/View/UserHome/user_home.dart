@@ -1,12 +1,21 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_servies/constants/imageconstants.dart';
 import 'package:mobile_servies/constants/textconstants.dart';
 import 'package:mobile_servies/decoration/decoration.dart';
+import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
+import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
+import 'package:provider/provider.dart';
+
+
+
+
+
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -24,6 +33,7 @@ class _UserHomeState extends State<UserHome> {
   ];
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       // backgroundColor: const Color(0xFF1E1E2E),
       appBar: AppBar(
@@ -33,6 +43,47 @@ class _UserHomeState extends State<UserHome> {
           children: [
             text(TextConstants.title1, Color(0xFF61DAFB), 30, FontWeight.bold),
             text(TextConstants.title2, Colors.white, 30, FontWeight.bold),
+           Spacer(),
+            Consumer<UserAuthProvider>(
+              builder: (context,authProvider,child) {
+                return PopupMenuButton<String>(
+                  icon: icon(Icons.person,Colors.white),
+                  color:  Colors.white, // background color
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  onSelected: (value) async{
+                    if (value == 'logout') {
+                        authProvider.logoutUser();
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UserLogin()), (Route)=>false)  ;
+                    } else if (value == 'technician') {
+                      // Navigate to become technician page
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'logout',
+                      child: Row(
+                        children: [
+                          icon(Icons.logout, Colors.black),
+                           SizedBox(width: 10),
+                          text("Logout", Colors.black, 16, FontWeight.bold),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'technician',
+                      child: Row(
+                        children: [
+                          icon(Icons.build,Colors.black),
+                          const SizedBox(width: 10),
+                          text("Become Technician", Colors.black, 16, FontWeight.bold),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }
+            )
+
           ],
         ),
       ),
@@ -92,15 +143,15 @@ class _UserHomeState extends State<UserHome> {
               Gap(30),
               Row(
                 children: [
-                  icon(Icons.verified_user),
+                  icon(Icons.verified_user,Colors.blue),
                   text(TextConstants.warranty, Colors.white, 12,
                       FontWeight.normal),
                   Gap(10),
-                  icon(Icons.watch_later_rounded),
+                  icon(Icons.watch_later_rounded,Colors.blue),
                   text(TextConstants.repair, Colors.white, 12,
                       FontWeight.normal),
                   Gap(10),
-                  icon(Icons.place),
+                  icon(Icons.place,Colors.blue),
                   text(
                       TextConstants.onsite, Colors.white, 12, FontWeight.normal)
                 ],

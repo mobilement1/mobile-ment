@@ -38,4 +38,6 @@ static const anaccount="Don't Have An Account?";
 static const forgot="Forget Password?";
 static const sup="Sign Up";
 static const fill="Please Fill All Field";
+static const urservice="Our Services";
+static const urservice1="Professional device repair and maintenance service";
 }
