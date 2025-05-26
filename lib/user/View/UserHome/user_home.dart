@@ -37,9 +37,9 @@ class _UserHomeState extends State<UserHome> {
   Widget build(BuildContext context) {
    
     return Scaffold(
-      // backgroundColor: const Color(0xFF1E1E2E),
+     
       appBar: AppBar(
-        // backgroundColor: const Color(0xFF181850),
+      
        
         title: Row(
           children: [
