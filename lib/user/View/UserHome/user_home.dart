@@ -51,7 +51,7 @@ class _UserHomeState extends State<UserHome> {
                 return PopupMenuButton<String>(
                   icon: icon(Icons.person,Colors.white),
                   color:  Colors.white, // background color
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)) ,
                   onSelected: (value) async{
                     if (value == 'logout') {
                         authProvider.logoutUser();
