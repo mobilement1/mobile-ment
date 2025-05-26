@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
@@ -6,6 +8,8 @@ import 'package:mobile_servies/tech/screens/profile/profile_tech.dart';
 import 'package:mobile_servies/tech/widgets/appBar.dart';
 import 'package:mobile_servies/tech/widgets/barchart.dart';
 import 'package:mobile_servies/tech/screens/home/widget/container.dart';
+import 'package:network_info_plus/network_info_plus.dart';
+
 class HomePageTech extends StatelessWidget {
   const HomePageTech({super.key});
 
@@ -141,3 +145,4 @@ class HomePageTech extends StatelessWidget {
     );
   }
 }
+
