@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/constants/textconstants.dart';
+
+import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/utils/utils.dart';
 import 'package:mobile_servies/user/view/UserHome/user_homewidget.dart';
 import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection_widget.dart';

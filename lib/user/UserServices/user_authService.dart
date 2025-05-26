@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:mobile_servies/constants/constant_api/const_url.dart';
+import 'package:mobile_servies/user/constants/constant_api/const_url.dart';
 import 'package:mobile_servies/user/UserModel/loginmodel.dart';
 import 'package:mobile_servies/user/UserModel/registermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';

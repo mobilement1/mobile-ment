@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/constants/textconstants.dart';
+import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 
 class UserService extends StatelessWidget {
