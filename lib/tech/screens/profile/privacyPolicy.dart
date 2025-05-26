@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/constants/text.dart';
 import 'package:mobile_servies/constants/textconstants.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:mobile_servies/tech/constants/text.dart';
 
 class PrivacypolicyTech extends StatelessWidget {
   const PrivacypolicyTech({super.key});
