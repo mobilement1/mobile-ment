@@ -37,12 +37,10 @@ dependencies:
   gap: ^3.0.1
   fl_chart: ^0.71.0
   carousel_slider: ^5.0.0
-  firebase_core: ^3.13.1
-  firebase_auth: ^5.5.3
-  cloud_firestore: ^5.6.7
   provider: ^6.1.5
   dio: ^5.8.0+1
   flutter_secure_storage: ^9.2.4
+  url_launcher:
 
 
 dev_dependencies:

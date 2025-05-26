@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 Widget text(String text,Color color,double size,FontWeight fontWeight){
   return Text(text,style: TextStyle(color: color,

@@ -117,7 +117,7 @@ class HomePageTech extends StatelessWidget {
                         height: 380,
                         child: CustomBarChart(
                           monthlyData: {
-                            "Jan": {"Revenue": 80, "Completed": 55},
+                            "Jan": {"Revenue": 110, "Completed": 55},
                             "Feb": {"Revenue": 90, "Completed": 60},
                             "Mar": {"Revenue": 30, "Completed": 25},
                             "Apr": {"Revenue": 30, "Completed": 5},

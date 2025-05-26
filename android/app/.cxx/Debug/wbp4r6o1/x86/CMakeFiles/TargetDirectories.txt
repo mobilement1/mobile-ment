@@ -1,0 +1,2 @@
+D:/project/mobile-ment/android/app/.cxx/Debug/wbp4r6o1/x86/CMakeFiles/edit_cache.dir
+D:/project/mobile-ment/android/app/.cxx/Debug/wbp4r6o1/x86/CMakeFiles/rebuild_cache.dir

@@ -3,6 +3,7 @@ import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
 import 'package:mobile_servies/tech/screens/profile/widget/profile_widgets.dart';
 import 'package:mobile_servies/tech/widgets/appBar.dart';
+import 'package:mobile_servies/tech/widgets/drawer.dart';
 
 class ProfilePageTech extends StatelessWidget {
   const ProfilePageTech({super.key});
@@ -12,6 +13,7 @@ class ProfilePageTech extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.darkBluePurple,
       appBar: customAppBar(),
+      drawer: TechnicianDrawer(context),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

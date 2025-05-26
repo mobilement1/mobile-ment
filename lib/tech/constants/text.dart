@@ -26,4 +26,32 @@ class TextConsts{
   static const newtaskassignedbyUser="New task assigned by User";
   static const currentAvailabilty="Current Availability";
   static const monFri="Mon-Fri, 9AM-6PM";
+      static const aboutUStxt=   '''
+Welcome to MobileMend!
+
+MobileMend is your trusted solution for reliable and affordable mobile repair services. Our mission is to connect skilled technicians with customers who need quick and professional service right at their doorstep.
+
+What We Do:
+• Provide on-demand mobile device repairs.
+• Offer technician tracking, updates, and secure communication.
+• Ensure transparency, trust, and quality service every time.
+
+Our technicians are trained, verified, and equipped with the tools needed to fix smartphones efficiently and safely. Whether it's a screen replacement, battery issue, or software problem – we've got it covered.
+
+Why Choose MobileMend?
+• Fast and reliable service
+• Transparent pricing
+• Verified and skilled technicians
+• Convenient scheduling
+
+We’re committed to simplifying mobile repair with just a few taps. Thank you for choosing us!
+
+🌐 Visit our website:  
+https://mobile-mend-ui.vercel.app/
+
+📧 Contact:  
+support@mobilemend.com
+
+Together, let's keep your devices running like new!
+            ''';
 }

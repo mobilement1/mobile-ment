@@ -1,30 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:mobile_servies/tech/constants/colors.dart';
-// import 'package:mobile_servies/tech/widgets/appBar.dart';
-
-// class InprogressTechPagessss extends StatelessWidget {
-//   const InprogressTechPagessss({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColors.darkBluePurple,
-//       appBar: customAppBar(),
-//       body: const Center(
-//         child: Text(
-//           'Profile',
-//           style: TextStyle(
-//             color: AppColors.whiteClr,
-//             fontSize: 24,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
@@ -110,53 +83,56 @@ class InprogressTechPagessss extends StatelessWidget {
                                 ),
                               ),
                               if (isExpanded)
-                                Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.only(bottom: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: AppColors.grey),
-                                  ),
-                                  child: Column( crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white)),
-                                      const SizedBox(height: 5),
-                                      const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 5),
-                                      const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 10),
-                                      Row(mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Task Completed ✅"),duration: Duration(seconds: 1),),
-                                              );
-                                            },
-                                            icon: const Icon(Icons.check),
-                                            label: const Text("Complete"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.green,
-                                              foregroundColor: Colors.white,
-                                            ),
-                                          ),SizedBox(width: 5,),
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Task Reassigned ❌"),duration: Duration(seconds: 1),),
-                                              );
-                                            },
-                                            icon: const Icon(Icons.undo),
-                                            label: const Text("Reassign"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.red,
-                                              foregroundColor: Colors.white,
-                                            ),),
-                                        ],
-                                      ),
-                                    ],
+                                Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppColors.grey),
+                                    ),
+                                    child: Column( crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white)),
+                                        const SizedBox(height: 5),
+                                        const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 5),
+                                        const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 10),
+                                        Row(mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text("Task Completed ✅"),duration: Duration(seconds: 1),),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.check),
+                                              label: const Text("Complete"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                                foregroundColor: Colors.white,
+                                              ),
+                                            ),SizedBox(width: 5,),
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text("Task Reassigned ❌"),duration: Duration(seconds: 1),),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.undo),
+                                              label: const Text("Reassign"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                                foregroundColor: Colors.white,
+                                              ),),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                             ],

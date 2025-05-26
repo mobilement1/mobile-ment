@@ -21,16 +21,17 @@ class CustomBarChart extends StatelessWidget {
         .expand((metric) => metric.values)
         .reduce((a, b) => a > b ? a : b);
 
-    const double fixedBarWidth = 35;
+    const double fixedBarWidth = 25;
     const double groupSpacing = 20;
     final double chartWidth =
         months.length * (metrics.length * fixedBarWidth + groupSpacing * 2);
-        
 
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Container(
+            height: 380, 
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -44,7 +45,7 @@ class CustomBarChart extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
-                  blurRadius: 12,
+                  blurRadius: 15,
                   offset: const Offset(0, 4),
                 ),
               ],
@@ -54,9 +55,11 @@ class CustomBarChart extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: SizedBox(
                 width: chartWidth,
+                height: maxValue + 250,
                 child: BarChart(
                   BarChartData(
-                    maxY: maxValue + (maxValue * 0.2),
+                    maxY: (maxValue < 100 ? 100 : maxValue + maxValue * 0.2),
+
                     minY: 0,
                     titlesData: FlTitlesData(
                       leftTitles: AxisTitles(
@@ -128,7 +131,6 @@ class CustomBarChart extends StatelessWidget {
                             ),
                           ),
                         ),
-                        showingTooltipIndicators: List.generate(metrics.length, (index) => index),
                       ),
                     ),
                     borderData: FlBorderData(show: false),
@@ -143,23 +145,7 @@ class CustomBarChart extends StatelessWidget {
                         );
                       },
                     ),
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipPadding: const EdgeInsets.all(8),
-                        tooltipMargin: 8,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          return BarTooltipItem(
-                            '${metrics[rodIndex]}\n${rod.toY.toStringAsFixed(1)}',
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                   
                     alignment: BarChartAlignment.spaceEvenly,
                     groupsSpace: groupSpacing,
                   ),
@@ -168,44 +154,41 @@ class CustomBarChart extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(metrics.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: colors[index],
-                        shape: BoxShape.rectangle,
+          ),SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(metrics.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: colors[index],
+                          shape: BoxShape.rectangle,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      metrics[index],
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      const SizedBox(width: 8),
+                      Text(
+                        metrics[index],
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                    ],
+                  ),
+                );
+              }),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
-
-
-

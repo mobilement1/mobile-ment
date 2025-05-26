@@ -83,53 +83,56 @@ class AssignedPageTech extends StatelessWidget {
                                 ),
                               ),
                               if (isExpanded)
-                                Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.only(bottom: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: AppColors.grey),
-                                  ),
-                                  child: Column( crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white)),
-                                      const SizedBox(height: 5),
-                                      const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 5),
-                                      const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 10),
-                                      Row(mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Task Accepted ✅"),duration: Duration(seconds: 1),),
-                                              );
-                                            },
-                                            icon: const Icon(Icons.check),
-                                            label: const Text("Accept"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.green,
-                                              foregroundColor: Colors.white,
-                                            ),
-                                          ),SizedBox(width: 5,),
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Task Rejected ❌"),duration: Duration(seconds: 1),),
-                                              );
-                                            },
-                                            icon: const Icon(Icons.close),
-                                            label: const Text("Reject"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.red,
-                                              foregroundColor: Colors.white,
-                                            ),),
-                                        ],
-                                      ),
-                                    ],
+                                Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppColors.grey),
+                                    ),
+                                    child: Column( crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white)),
+                                        const SizedBox(height: 5),
+                                        const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 5),
+                                        const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 10),
+                                        Row(mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text("Task Accepted ✅"),duration: Duration(seconds: 1),),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.check),
+                                              label: const Text("Accept"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                                foregroundColor: Colors.white,
+                                              ),
+                                            ),SizedBox(width: 5,),
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text("Task Rejected ❌"),duration: Duration(seconds: 1),),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.close),
+                                              label: const Text("Reject"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                                foregroundColor: Colors.white,
+                                              ),),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                             ],

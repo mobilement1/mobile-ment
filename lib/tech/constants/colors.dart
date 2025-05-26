@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppColors{
   static const darkBluePurple=Color(0xFF1E1E2E);

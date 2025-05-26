@@ -84,55 +84,58 @@ class CompletedPageTech extends StatelessWidget {
                                 ),
                               ),
                               if (isExpanded)
-                                Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.only(bottom: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(255, 255, 255, 0.05),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: AppColors.grey),
-                                  ),
-                                  child: Column( crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      const Text( "Service ID: a2466d16-6da5-46cc-9e1a-a5d4f94a4d9f",style:TextStyle(color: Colors.white)),                                      const SizedBox(height: 5),
-
-                                      const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 5),
-                                      const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 5),
-                                      const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
-                                      const SizedBox(height: 10),
-                                      Row(mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                           ElevatedButton.icon(
-                                            onPressed: () {
-                                             viewDialog(context);
-                                            },
-                                            icon: const Icon(Icons.remove_red_eye_sharp),
-                                            label: const Text("View"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.blue,
-                                              foregroundColor: Colors.white,
-                                            ),
-                                          ),SizedBox(width: 5,),
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Task Reopened ✅"),duration: Duration(seconds: 1),),
-                                              );
-                                            },
-                                            icon: const Icon(Icons.undo),
-                                            label: const Text("Reopen"),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.blue,
-                                              foregroundColor: Colors.white,
-                                            ),
-                                          )
-                                         
-                                        ],
-                                      ),
-                                    ],
+                                Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(255, 255, 255, 0.05),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppColors.grey),
+                                    ),
+                                    child: Column( crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        const Text( "Service ID: a2466d16-6da5-46cc-9e1a-a5d4f94a4d9f",style:TextStyle(color: Colors.white)),                                      const SizedBox(height: 5),
+                                  
+                                        const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 5),
+                                        const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 5),
+                                        const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
+                                        const SizedBox(height: 10),
+                                        Row(mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                             ElevatedButton.icon(
+                                              onPressed: () {
+                                               viewDialog(context);
+                                              },
+                                              icon: const Icon(Icons.remove_red_eye_sharp),
+                                              label: const Text("View"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.blue,
+                                                foregroundColor: Colors.white,
+                                              ),
+                                            ),SizedBox(width: 5,),
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text("Task Reopened ✅"),duration: Duration(seconds: 1),),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.undo),
+                                              label: const Text("Reopen"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.blue,
+                                                foregroundColor: Colors.white,
+                                              ),
+                                            )
+                                           
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                             ],
