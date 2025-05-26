@@ -1,10 +1,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-
 import 'package:mobile_servies/user/constants/imageconstants.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
