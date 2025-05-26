@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_servies/constants/constant_api/const_url.dart';
 import 'package:mobile_servies/user/UserModel/loginmodel.dart';
 import 'package:mobile_servies/user/UserModel/registermodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserAuthService {
   final Dio dio = Dio();
@@ -34,7 +34,7 @@ class UserAuthService {
         final token = response.data['data']?['token']as String;
         log("Response token: $token");
 
-        if (token != null&&token.isNotEmpty) {
+        if (token.isNotEmpty) {
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('auth_token', token);
           log("Token saved to SharedPreferences register");
