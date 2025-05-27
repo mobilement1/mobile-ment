@@ -246,7 +246,7 @@ buildChartContainer(),
                   title: Text("Logout", style: TextStyle(color: Colors.white)),
                   onTap: () {
                     authpro.logoutUser();
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>UserLogin()), (Route)=>false);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>UserLogin()),(Route)=>false);
                   },
                 );
               }
