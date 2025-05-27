@@ -1,6 +1,5 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_servies/user/constants/imageconstants.dart';
@@ -35,9 +34,9 @@ class _UserHomeState extends State<UserHome> {
   Widget build(BuildContext context) {
    
     return Scaffold(
-      // backgroundColor: const Color(0xFF1E1E2E),
+     
       appBar: AppBar(
-        // backgroundColor: const Color(0xFF181850),
+      
        
         title: Row(
           children: [
@@ -49,7 +48,7 @@ class _UserHomeState extends State<UserHome> {
                 return PopupMenuButton<String>(
                   icon: icon(Icons.person,Colors.white),
                   color:  Colors.white, // background color
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)) ,
                   onSelected: (value) async{
                     if (value == 'logout') {
                         authProvider.logoutUser();

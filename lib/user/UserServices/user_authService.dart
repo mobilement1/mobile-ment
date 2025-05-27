@@ -10,6 +10,8 @@ class UserAuthService {
   final Dio dio = Dio();
   final String registerUrl = ApiConstants.registerUrl;
   final String loginUrl = ApiConstants.loginUrl;
+  final String logoutUrl=ApiConstants.logoutUrl;
+  String?userRole;
 
   // REGISTER   
   Future<String> registerUser(Registermodel user) async {
@@ -54,7 +56,7 @@ class UserAuthService {
   Future<String> loginUser(LoginModel user) async {
     try {
       log("Sending login data: ${user.toJson()}");
-
+ log("baseUrl${dio.options.baseUrl}");
       final response = await dio.post(
         loginUrl,
         data: user.toJson(),
@@ -70,13 +72,16 @@ class UserAuthService {
 
       if (response.statusCode == 200) {
         final token = response.data['data']?['token']as String?;
+        userRole=response.data['data']?['role'];
         log("Response token: $token");
+        log("Response role: $userRole");
 
         if (token != null&&token.isNotEmpty) {
            log("Saving token: $token");
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('auth_token', token);
-          log("Token saved to SharedPreferences");
+          await prefs.setString('user_role', userRole??'user');
+          log("Token and role saved to SharedPreferences");
           
         }else{
             log("❌ Token missing in response.data['data']");
@@ -98,13 +103,42 @@ class UserAuthService {
     final prefs = await SharedPreferences.getInstance();
     final token =await prefs.getString('auth_token');
     log("Token read from SharedPreferences: $token");
+
     return token;
+  }
+
+  // get user role
+  Future<String?>getUserRole()async{
+    final prefs=await SharedPreferences.getInstance();
+    final role=prefs.getString('user_role');
+    log("Token read from sharedprferences:$role");
+    return role;
   }
 
   // LOGOUT
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
+    final token=prefs.getString('auth_token');
+
+    try {
+      if (token!=null&&token.isNotEmpty) {
+        final response=await dio.post(logoutUrl,options:Options(
+          headers: {
+            'Authorization': 'Bearer $token',  
+            'Content-Type': 'application/json',
+          }
+        ) );
+
+        log("Logout API response status: ${response.statusCode}");
+      log("Logout API response data: ${response.data}");
+      }else{
+         log("No auth token found, skipping logout API call");
+      }
+    } catch (e) {
+      log("Error calling logout API: $e");
+    }
     await prefs.remove('auth_token');
+    await prefs.remove('user_role');
     log("Token removed from SharedPreferences");
   }
 }

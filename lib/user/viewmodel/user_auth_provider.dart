@@ -49,6 +49,9 @@ class UserAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String?userRole;
+  bool isAdmin=false;
+
   /// Register User
   Future<String> registerUser(BuildContext context) async {
     setLoading(true);
@@ -89,6 +92,7 @@ class UserAuthProvider extends ChangeNotifier {
      if (response == "success") {
       successMessage = 'Registration Successful!';
       errorMessage = '';
+      
     } else {
       errorMessage = response;
       successMessage = '';
@@ -126,9 +130,12 @@ class UserAuthProvider extends ChangeNotifier {
    if (response == "success") {
       successMessage = 'Login Successful!';
       errorMessage = '';
+      userRole=await _authService.getUserRole();
+      isAdmin=userRole=='Admin';
     } else {
       errorMessage = response;
       successMessage = '';
+      isAdmin=false;
     }
     setLoading(false);
 
@@ -152,6 +159,7 @@ class UserAuthProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     await _authService.logout();
     clearAllFields();
+    isAdmin=false;
     notifyListeners();
   }
 
@@ -167,6 +175,7 @@ class UserAuthProvider extends ChangeNotifier {
     loginPasswordController.clear();
     errorMessage = '';
       successMessage = '';
+      isAdmin=false;
     notifyListeners();
   }
 
