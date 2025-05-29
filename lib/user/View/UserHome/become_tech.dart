@@ -42,7 +42,7 @@ class BecomeTechPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
+                    ], 
                   ),
                 ),
                 Padding(
