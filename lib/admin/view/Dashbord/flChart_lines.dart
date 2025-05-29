@@ -59,7 +59,7 @@ Widget LineChartFL() {
                   text = const Text('May', style: style);
                   break;
                 default:
-                  text = const Text('', style: style);
+                  text = const Text('June', style: style);
                   break;
               }
               return SideTitleWidget(
@@ -173,7 +173,7 @@ Widget LineChartFL() {
 
 Widget buildChartContainer() {
   return Container(
-    height: 240, 
+    height: 300, 
     width: double.infinity,
     padding: const EdgeInsets.all(16.0), 
     decoration: BoxDecoration(
@@ -182,8 +182,14 @@ Widget buildChartContainer() {
     ),
     child: Column(
       children: [
-        // Legend
-        Row(
+       
+        const SizedBox(height: 8),
+        Expanded(
+          child: LineChartFL(),
+        ),SizedBox(height: 15,),
+                // Legend
+
+         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildLegendItem(
@@ -196,11 +202,6 @@ Widget buildChartContainer() {
               label: 'Bookings',
             ),
           ],
-        ),
-        const SizedBox(height: 8),
-        // Chart
-        Expanded(
-          child: LineChartFL(),
         ),
       ],
     ),

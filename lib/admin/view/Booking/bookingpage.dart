@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
-import 'package:mobile_servies/admin/view/Device/devicepage.dart';
-import 'package:mobile_servies/admin/view/Servicess/service.dart';
-import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
-import 'package:mobile_servies/admin/view/Technicians/techician.dart';
+import 'package:mobile_servies/admin/widgets.dart';
 
 class Bookingpage extends StatefulWidget {
   const Bookingpage({super.key});
@@ -28,7 +24,6 @@ class _BookingpageState extends State<Bookingpage> {
       selectedFilter = newValue;
     });
 
-    // You can add your method or logic here:
     print("Selected Booking Filter: $newValue");
   }
 
@@ -102,12 +97,10 @@ class _BookingpageState extends State<Bookingpage> {
                 ],
               ),
               const Text(
-                "Manage bookings , services, devices, and technicians",
+                "Manage bookings, services, devices, and technicians",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 25),
-
-              // Filter Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -131,18 +124,16 @@ class _BookingpageState extends State<Bookingpage> {
                       );
                     }).toList(),
                     onChanged: onFilterChanged,
-                    icon:
-                        const Icon(Icons.arrow_drop_down, color: Colors.white),
+                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
                     underline: Container(height: 1, color: Colors.white24),
                   ),
                 ],
               ),
-
               const SizedBox(height: 15),
-
               _buildBookingCard(
                 customerName: "Emma Johnson",
                 service: "Screen Replacement",
+                Device: "S23 Ultra",
                 date: "May 10, 2025",
                 amount: 149.99,
                 status: "Completed",
@@ -150,6 +141,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: "Michael Brown",
                 service: "Battery Replacement",
+                Device: "iPhone13",
                 date: "May 11, 2025",
                 amount: 79.99,
                 status: "In Progress",
@@ -158,6 +150,7 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: "Sarah Davis",
                 service: "Data Recovery",
+                Device: "Nokia",
                 date: "May 12, 2025",
                 amount: 199.99,
                 status: "Scheduled",
@@ -167,101 +160,24 @@ class _BookingpageState extends State<Bookingpage> {
               _buildBookingCard(
                 customerName: 'Jabeel',
                 service: 'Screen replacement',
+                Device: "Vivo",
                 date: 'May 18,2025',
                 amount: 799,
                 status: 'Pending',
               ),
-
               const SizedBox(height: 30),
             ],
           ),
         ),
       ),
-      drawer: Drawer(
-        backgroundColor: const Color(0xFF1E1E2E),
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
-          children: [
-            Text(
-              "Admin Dashboard",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.dashboard, color: Colors.white),
-              title: Text("Dashboard", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Dashbordpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book_online, color: Colors.white),
-              title: Text("Booking", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Bookingpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.build, color: Colors.white),
-              title: Text("Services", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Servicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.devices, color: Colors.white),
-              title: Text("Devices", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Devicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technicians", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Techicianpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.check_circle, color: Colors.white),
-              title: Text("Completed Orders",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technician Requests",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Techniciarequstpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text("Logout", style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: AdminDraw(),
     );
   }
 
   Widget _buildBookingCard({
     required String customerName,
     required String service,
+    required String Device,
     required String date,
     required double amount,
     required String status,
@@ -343,8 +259,7 @@ class _BookingpageState extends State<Bookingpage> {
               ),
               const SizedBox(height: 8),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: statusColor,
                   borderRadius: BorderRadius.circular(12),
@@ -368,24 +283,98 @@ class _BookingpageState extends State<Bookingpage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   backgroundColor: const Color(0xFF1E1E2E),
-                  title: const Text(
-                    "Booking Details",
-                    style: TextStyle(color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  content: Text(
-                    "Customer: $customerName\nService: $service\nDate: $date\nAmount: \$${amount.toStringAsFixed(2)}\nStatus: $status",
-                    style: const TextStyle(color: Colors.white70),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Booking Details",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildDetailRow("Customer", customerName, Colors.white),
+                        _buildDetailRow("Service", service, Colors.white70),
+                        _buildDetailRow("Device", Device, Colors.white70),
+                        _buildDetailRow("Date", date, Colors.white70),
+                        _buildDetailRow("Amount", "\$${amount.toStringAsFixed(2)}", Colors.white),
+                        _buildDetailRow("Status", status, statusColor),
+                      ],
+                    ),
                   ),
                   actions: [
-                    TextButton(
-                      child: const Text("Close",
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () => Navigator.pop(context),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: statusColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text(
+                          "Close",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value, Color valueColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$label:",
+            style: const TextStyle(
+              color: Colors.white54,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: valueColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),

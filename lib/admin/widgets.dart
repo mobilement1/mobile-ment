@@ -1,85 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:mobile_servies/admin/view/Booking/bookingpage.dart';
+import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
+import 'package:mobile_servies/admin/view/Device/devicepage.dart';
+import 'package:mobile_servies/admin/view/Servicess/service.dart';
+import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
+import 'package:mobile_servies/admin/view/Technicians/techician.dart';
+import 'package:mobile_servies/admin/view/completedoders/cmpltedorder.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
+import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:provider/provider.dart';
 
-Widget text(String text,Color color,double size,FontWeight fontWeight){
-  return Text(text,style: TextStyle(color: color,
-  fontSize: size,
-  fontWeight: fontWeight),);
-}
-Widget icon(IconData icon,Color color){
-  return Icon(icon,color:color);
-}
+class AdminDraw extends StatelessWidget {
+  const AdminDraw({super.key});
 
-
-Widget customButton({
-  required String label,
-  required VoidCallback onPressed,
-  IconData? icon,
-  bool hasBorder = false,
-}) {
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0x3361DAFB),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: hasBorder ? const BorderSide(color: Colors.black) : BorderSide.none,
-      ),
-    ),
-    onPressed: onPressed,
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: const Color(0xFF1E1E2E),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
+        children: [
+          const Text(
+            "Admin Dashboard",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        icon != null
-            ? Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Icon(icon, color: Colors.white),
-                ],
-              )
-            : Container(), 
-      ],
-    ),
-  );
-}
-
-
-
-// Become technician side text form fields
-
-
-Widget TechTextField(String hintText, {int maxLines = 1}) {
-    return TextFormField(
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: const Color(0xFF2A2A2A),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
-        ),
+          const SizedBox(height: 20),
+          _buildTile(context, Icons.dashboard, "Dashboard", const Dashbordpage()),
+          _buildTile(context, Icons.book_online, "Booking", const Bookingpage()),
+          _buildTile(context, Icons.build, "Services", const Servicepage()),
+          _buildTile(context, Icons.devices, "Devices", const Devicepage()),
+          _buildTile(context, Icons.engineering, "Technicians", const Techicianpage()),
+          _buildTile(context, Icons.check_circle, "Completed Orders", const Cmpltedorderpage()),
+          _buildTile(context, Icons.engineering, "Technician Requests", const Techniciarequstpage()),
+          Consumer<UserAuthProvider>(
+            builder: (context, authpro, child) {
+              return ListTile(
+                leading: const Icon(Icons.logout, color: Colors.white),
+                title: const Text("Logout", style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  _showLogoutDialog(context, authpro);
+                },
+              );
+            },
+          ),
+        ],
       ),
-      style: const TextStyle(color: AppColors.whiteClr),
     );
   }
 
+  Widget _buildTile(BuildContext context, IconData icon, String title, Widget page) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.white),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      onTap: () {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => page));
+      },
+    );
+  }
 
-// logout alert dialogue
-
-
-  void showLogoutDialog(BuildContext context, UserAuthProvider authProvider) {
+  void _showLogoutDialog(BuildContext context, UserAuthProvider authpro) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -120,7 +104,7 @@ Widget TechTextField(String hintText, {int maxLines = 1}) {
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBluePurple, // Cyan for Cancel
+                      backgroundColor: AppColors.darkBluePurple, 
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -143,7 +127,7 @@ Widget TechTextField(String hintText, {int maxLines = 1}) {
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.red, // Red for Logout
+                      backgroundColor: AppColors.red, 
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -151,7 +135,7 @@ Widget TechTextField(String hintText, {int maxLines = 1}) {
                     ),
                     onPressed: () {
                       Navigator.of(ctx).pop();
-                      authProvider.logoutUser();
+                      authpro.logoutUser();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (ctx) =>  UserLogin()),
@@ -175,3 +159,4 @@ Widget TechTextField(String hintText, {int maxLines = 1}) {
       ),
     );
   }
+}

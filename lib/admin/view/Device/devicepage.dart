@@ -1,19 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:mobile_servies/admin/view/Booking/bookingpage.dart';
-import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
-import 'package:mobile_servies/admin/view/Servicess/addservice.dart';
-import 'package:mobile_servies/admin/view/Servicess/service.dart';
-import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
-import 'package:mobile_servies/admin/view/Technicians/techician.dart';
 
-class Devicepage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/Device/add_device.dart';
+import 'package:mobile_servies/admin/view/Device/edit_device.dart';
+import 'package:mobile_servies/admin/view/Device/widgets.dart';
+import 'package:mobile_servies/admin/widgets.dart';
+import 'package:mobile_servies/tech/constants/colors.dart';
+
+class Devicepage extends StatelessWidget {
   const Devicepage({super.key});
 
-  @override
-  State<Devicepage> createState() => _BookingpageState();
-}
-
-class _BookingpageState extends State<Devicepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +49,7 @@ class _BookingpageState extends State<Devicepage> {
                   color: Colors.white70,
                   size: 26,
                 ),
-                onPressed: () {
-                  // Notification handling
-                },
+                onPressed: () {},
               ),
             ],
           ),
@@ -70,167 +63,84 @@ class _BookingpageState extends State<Devicepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Admin Dashboard",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontSize: 32,
-                    ),
-                  ),
-                ],
+              const Text(
+                "Devices",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
               ),
               const Text(
-                "Manage bookings , services, devices, and technicians",
+                "Manage bookings, services, devices, and technicians",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Services Management",
+                  const Text(
+                    "Device Management",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 12),
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15))),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Addservicepage()));
-                      },
-                      child: Text(
-                        "Add Service",
-                        style: TextStyle(color: Colors.white),
-                      ))
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddDeviceScreen()),
+                      );
+                    },
+                    child: const Text(
+                      "Add Device",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 15),
               const SizedBox(height: 30),
-              _buildBookingCard(
-                  customerName: 'jon',
-                  service: 'water Damage',
-                  date: '12/5/2025',
-                  amount: 999,
-                  status: 'Yes',
-                  bookingid: '123242342354534524')
+              buildDeviceCard(
+                context,
+                Id: '10119757-0fad-11f1-893f-4567899876cvb',
+                Brand: 'Apple',
+                Name: 'iPhone 13',
+                Model: 'A2694',
+                Type: 'Smartphone',
+                Year: '2021',
+                RepairableParts: 'Battery, Display, Charging port, Screen',
+                CommonIssues: 'Battery Draining, Screen flickering',
+              ),
             ],
           ),
         ),
       ),
-      drawer: Drawer(
-        backgroundColor: const Color(0xFF1E1E2E),
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
-          children: [
-            Text(
-              "Admin Dashboard",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.dashboard, color: Colors.white),
-              title: Text("Dashboard", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Dashbordpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book_online, color: Colors.white),
-              title: Text("Booking", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Bookingpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.build, color: Colors.white),
-              title: Text("Services", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Servicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.devices, color: Colors.white),
-              title: Text("Devices", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Devicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technicians", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Techicianpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.check_circle, color: Colors.white),
-              title: Text("Completed Orders",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technician Requests",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Techniciarequstpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text("Logout", style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: AdminDraw(),
     );
   }
 
-  Widget _buildBookingCard({
-    required String bookingid,
-    required String customerName,
-    required String service,
-    required String date,
-    required double amount,
-    required String status,
+  Widget buildDeviceCard(
+    BuildContext context,
+    {
+    required String Id,
+    required String Brand,
+    required String Name,
+    required String Model,
+    required String Type,
+    required String Year,
+    required String RepairableParts,
+    required String CommonIssues,
     bool isCompleted = true,
     bool isScheduled = false,
   }) {
-    Color statusColor;
-    if (isCompleted) {
-      statusColor = const Color(0xFF4CAF50); // Green
-    } else if (isScheduled) {
-      statusColor = const Color(0xFFFFA726); // Orange
-    } else {
-      statusColor = const Color(0xFF61DAFB); // Cyan
-    }
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -244,12 +154,12 @@ class _BookingpageState extends State<Devicepage> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.2),
+              color: AppColors.green,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              Icons.settings_backup_restore_outlined,
-              color: statusColor,
+              Icons.phone_android_outlined,
+              color: const Color.fromARGB(255, 248, 255, 248),
               size: 30,
             ),
           ),
@@ -259,7 +169,7 @@ class _BookingpageState extends State<Devicepage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  customerName,
+                  Name,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -267,14 +177,14 @@ class _BookingpageState extends State<Devicepage> {
                   ),
                 ),
                 Text(
-                  service,
+                  Brand,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.white70,
                   ),
                 ),
                 Text(
-                  date,
+                  Type,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.white54,
@@ -284,37 +194,6 @@ class _BookingpageState extends State<Devicepage> {
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "\$${amount.toStringAsFixed(2)}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: statusColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  status,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: Colors.white),
             onPressed: () {
@@ -322,19 +201,97 @@ class _BookingpageState extends State<Devicepage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   backgroundColor: const Color(0xFF1E1E2E),
-                  title: const Text(
-                    "Booking Details",
-                    style: TextStyle(color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  content: Text(
-                    "Customer: $customerName\nService: $service\nDate: $date\nAmount: \$${amount.toStringAsFixed(2)}\nStatus: $status",
-                    style: const TextStyle(color: Colors.white70),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Device Details",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        buildDetailRow("Device ID", Id, Colors.white70),
+                        const Divider(color: Colors.white24, height: 16),
+                        buildDetailRow("Brand", Brand, Colors.white),
+                        buildDetailRow("Name", Name, Colors.white),
+                        buildDetailRow("Model", Model, Colors.white70),
+                        buildDetailRow("Type", Type, Colors.white70),
+                        buildDetailRow("Year", Year, Colors.white70),
+                        buildDetailRow("Repairable Parts", RepairableParts, Colors.white70),
+                        buildDetailRow("Common Issues", CommonIssues, Colors.white70),
+                      ],
+                    ),
                   ),
                   actions: [
-                    TextButton(
-                      child: const Text("Close",
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () => Navigator.pop(context),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF61DAFB), // Cyan for Edit
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EditDevice()),
+                              ),
+                              child: const Text(
+                                "Edit",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.green, // Green for Close
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text(
+                                "Close",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -36,14 +36,14 @@ Widget StatCard({
           child: Icon(
             icon,
             color: const Color(0xFF61DAFB),
-            size: 20,
+            size: 25,
           ),
         ),
         const SizedBox(height: 12),
         Text(
           title,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 18,
             fontWeight: FontWeight.w500,
             color: Colors.white70,
           ),
@@ -52,7 +52,7 @@ Widget StatCard({
         Text(
           value,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

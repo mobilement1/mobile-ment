@@ -1,19 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:mobile_servies/admin/view/Booking/bookingpage.dart';
-import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
-import 'package:mobile_servies/admin/view/Device/devicepage.dart';
-import 'package:mobile_servies/admin/view/Servicess/addservice.dart';
-import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
-import 'package:mobile_servies/admin/view/Technicians/techician.dart';
 
-class Servicepage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/Servicess/addservice.dart';
+import 'package:mobile_servies/admin/view/Servicess/editService.dart';
+import 'package:mobile_servies/admin/widgets.dart';
+import 'package:mobile_servies/tech/constants/colors.dart';
+
+class Servicepage extends StatelessWidget {
   const Servicepage({super.key});
 
-  @override
-  State<Servicepage> createState() => _BookingpageState();
-}
-
-class _BookingpageState extends State<Servicepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +48,7 @@ class _BookingpageState extends State<Servicepage> {
                   color: Colors.white70,
                   size: 26,
                 ),
-                onPressed: () {
-
-                },
+                onPressed: () {},
               ),
             ],
           ),
@@ -70,174 +62,89 @@ class _BookingpageState extends State<Servicepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Admin Dashboard",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontSize: 32,
-                    ),
-                  ),
-                ],
+              const Text(
+                "Services",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
               ),
               const Text(
-                "Manage bookings , services, devices, and technicians",
+                "Manage bookings, services, devices, and technicians",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Services Management",
+                  const Text(
+                    "Service Management",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 12),
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15))),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Addservicepage()));
-                      },
-                      child: Text(
-                        "Add Service",
-                        style: TextStyle(color: Colors.white),
-                      ))
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddServicePage(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Add Service",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 15),
               const SizedBox(height: 30),
-              _buildBookingCard(
-                  customerName: 'jon',
-                  service: 'water Damage',
-                  date: '12/5/2025',
-                  amount: 999,
-                  status: 'Yes',
-                  bookingid: '123242342354534524'),
-              _buildBookingCard(
-                  customerName: 'jon',
-                  service: 'water Damage',
-                  date: '12/5/2025',
-                  amount: 999,
-                  status: 'Yes',
-                  bookingid: '123242342354534524'),
+              _buildServiceCard(
+                context,
+                id: '06384cad-3405-4dcr-88bd-c702845678d84f3',
+                ServiceName: 'Storage Increase',
+                Description: 'Increase your phone\'s storage',
+                amount: 999,
+                EstimatedTime: '90 Minutes',
+                Category: 'Repair',
+              ),
+              _buildServiceCard(
+                context,
+                id: '06384cad-3405-4dcr-88bd-c702845678d84f3',
+                ServiceName: 'Camera Cleanup',
+                Description: 'Camera cleaning',
+                amount: 199,
+                EstimatedTime: '10 Minutes',
+                Category: 'Cleaning',
+              ),
             ],
           ),
         ),
       ),
-      drawer: Drawer(
-        backgroundColor: const Color(0xFF1E1E2E),
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
-          children: [
-            Text(
-              "Admin Dashboard",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.dashboard, color: Colors.white),
-              title: Text("Dashboard", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Dashbordpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book_online, color: Colors.white),
-              title: Text("Booking", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Bookingpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.build, color: Colors.white),
-              title: Text("Services", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Servicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.devices, color: Colors.white),
-              title: Text("Devices", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Devicepage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technicians", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Techicianpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.check_circle, color: Colors.white),
-              title: Text("Completed Orders",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.engineering, color: Colors.white),
-              title: Text("Technician Requests",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Techniciarequstpage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text("Logout", style: TextStyle(color: Colors.white)),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: AdminDraw(),
     );
   }
 
-  Widget _buildBookingCard({
-    required String bookingid,
-    required String customerName,
-    required String service,
-    required String date,
+  Widget _buildServiceCard(
+    BuildContext context,
+    {
+    required String id,
+    required String ServiceName,
+    required String Description,
+    required String EstimatedTime,
     required double amount,
-    required String status,
-    bool isCompleted = true,
-    bool isScheduled = false,
+    required String Category,
   }) {
-    Color statusColor;
-    if (isCompleted) {
-      statusColor = const Color(0xFF4CAF50); // Green
-    } else if (isScheduled) {
-      statusColor = const Color(0xFFFFA726); // Orange
-    } else {
-      statusColor = const Color(0xFF61DAFB); // Cyan
-    }
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -251,12 +158,12 @@ class _BookingpageState extends State<Servicepage> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.2),
+              color: AppColors.green,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              Icons.settings_backup_restore_outlined,
-              color: statusColor,
+              Icons.phone_android_rounded,
+              color: const Color.fromARGB(255, 248, 255, 248),
               size: 30,
             ),
           ),
@@ -266,7 +173,7 @@ class _BookingpageState extends State<Servicepage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  customerName,
+                  ServiceName,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -274,14 +181,14 @@ class _BookingpageState extends State<Servicepage> {
                   ),
                 ),
                 Text(
-                  service,
+                  Description,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.white70,
                   ),
                 ),
                 Text(
-                  date,
+                  EstimatedTime,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.white54,
@@ -304,14 +211,13 @@ class _BookingpageState extends State<Servicepage> {
               ),
               const SizedBox(height: 8),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: statusColor,
+                  color: AppColors.green,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  status,
+                  "Popular",
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -329,24 +235,131 @@ class _BookingpageState extends State<Servicepage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   backgroundColor: const Color(0xFF1E1E2E),
-                  title: const Text(
-                    "Booking Details",
-                    style: TextStyle(color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  content: Text(
-                    "Customer: $customerName\nService: $service\nDate: $date\nAmount: \$${amount.toStringAsFixed(2)}\nStatus: $status",
-                    style: const TextStyle(color: Colors.white70),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Service Details",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildDetailRow("Service ID", id, Colors.white70),
+                        const Divider(color: Colors.white24, height: 16),
+                        _buildDetailRow("Service", ServiceName, Colors.white),
+                        _buildDetailRow("Description", Description, Colors.white70),
+                        _buildDetailRow("Estimated Time", EstimatedTime, Colors.white70),
+                        _buildDetailRow("Category", Category, Colors.white70),
+                        _buildDetailRow("Amount", "\$${amount.toStringAsFixed(2)}", Colors.white),
+                      ],
+                    ),
                   ),
                   actions: [
-                    TextButton(
-                      child: const Text("Close",
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () => Navigator.pop(context),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF61DAFB), // Cyan for Edit
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Editservice()),
+                              ),
+                              child: const Text(
+                                "Edit",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.green, // Green for Close
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text(
+                                "Close",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value, Color valueColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$label:",
+            style: const TextStyle(
+              color: Colors.white54,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: valueColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),
