@@ -13,7 +13,7 @@ class UserAuthService {
   final String logoutUrl=ApiConstants.logoutUrl;
   String?userRole;
 
-  // REGISTER
+  // REGISTER   
   Future<String> registerUser(Registermodel user) async {
     try {
       log("Sending register data: ${user.toJson()}");

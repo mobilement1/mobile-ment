@@ -3,8 +3,8 @@ import 'package:mobile_servies/admin/view/Servicess/widgets.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/widgets/appBar.dart';
 
-class AddServicePage extends StatelessWidget {
-  const AddServicePage({super.key});
+class Editservice extends StatelessWidget {
+  const Editservice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class AddServicePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Add Services",
+                "Edit Services",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(height: 20),
@@ -99,7 +99,7 @@ class AddServicePage extends StatelessWidget {
                       backgroundColor: AppColors.darkBluePurple,
                     ),
                     onPressed: () {},
-                    child: const Text("Add", style: TextStyle(color: Colors.white,fontSize: 18)),
+                    child: const Text("Save", style: TextStyle(color: Colors.white,fontSize: 18)),
                   ),
                 ],
               )

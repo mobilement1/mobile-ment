@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
 
@@ -23,7 +21,7 @@ class PrivacypolicyTech extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          // child: Text( TextConsts.priva, style: TextStyle(color: AppColors.whiteClr,fontSize: 18))
+          child: Text( TextConsts.privacytxt, style: TextStyle(color: AppColors.whiteClr,fontSize: 18))
         ),
       ),
     );
