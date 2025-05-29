@@ -21,7 +21,7 @@ class BecomeTechPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 22),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -55,8 +55,10 @@ class BecomeTechPage extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                     textAlign: TextAlign.start,
-                    softWrap: true,
+                    softWrap: true,          
+
                   ),
+
                 ),
                 const Gap(25),
                 const Padding(
