@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math'; // Needed for max()
+import 'dart:math';
+
+import 'package:mobile_servies/tech/constants/colors.dart'; // Needed for max()
 
 
 class HorizontalBarChart extends StatelessWidget {
@@ -15,7 +17,7 @@ class HorizontalBarChart extends StatelessWidget {
       'Charging Port Repair',
       'Storage Increase'
     ];
-    final values = [8.0, 12.0, 5.0, 4.0, 3.0, 3.0];
+    final values = [8.0, 20.0, 5.0, 4.0, 3.0, 3.0];
     
     // ✅ FIXED: Use the highest value in the list for scaling
     final maxBarValue = values.reduce(max);
@@ -30,8 +32,7 @@ class HorizontalBarChart extends StatelessWidget {
             maxValue: maxBarValue,
             label: labels[index],
             gradientColors: const [
-              Color.fromARGB(255, 95, 107, 214),
-              Color.fromARGB(228, 110, 161, 171),
+            Color.fromARGB(121, 97, 218, 251),Color.fromARGB(144, 97, 218, 251)
             ],
           );
         }),
@@ -65,12 +66,11 @@ class Bar extends StatelessWidget {
         children: [
           Stack(
             children: [
-              // Background track
               Container(
-                height: 35,
+                height: 36,
                 width: maxWidth,
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey.shade100,
+                  color: const Color.fromARGB(214, 255, 107, 139),
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
@@ -103,7 +103,7 @@ class Bar extends StatelessWidget {
                   child: Text(
                     value.toInt().toString(),
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       shadows: [

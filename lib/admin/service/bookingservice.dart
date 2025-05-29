@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:mobile_servies/admin/Model/bookingmodel.dart';
 
 class BookingService {
-  final Dio _dio = Dio();
+  final Dio dio = Dio();
 
   Future<List<Booking>> fetchBookings() async {
     try {
-      final response = await _dio.get(
+      final response = await dio.get(
           'https://mobilemend-backend.onrender.com/api/Booking/get-booking');
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
