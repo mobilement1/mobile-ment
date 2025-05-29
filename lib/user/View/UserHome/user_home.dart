@@ -1,21 +1,15 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mobile_servies/user/View/UserHome/become_tech.dart';
+import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 import 'package:mobile_servies/user/constants/imageconstants.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
-import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/view/UserService/user_service.dart';
 import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection.dart';
-import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
 import 'package:provider/provider.dart';
-
-
-
-
-
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -31,31 +25,25 @@ class _UserHomeState extends State<UserHome> {
     Imageconstants.img3,
     Imageconstants.img4,
   ];
+
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
-     
       appBar: AppBar(
-      
-       
         title: Row(
           children: [
-            text(TextConstants.title1, Color(0xFF61DAFB), 30, FontWeight.bold),
+            text(TextConstants.title1, const Color(0xFF61DAFB), 30, FontWeight.bold),
             text(TextConstants.title2, Colors.white, 30, FontWeight.bold),
-           Spacer(),
+            const Spacer(),
             Consumer<UserAuthProvider>(
-              builder: (context,authProvider,child) {
+              builder: (context, authProvider, child) {
                 return PopupMenuButton<String>(
-                  icon: icon(Icons.person,Colors.white),
-                  color:  Colors.white, // background color
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)) ,
-                  onSelected: (value) async{
+                  icon: icon(Icons.person, Colors.white),
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  onSelected: (value) {
                     if (value == 'logout') {
-                        authProvider.logoutUser();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UserLogin()), (Route)=>false)  ;
-                    } else if (value == 'technician') {
-                      // Navigate to become technician page
+                      showLogoutDialog(context, authProvider);
                     }
                   },
                   itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -64,7 +52,7 @@ class _UserHomeState extends State<UserHome> {
                       child: Row(
                         children: [
                           icon(Icons.logout, Colors.black),
-                           SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           text("Logout", Colors.black, 16, FontWeight.bold),
                         ],
                       ),
@@ -73,16 +61,21 @@ class _UserHomeState extends State<UserHome> {
                       value: 'technician',
                       child: Row(
                         children: [
-                          icon(Icons.build,Colors.black),
+                          icon(Icons.build, Colors.black),
                           const SizedBox(width: 10),
                           text("Become Technician", Colors.black, 16, FontWeight.bold),
                         ],
                       ),
+                      onTap: () {
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const BecomeTechPage()));
+                        });
+                      },
                     ),
                   ],
                 );
-              }
-            )
+              },
+            ),
           ],
         ),
       ),
@@ -93,73 +86,70 @@ class _UserHomeState extends State<UserHome> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gap(30),
+              const Gap(30),
               containerStyle(
                 40,
                 220,
                 const Color(0xFF61DAFB).withOpacity(0.2),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: text(TextConstants.proffesion, Colors.white, 15,
-                      FontWeight.normal),
+                  child: text(TextConstants.proffesion, Colors.white, 15, FontWeight.normal),
                 ),
               ),
               const Gap(20),
               text(TextConstants.weCome, Colors.white, 30, FontWeight.w900),
               text(TextConstants.fix, Colors.blue, 30, FontWeight.w900),
-              Gap(30),
-              text(TextConstants.homeOroffice, Colors.white, 15,
-                  FontWeight.normal),
-              Gap(40),
+              const Gap(30),
+              text(TextConstants.homeOroffice, Colors.white, 15, FontWeight.normal),
+              const Gap(40),
+
+              // Buttons
               Row(
                 children: [
-                Row(
-  children: [
-    customButton(
-      label: TextConstants.book,
-      icon: Icons.arrow_forward,
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>BookRepairPage()));
-      },
-    ),
-    const Gap(10),
-    customButton(
-      label: TextConstants.view,
-      hasBorder: true,
-      icon: null,
-      onPressed: () {
-         Navigator.push(context, MaterialPageRoute(builder: (context)=>UserService()));
-      },
-    ),
-  ],
-),
-
-                  Gap(10),
-                 
-
+                  customButton(
+                    label: TextConstants.book,
+                    icon: Icons.arrow_forward,
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const BookRepairPage()));
+                    },
+                  ),
+                  const Gap(10),
+                  customButton(
+                    label: TextConstants.view,
+                    hasBorder: true,
+                    icon: null,
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const UserService()));
+                    },
+                  ),
                 ],
               ),
-              Gap(30),
+
+              const Gap(30),
+
+              // Icons Row
               Row(
                 children: [
-                  icon(Icons.verified_user,Colors.blue),
-                  text(TextConstants.warranty, Colors.white, 12,
-                      FontWeight.normal),
-                  Gap(10),
-                  icon(Icons.watch_later_rounded,Colors.blue),
-                  text(TextConstants.repair, Colors.white, 12,
-                      FontWeight.normal),
-                  Gap(10),
-                  icon(Icons.place,Colors.blue),
-                  text(
-                      TextConstants.onsite, Colors.white, 12, FontWeight.normal)
+                  icon(Icons.verified_user, Colors.blue),
+                  const Gap(5),
+                  text(TextConstants.warranty, Colors.white, 12, FontWeight.normal),
+                  const Gap(10),
+                  icon(Icons.watch_later_rounded, Colors.blue),
+                  const Gap(5),
+                  text(TextConstants.repair, Colors.white, 12, FontWeight.normal),
+                  const Gap(10),
+                  icon(Icons.place, Colors.blue),
+                  const Gap(5),
+                  text(TextConstants.onsite, Colors.white, 12, FontWeight.normal),
                 ],
               ),
-              Gap(60),
+
+              const Gap(60),
+
+              // Carousel
               CarouselSlider(
                 items: imageCarousel.map((imagePath) {
                   return Container(
-                    // margin: const EdgeInsets.symmetric(horizontal: 8.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
@@ -189,8 +179,7 @@ class _UserHomeState extends State<UserHome> {
                 ),
               ),
 
-              Gap(40),
-           
+              const Gap(40),
             ],
           ),
         ),
@@ -198,4 +187,3 @@ class _UserHomeState extends State<UserHome> {
     );
   }
 }
-

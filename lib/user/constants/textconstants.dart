@@ -44,4 +44,7 @@ static const viewDetails='View Details';
 static const ourDevices='Our Devices';
 static const deviceSer='Your Device Services & Status';
  static const serviceHis='Service History';
+ static const TechApplication='Tecnician Application';
+ static const Applytojoinourteamofprofessional="Apply to join our team of professional repair technicians";
+ static const ProfessionalInformation="Professional Information";
 }

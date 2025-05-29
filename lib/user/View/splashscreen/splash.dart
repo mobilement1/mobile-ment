@@ -30,7 +30,7 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset("asset/splashimg.jpg"),
+        child: Image.asset("asset/splashimg.jpg",height: 400,width: 400,),
       ),
     );
   }
