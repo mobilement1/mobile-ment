@@ -143,6 +143,7 @@ class UserDevice extends StatelessWidget {
                 spacing: 6,
                 children: [
                   Chip(label: Text('display'), backgroundColor: Colors.blue[100]),
+                  
                   Chip(label: Text('battery'), backgroundColor: Colors.blue[100]),
                   Chip(label: Text('camera'), backgroundColor: Colors.blue[100]),
                 ],
