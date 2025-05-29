@@ -40,4 +40,8 @@ static const sup="Sign Up";
 static const fill="Please Fill All Field";
 static const urservice="Our Services";
 static const urservice1="Professional device repair and maintenance service";
+static const viewDetails='View Details';
+static const ourDevices='Our Devices';
+static const deviceSer='Your Device Services & Status';
+ static const serviceHis='Service History';
 }
