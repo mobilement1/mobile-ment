@@ -61,7 +61,10 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+       
+        prefixIconColor: Colors.white70,
         labelText: labelText,
+        labelStyle: TextStyle(color: Colors.white70),
         prefixIcon: Icon(prefixIcon),
         border: const OutlineInputBorder(),
       ),

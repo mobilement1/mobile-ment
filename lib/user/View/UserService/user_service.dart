@@ -13,6 +13,9 @@ class UserService extends StatelessWidget {
     TextEditingController searchController=TextEditingController();
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
         title: Row(children: [
           text(TextConstants.title1, Color(0xFF61DAFB), 30, FontWeight.bold),
             text(TextConstants.title2, Colors.white, 30, FontWeight.bold),

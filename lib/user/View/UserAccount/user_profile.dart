@@ -30,21 +30,22 @@ class UserProfile extends StatelessWidget {
               text('zeenathtc961@gmail.com', Colors.blue, 18, FontWeight.bold),
               Gap(10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                containerStyle(140, 140, const Color(0x3361DAFB), Padding(
+                containerStyle(130, 130, const Color(0x3361DAFB), Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(children: [
-                    text('12', Colors.white, 28, FontWeight.bold),
-                    text('   Total\n Repairs', const Color.fromARGB(255, 174, 173, 173), 25, FontWeight.normal)
+                    text('12', Colors.white, 30, FontWeight.bold),
+                    text('   Total\n Repairs', const Color.fromARGB(255, 174, 173, 173), 20, FontWeight.normal)
                     
                   ],),
                 )),
-                containerStyle(140, 140 , const Color(0x3361DAFB), Padding(
+                Gap(20),
+                containerStyle(130, 130 , const Color(0x3361DAFB), Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(children: [
-                    text('2', Colors.white, 28, FontWeight.bold),
-                      text('Active\nOrders', const Color.fromARGB(255, 174, 173, 173), 25, FontWeight.normal)
+                    text('2', Colors.white, 30, FontWeight.bold),
+                      text('Active\nOrders', const Color.fromARGB(255, 174, 173, 173), 20, FontWeight.normal)
                       
                   ],),
                 ))
