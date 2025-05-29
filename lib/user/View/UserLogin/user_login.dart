@@ -5,7 +5,6 @@ import 'package:mobile_servies/user/View/UserRegister/registerwidget.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
 import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
 import 'package:mobile_servies/user/View/UserRegister/user_register.dart';
-import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
 
 class UserLogin extends StatelessWidget {
   UserLogin({super.key});

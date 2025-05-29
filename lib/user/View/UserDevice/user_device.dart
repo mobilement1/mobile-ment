@@ -49,7 +49,7 @@ class UserDevice extends StatelessWidget {
                   color:const Color(0x3361DAFB) ,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                    child: Column( 
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ListTile(
