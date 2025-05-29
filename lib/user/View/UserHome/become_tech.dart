@@ -17,12 +17,13 @@ class BecomeTechPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            child: Column(
+            child: Column(  
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 22),
-                Padding(
+                const SizedBox(height: 20),
+                Padding( 
+                  
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
