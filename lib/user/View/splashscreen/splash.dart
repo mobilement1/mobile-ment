@@ -42,7 +42,7 @@ class _SplashState extends State<Splash> {
    final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('auth_token');
    final userRole = prefs.getString('user_role');
-     log(" [SharedPrefs] user_role = $userRole");
+     log(" [SharedPrefs] user_role= $userRole");
   log(" [SharedPrefs]  auth_token = $token");
 
     final authProvider = Provider.of<UserAuthProvider>(context, listen: false);
