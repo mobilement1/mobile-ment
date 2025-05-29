@@ -47,6 +47,7 @@ class UserBooking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: Row(children: [
           text(TextConstants.title1, const Color(0xFF61DAFB), 30, FontWeight.bold),
           text(TextConstants.title2, Colors.white, 30, FontWeight.bold),

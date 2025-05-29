@@ -18,6 +18,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+                automaticallyImplyLeading: false,
         title: text("Booking Details", Colors.white, 25, FontWeight.bold),
       ),
       body: SingleChildScrollView(

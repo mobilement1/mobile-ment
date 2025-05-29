@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
+import 'package:mobile_servies/user/decoration/decoration.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 
 class UserService extends StatelessWidget {
@@ -12,6 +13,9 @@ class UserService extends StatelessWidget {
     TextEditingController searchController=TextEditingController();
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
         title: Row(children: [
           text(TextConstants.title1, Color(0xFF61DAFB), 30, FontWeight.bold),
             text(TextConstants.title2, Colors.white, 30, FontWeight.bold),
@@ -31,6 +35,7 @@ class UserService extends StatelessWidget {
             TextField(
               controller: searchController,
               decoration: InputDecoration(
+                hintText: 'Search Services',
                 border: OutlineInputBorder(),
                 prefixIcon: icon(Icons.search, Colors.white)
               ),
@@ -48,7 +53,16 @@ class UserService extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: containerStyle(30, 130,Color(0xFF181850), Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Row(children: [
+                              icon(Icons.thumb_up_outlined, Colors.white),
+                              Gap(10),
+                              text('Popular', Colors.white, 15, FontWeight.bold)],),
+                          ))),
+                        text('Increase Storage', Colors.white, 25, FontWeight.bold),
                           text('INR 2499.00', const Color.fromARGB(255, 215, 215, 215), 20, FontWeight.bold),
                           Gap(7),
                         text('Increase your phone storage', const Color.fromARGB(255, 198, 198, 198), 15, FontWeight.bold),
@@ -65,20 +79,7 @@ class UserService extends StatelessWidget {
                           ],
                         ),
                         Gap(20),
-                        Center(
-                          child: ElevatedButton(
-                           style: ElevatedButton.styleFrom(
-      backgroundColor:Color(0xFF181850),
-      padding: const EdgeInsets.symmetric(horizontal: 110, vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      
-      ),
-    ),
-                            onPressed: (){
-                                              
-                          }, child: text(TextConstants.viewDetails, Colors.white, 18, FontWeight.bold)),
-                        )
+                        
                         
                       ],
                     ),
