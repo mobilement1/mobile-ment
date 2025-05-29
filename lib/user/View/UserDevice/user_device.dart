@@ -60,6 +60,7 @@ class UserDevice extends StatelessWidget {
                             children: [
                             text('iphone 13', const Color.fromARGB(255, 215, 215, 215), 25, FontWeight.bold),
                             Gap(27),
+                            
                             Expanded(
                               child: containerStyle(30, 130, Color(0xFF181850),
                                                          Center(child: text('SmartPhone', Colors.white, 15, FontWeight.normal))),
