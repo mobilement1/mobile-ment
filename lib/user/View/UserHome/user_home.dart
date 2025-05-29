@@ -6,6 +6,7 @@ import 'package:mobile_servies/user/constants/imageconstants.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
 import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
+import 'package:mobile_servies/user/view/UserService/user_service.dart';
 import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
@@ -128,7 +129,7 @@ class _UserHomeState extends State<UserHome> {
       hasBorder: true,
       icon: null,
       onPressed: () {
-        // View action
+         Navigator.push(context, MaterialPageRoute(builder: (context)=>UserService()));
       },
     ),
   ],
