@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mobile_servies/user/View/UserDevice/devicewidget.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
@@ -33,6 +34,7 @@ class UserDevice extends StatelessWidget {
             TextField(
               controller: searchController,
               decoration: InputDecoration(
+                hintText: 'Search Devices',
                 border: OutlineInputBorder(),
                 prefixIcon: icon(Icons.search, Colors.white)
               ),
@@ -87,7 +89,7 @@ class UserDevice extends StatelessWidget {
       ),
     ),
                             onPressed: (){
-                                              
+                                 showDeviceDetailDialog(context)   ;          
                           }, child: text(TextConstants.viewDetails, Colors.white, 18, FontWeight.bold)),
                         )
                         
@@ -103,4 +105,59 @@ class UserDevice extends StatelessWidget {
       ),
     );
   }
+
+
+  void showDeviceDetailDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 24),
+      child: SizedBox(
+        width: double.infinity, // Takes full screen width
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              text('Device details', Colors.black, 22, FontWeight.bold),
+              Gap(10),
+              detailRow('Brand', 'Samsung'),
+              detailRow('Model', 'S23'),
+              detailRow('Type', 'Smartphone'),
+              detailRow('Release Year', '2024'),
+              Gap(10),
+              text('⚠️ Common Issues', Colors.black, 16, FontWeight.bold),
+              Wrap(
+                spacing: 6,
+                children: [
+                  Chip(label: Text('display'), backgroundColor: Colors.orange[200]),
+                ],
+              ),
+              Gap(10),
+              text('🛠️ Repairable Components', Colors.black, 16, FontWeight.bold),
+              Wrap(
+                spacing: 6,
+                children: [
+                  Chip(label: Text('display'), backgroundColor: Colors.blue[100]),
+                  Chip(label: Text('battery'), backgroundColor: Colors.blue[100]),
+                  Chip(label: Text('camera'), backgroundColor: Colors.blue[100]),
+                ],
+              ),
+              Gap(10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: text('Close', Colors.blue, 16, FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 }
