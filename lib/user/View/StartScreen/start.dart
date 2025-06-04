@@ -48,7 +48,7 @@ class StartScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color.fromARGB(255, 13, 58, 105),
+                          Colors.green,
                           Color.fromARGB(255, 41, 41, 41)
                         ],
                         begin: Alignment.topLeft,
@@ -87,40 +87,10 @@ class StartScreen extends StatelessWidget {
                 Gap(50),
 
              
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(color: Colors.white24, thickness: 2),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'OR',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(color: Colors.white24, thickness: 2),
-                    ),
-                  ],
-                ),
-                Gap(30),
+                
 
               
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                    
-                      backgroundImage: AssetImage(Imageconstants.googleLogo),
-                    ),
-                    Gap(30),
-                    CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage(Imageconstants.facebookLogo))
-                  ],
-                ),
+                
               ],
             ),
           ),
@@ -129,3 +99,4 @@ class StartScreen extends StatelessWidget {
     );
   }
 }
+

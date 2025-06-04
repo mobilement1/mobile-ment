@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
+
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/View/UserRegister/registerwidget.dart';
 import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
@@ -144,8 +144,8 @@ class _UserRegisterState extends State<UserRegister> {
                               borderRadius: BorderRadius.circular(30),
                               gradient: const LinearGradient(
                                 colors: [
-                                  Color(0xFF2980B9),
-                                  Color(0xFF2C3E50)
+                                  Colors.green,
+                          Color.fromARGB(255, 41, 41, 41)
                                 ],
                               ),
                             ),

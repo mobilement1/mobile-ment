@@ -19,3 +19,15 @@ Color color,Widget child,{Color?borderColor,double borderWidth=1.0}){
    child: child,
   );
 }
+Widget containers(Widget child){
+  return Expanded(
+  child:   Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(40),
+                  topLeft: Radius.circular(40),
+                ),
+              ),
+    child: child));
+}

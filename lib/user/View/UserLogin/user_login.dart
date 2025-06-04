@@ -93,7 +93,8 @@ class UserLogin extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF2980B9), Color(0xFF2C3E50)],
+                              colors: [Colors.green,
+                          Color.fromARGB(255, 41, 41, 41)],
                             ),
                           ),
                           child: Material(

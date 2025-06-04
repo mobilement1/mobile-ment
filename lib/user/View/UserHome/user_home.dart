@@ -1,15 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile_servies/user/View/UserHome/become_tech.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mobile_servies/user/View/UserBookingSection/user_bookingsection.dart';
+import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
 import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
-import 'package:mobile_servies/user/constants/imageconstants.dart';
+import 'package:mobile_servies/user/View/UserService/user_service.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
-import 'package:mobile_servies/user/decoration/decoration.dart';
-import 'package:mobile_servies/user/view/UserService/user_service.dart';
-import 'package:mobile_servies/user/view/userbookingsection/user_bookingsection.dart';
-import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:mobile_servies/user/utils/utils.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -18,168 +15,79 @@ class UserHome extends StatefulWidget {
   State<UserHome> createState() => _UserHomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
-  final imageCarousel = [
-    Imageconstants.img1,
-    Imageconstants.img2,
-    Imageconstants.img3,
-    Imageconstants.img4,
-  ];
+class _UserHomeState extends State<UserHome> with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late AnimationController _scaleController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAnimations();
+  }
+
+  void _initializeAnimations() {
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _scaleController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _slideController,
+      curve: Curves.easeOutCubic,
+    ));
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
+    );
+
+    _fadeController.forward();
+    Future.delayed(const Duration(milliseconds: 200), () => _slideController.forward());
+    Future.delayed(const Duration(milliseconds: 400), () => _scaleController.forward());
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _slideController.dispose();
+    _scaleController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            text(TextConstants.title1, const Color(0xFF61DAFB), 30, FontWeight.bold),
-            text(TextConstants.title2, Colors.white, 30, FontWeight.bold),
-            const Spacer(),
-            Consumer<UserAuthProvider>(
-              builder: (context, authProvider, child) {
-                return PopupMenuButton<String>(
-                  icon: icon(Icons.person, Colors.white),
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  onSelected: (value) {
-                    if (value == 'logout') {
-                      showLogoutDialog(context, authProvider);
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      value: 'logout',
-                      child: Row(
-                        children: [
-                          icon(Icons.logout, Colors.black),
-                          const SizedBox(width: 10),
-                          text("Logout", Colors.black, 16, FontWeight.bold),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'technician',
-                      child: Row(
-                        children: [
-                          icon(Icons.build, Colors.black),
-                          const SizedBox(width: 10),
-                          text("Become Technician", Colors.black, 16, FontWeight.bold),
-                        ],
-                      ),
-                      onTap: () {
-                        Future.delayed(Duration.zero, () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const BecomeTechPage()));
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
+      
+      body: Container(
+      
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Gap(30),
-              containerStyle(
-                40,
-                220,
-                const Color(0xFF61DAFB).withOpacity(0.2),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: text(TextConstants.proffesion, Colors.white, 15, FontWeight.normal),
+              HeaderSection(_fadeAnimation),
+              Expanded(
+                child: MainContentSection(
+                  slideAnimation: _slideAnimation,
+                  scaleAnimation: _scaleAnimation,
                 ),
               ),
-              const Gap(20),
-              text(TextConstants.weCome, Colors.white, 30, FontWeight.w900),
-              text(TextConstants.fix, Colors.blue, 30, FontWeight.w900),
-              const Gap(30),
-              text(TextConstants.homeOroffice, Colors.white, 15, FontWeight.normal),
-              const Gap(40),
-
-              // Buttons
-              Row(
-                children: [
-                  customButton(
-                    label: TextConstants.book,
-                    icon: Icons.arrow_forward,
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const BookRepairPage()));
-                    },
-                  ),
-                  const Gap(10),
-                  customButton(
-                    label: TextConstants.view,
-                    hasBorder: true,
-                    icon: null,
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const UserService()));
-                    },
-                  ),
-                ],
-              ),
-
-              const Gap(30),
-
-              // Icons Row
-              Row(
-                children: [
-                  icon(Icons.verified_user, Colors.blue),
-                  const Gap(5),
-                  text(TextConstants.warranty, Colors.white, 12, FontWeight.normal),
-                  const Gap(10),
-                  icon(Icons.watch_later_rounded, Colors.blue),
-                  const Gap(5),
-                  text(TextConstants.repair, Colors.white, 12, FontWeight.normal),
-                  const Gap(10),
-                  icon(Icons.place, Colors.blue),
-                  const Gap(5),
-                  text(TextConstants.onsite, Colors.white, 12, FontWeight.normal),
-                ],
-              ),
-
-              const Gap(60),
-
-              // Carousel
-              CarouselSlider(
-                items: imageCarousel.map((imagePath) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(
-                        imagePath,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                  );
-                }).toList(),
-                options: CarouselOptions(
-                  autoPlay: true,
-                  height: 180,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.8,
-                  autoPlayAnimationDuration: const Duration(seconds: 1),
-                ),
-              ),
-
-              const Gap(40),
             ],
           ),
         ),
@@ -187,3 +95,106 @@ class _UserHomeState extends State<UserHome> {
     );
   }
 }
+
+
+
+class MainContentSection extends StatelessWidget {
+  final Animation<Offset> slideAnimation;
+  final Animation<double> scaleAnimation;
+
+  const MainContentSection({
+    required this.slideAnimation,
+    required this.scaleAnimation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: slideAnimation,
+      child: Container(
+        decoration: ColorStyle.mainContentDecoration,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScaleTransition(
+                  scale: scaleAnimation,
+                  child: Container(
+      height: 300,
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: ColorStyle.neumorphicCardDecoration,
+      child:LottieBuilder.asset("asset/lottieimg.json")
+       )
+                ),
+                const Gap(32),
+                   Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        text(TextConstants.quikActions, Color(0xFF2E2E2E), 24, FontWeight.w700),
+      Gap(4),
+      text(TextConstants.access, Color(0xFF5A5A5A), 16, FontWeight.w400),
+        const Gap(20),
+        Row(
+          children: [
+            Expanded(
+              child: ActionCard(
+                TextConstants.book,
+               TextConstants.sheduled,
+                Icons.calendar_today_outlined,
+               LinearGradient(
+    colors: [Color(0xFF718355), Color(0xFF8B9D7A)],
+  ),
+                () => Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const BookRepairPage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(opacity: animation, child: child);
+                    },
+                  ),
+                ),
+                false
+              ),
+            ),
+            const Gap(16),
+            Expanded(
+              child: ActionCard(
+                TextConstants.view,
+             TextConstants.viewSer ,
+                Icons.visibility_outlined,
+                
+                null,
+                () => Navigator.push(
+                  context,MaterialPageRoute(builder: (ctx)=>UserService(showBackButton: true,))
+                  
+                ),
+                true
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+             
+                const Gap(32),
+                FeaturesSection(),
+                const Gap(40),
+                
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+  

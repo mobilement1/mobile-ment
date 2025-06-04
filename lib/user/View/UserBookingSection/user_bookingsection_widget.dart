@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/user/utils/utils.dart';
-
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/user/View/UserBookingSection/addAddress.dart';
+import 'package:mobile_servies/user/constants/textconstants.dart';
 
 
 Widget buildDropdown({
@@ -12,28 +14,39 @@ Widget buildDropdown({
   return DropdownButtonFormField<String>(
     decoration: InputDecoration(
       filled: true,
-      fillColor: ColorStyle.containerColor,
+      fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-       hintStyle:  TextStyle(color: Colors.white70),
-       
+      hintStyle: GoogleFonts.openSans(color: const Color(0xFF8D8D8D)),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+        borderSide: const BorderSide(color: Color(0xFF8D8D8D), width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: const Color.fromARGB(255, 153, 198, 235), width: 2),
+        borderSide: const BorderSide(color: Color(0xFF718355), width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
     ),
-    hint: Text(hintText, style: const TextStyle(color: Colors.grey, fontSize: 16)),
+    hint: Text(
+      hintText,
+      style: GoogleFonts.openSans(
+        color: const Color(0xFF8D8D8D),
+        fontSize: 16,
+      ),
+    ),
     value: value,
-    dropdownColor: const Color.fromARGB(255, 33, 52, 68),
-    iconEnabledColor: Colors.white,             
-    style: const TextStyle(color: Colors.white),
+    dropdownColor: Colors.white,
+    iconEnabledColor: const Color(0xFF5A5A5A),
+    style: GoogleFonts.openSans(color: const Color(0xFF2E2E2E)),
     items: items.map((item) {
       return DropdownMenuItem(
         value: item,
-        child: Text(item),
+        child: Text(
+          item,
+          style: GoogleFonts.openSans(
+            color: const Color(0xFF2E2E2E),
+            fontSize: 16,
+          ),
+        ),
       );
     }).toList(),
     onChanged: onChanged,
@@ -41,35 +54,160 @@ Widget buildDropdown({
 }
 
 
-class CustomTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final IconData prefixIcon;
-  final TextInputType keyboardType;
 
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.prefixIcon,
-    this.keyboardType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-       
-        prefixIconColor: Colors.white70,
-        labelText: labelText,
-        labelStyle: TextStyle(color: Colors.white70),
-        prefixIcon: Icon(prefixIcon),
-        border: const OutlineInputBorder(),
+Widget customButton({
+  required String label,
+  required VoidCallback onPressed,
+  IconData? icon,
+  bool hasBorder = false,
+}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Color.fromARGB(255, 85, 105, 53),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: hasBorder
+            ? const BorderSide(color: Color(0xFF2E2E2E))
+            : BorderSide.none,
       ),
-    );
-  }
+    ),
+    onPressed: onPressed,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+        ),
+        icon != null
+            ? Row(
+                children: [
+                   Gap(10),
+                  Icon(icon, color: const Color(0xFF718355)),
+                ],
+              )
+            : Container(),
+      ],
+    ),
+  );
 }
 
+  
 
+Widget showAddressDialog(BuildContext context){
+  List<String> savedAddresses = [];
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Color.fromARGB(255, 85, 105, 53),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        
+      ),
+    ),
+    onPressed: () {
+      showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Select or Add Address",
+                style: GoogleFonts.poppins(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF2E2E2E),
+                ),
+              ),
+              const Gap(10),
+              savedAddresses.isNotEmpty
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: savedAddresses
+                          .map((address) => Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text(
+                                  address,
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF2E2E2E),
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                    )
+                  : Text(
+                      "No saved addresses",
+                      style: GoogleFonts.openSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+              const Gap(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF8D6E63),
+                      ),
+                    ),
+                  ),
+                  customButton(
+                    label: 'Add Address',
+                    icon: null,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  AddAddressPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+    },
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          TextConstants.selectAddress,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+        ),
+        
+      ],
+    ),
+  );
+}
