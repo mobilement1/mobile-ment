@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
 import 'package:mobile_servies/tech/controller/providers/assigned_provider.dart';
 import 'package:mobile_servies/tech/screens/completed/widgets/widgets.dart';
 import 'package:mobile_servies/tech/widgets/container.dart';
-import 'package:mobile_servies/tech/widgets/appBar.dart';
 import 'package:mobile_servies/tech/widgets/textField.dart';
 import 'package:provider/provider.dart';
 
@@ -14,18 +14,21 @@ class CompletedPageTech extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBluePurple,
-      appBar: customAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [ SizedBox(height: 10),
+          children: [
+            const Gap(20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
-              child: Text(TextConsts.assignedTasks,
-                style: TextStyle(color: AppColors.whiteClr,fontSize: 28,fontWeight: FontWeight.w700,
-                ),),
+              child: Text(
+                TextConsts.completed, 
+                style: TextStyle(
+                  color: AppColors.whiteClr,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             searchField(),
@@ -34,46 +37,71 @@ class CompletedPageTech extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                   colorContainers(Icons.assignment, ' 12', 'Assigned',AppColors.orange,Color(0x25FFA726)),
-                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress',AppColors.appBarMobileTitle,Color(0x3061DAFB)),
-                  colorContainers(Icons.check_circle, ' 20', 'Completed',AppColors.green,Color(0x404CAF50)),
-                ],),
+                  colorContainers(Icons.assignment, ' 12', 'Assigned'),
+                  colorContainers(Icons.hourglass_empty, ' 7', 'In Progress'),
+                  colorContainers(Icons.check_circle, ' 20', 'Completed'),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             Expanded(
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.grey),
-                  color: const Color.fromARGB(255, 44, 44, 78),
+                  border: Border.all(color: Color(0xFF718355)),
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Consumer<AssignedTechProvider>(
                     builder: (context, provider, _) {
                       return ListView.builder(
                         itemCount: 2,
                         itemBuilder: (context, index) {
                           final isExpanded = provider.selectedIndex == index;
-                          return Column(children: [
+                          return Column(
+                            children: [
                               GestureDetector(
                                 onTap: () => provider.dropContainer(index),
                                 child: Container(
-                                  margin: EdgeInsets.all(5.0),
-                                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.1),borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: AppColors.grey),),
+                                  margin: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF718355).withOpacity(0.8),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: AppColors.grey),
+                                  ),
                                   child: ListTile(
-                                    contentPadding: const EdgeInsets.symmetric( horizontal: 20, vertical: 10),
-                                    leading: Container( height: 50, width: 50, decoration: BoxDecoration(
-                                        color: const Color(0x404CAF50),borderRadius: BorderRadius.circular(15),),
-                                      child: const Icon( Icons.phone_android_outlined, size: 30, color: Colors.green),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    leading: Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(36, 255, 255, 255),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Icon(
+                                        Icons.phone_android_outlined,
+                                        size: 30,
+                                        color: Color.fromARGB(255, 215, 216, 213)
+                                            .withOpacity(0.8),
+                                      ),
                                     ),
-                                    title: Text(  "Smith",style: const TextStyle(color: AppColors.whiteClr,fontWeight: FontWeight.bold), ),
-                                    subtitle: const Text("iPhone 13 - 05/08/2025",style: TextStyle(color: Colors.white70), ),
+                                    title: const Text(
+                                      "Smith",
+                                      style: TextStyle(
+                                        color: AppColors.whiteClr,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: const Text(
+                                      "iPhone 13 - 05/08/2025",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
                                     trailing: Icon(
                                       isExpanded
                                           ? Icons.keyboard_arrow_up
@@ -91,53 +119,70 @@ class CompletedPageTech extends StatelessWidget {
                                     margin: const EdgeInsets.only(bottom: 10),
                                     padding: const EdgeInsets.all(15),
                                     decoration: BoxDecoration(
-                                      color: Color.fromRGBO(255, 255, 255, 0.05),
+                                      color: Color(0xFF718355).withOpacity(0.8),
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: AppColors.grey),
                                     ),
-                                    child: Column( crossAxisAlignment:CrossAxisAlignment.start,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Text( "Service ID: a2466d16-6da5-46cc-9e1a-a5d4f94a4d9f",style:TextStyle(color: Colors.white)),                                      const SizedBox(height: 5),
-                                  
-                                        const Text("Complaint: Screen not working properly",style:TextStyle(color: Colors.white70)),
+                                        const Text(
+                                          "Service ID: a2466d16-6da5-46cc-9e1a-a5d4f94a4d9f",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                         const SizedBox(height: 5),
-                                        const Text("Location: Calicut,kerala",style:TextStyle(color: Colors.white70)),
+                                        const Text(
+                                          "Complaint: Screen not working properly",
+                                          style: TextStyle(color: Colors.white70),
+                                        ),
                                         const SizedBox(height: 5),
-                                        const Text("Status: Assigned",style:TextStyle(color: Colors.white70)),
+                                        const Text(
+                                          "Location: Calicut, Kerala",
+                                          style: TextStyle(color: Colors.white70),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Text(
+                                          "Status: Completed",
+                                          style: TextStyle(color: Colors.white70),
+                                        ),
                                         const SizedBox(height: 10),
-                                        Row(mainAxisAlignment: MainAxisAlignment.end,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                             ElevatedButton.icon(
+                                            ElevatedButton.icon(
                                               onPressed: () {
-                                               viewDialog(context);
+                                                viewDialog(context);
                                               },
                                               icon: const Icon(Icons.remove_red_eye_sharp),
                                               label: const Text("View"),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.blue,
+                                                backgroundColor:  Color(0xFF718355),
                                                 foregroundColor: Colors.white,
                                               ),
-                                            ),SizedBox(width: 5,),
+                                            ),
+                                            const SizedBox(width: 5),
                                             ElevatedButton.icon(
                                               onPressed: () {
                                                 ScaffoldMessenger.of(context).showSnackBar(
-                                                  const SnackBar(content: Text("Task Reopened ✅"),duration: Duration(seconds: 1),),
+                                                  const SnackBar(
+                                                    content: Text("Task Reopened ✅"),
+                                                    duration: Duration(seconds: 1),
+                                                  ),
                                                 );
                                               },
                                               icon: const Icon(Icons.undo),
                                               label: const Text("Reopen"),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.blue,
+                                                backgroundColor: Color(0xFF718355),
                                                 foregroundColor: Colors.white,
                                               ),
-                                            )
-                                           
+                                            ),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
                             ],
                           );
                         },

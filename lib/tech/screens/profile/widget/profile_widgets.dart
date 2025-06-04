@@ -43,32 +43,32 @@ class SpecialisationWidget extends StatelessWidget {
             "Smartphone Repair",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.smartphone, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Laptop Service",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.laptop, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Network Setup",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.wifi, color: AppColors.blue),
+         backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Hardware Installation",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.computer, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
       ],
     );
@@ -87,7 +87,7 @@ Widget jobsDoneRatingsExperience({
   return Container(
     height: 100,width: 100,decoration: BoxDecoration(
        gradient: const LinearGradient(
-                    colors: [AppColors.darkBluePurple, AppColors.justSample],
+                    colors: [Color(0xFF718355),Color(0xFF718355)],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),borderRadius: BorderRadius.circular(15)
@@ -107,13 +107,13 @@ Widget jobsDoneRatingsExperience({
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Icon(icon, color: AppColors.grey, size: 24),
+                  Icon(icon, color: const Color.fromARGB(255, 255, 255, 255), size: 24),
                 ],
               )
             : Text(
                 title,
                 style: const TextStyle(
-                  color: AppColors.whiteClr,
+                  color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -121,7 +121,7 @@ Widget jobsDoneRatingsExperience({
         Text(
           subtitle,
           style: const TextStyle(
-            color: AppColors.grey,
+            color: Colors.white70,
             fontSize: 16,
           ),
         ),

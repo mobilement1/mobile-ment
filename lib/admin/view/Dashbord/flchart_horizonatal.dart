@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+
+// Horizontal Bar Chart
 import 'dart:math';
+import 'dart:ui';
 
-import 'package:mobile_servies/tech/constants/colors.dart'; // Needed for max()
-
+import 'package:flutter/material.dart';
 
 class HorizontalBarChart extends StatelessWidget {
   const HorizontalBarChart({super.key});
@@ -18,8 +19,6 @@ class HorizontalBarChart extends StatelessWidget {
       'Storage Increase'
     ];
     final values = [8.0, 20.0, 5.0, 4.0, 3.0, 3.0];
-    
-    // ✅ FIXED: Use the highest value in the list for scaling
     final maxBarValue = values.reduce(max);
 
     return SizedBox(
@@ -32,7 +31,8 @@ class HorizontalBarChart extends StatelessWidget {
             maxValue: maxBarValue,
             label: labels[index],
             gradientColors: const [
-            Color.fromARGB(121, 97, 218, 251),Color.fromARGB(144, 97, 218, 251)
+              Color(0xFF97A97C), // Light green
+              Color(0xFF718355), // Darker green
             ],
           );
         }),
@@ -52,7 +52,7 @@ class Bar extends StatelessWidget {
     required this.value,
     required this.maxValue,
     required this.label,
-    this.gradientColors = const [Colors.blue, Colors.lightBlueAccent],
+    this.gradientColors = const [Color(0xFF97A97C), Color(0xFF718355)],
   });
 
   @override
@@ -70,16 +70,18 @@ class Bar extends StatelessWidget {
                 height: 36,
                 width: maxWidth,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(214, 255, 107, 139),
+                  color: const Color(0xFFE5E5E5), // Lighter gray background
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
-              // Foreground bar
               Container(
                 height: 35,
                 width: barWidth,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20)),
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
                   gradient: LinearGradient(
                     colors: gradientColors,
                     begin: Alignment.centerLeft,
@@ -87,14 +89,13 @@ class Bar extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: gradientColors.last.withOpacity(0.6),
+                      color: Colors.black.withOpacity(0.15),
                       offset: const Offset(3, 3),
                       blurRadius: 6,
                     ),
                   ],
                 ),
               ),
-              // Value text
               Positioned(
                 right: 10,
                 top: 0,
@@ -102,14 +103,14 @@ class Bar extends StatelessWidget {
                 child: Center(
                   child: Text(
                     value.toInt().toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: const Color(0xFF2E2E2E),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       shadows: [
                         Shadow(
-                          color: Colors.black38,
-                          offset: Offset(1, 1),
+                          color: Colors.black.withOpacity(0.3),
+                          offset: const Offset(1, 1),
                           blurRadius: 2,
                         ),
                       ],
@@ -125,7 +126,7 @@ class Bar extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.white70,
+              color: Color(0xFF5A5A5A), // Adjusted to match subtitle color
             ),
             textAlign: TextAlign.left,
           ),

@@ -1,120 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
 import 'package:mobile_servies/admin/widgets.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:mobile_servies/user/View/UserHome/user_home.dart';
 
 class Techicianpage extends StatelessWidget {
-  const Techicianpage({super.key});
+  Techicianpage({super.key});
+
+  final GlobalKey _technicianKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2E),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        backgroundColor: const Color(0xFF181850),
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              const Text(
-                "Mobile",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF61DAFB),
-                  fontSize: 30,
-                ),
-              ),
-              const Text(
-                "Mend",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white70,
-                  size: 26,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 25),
-              const Text(
-                "Technicians",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontSize: 32,
-                ),
-              ),
-              const Text(
-                "Manage bookings, services, devices, and technicians",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              const SizedBox(height: 25),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Technicians Management",
+                  const SizedBox(height: 50),
+                  AppLogo(),
+                  const SizedBox(height: 30),
+                  const Text(
+                    "Technicians",
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: Colors.white,
+                      fontSize: 32,
                     ),
+                  ),
+                  const Text(
+                    "Manage bookings, services, devices, and technicians",
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                  const SizedBox(height: 25),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Technicians Management",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  buildTechnicianCard(
+                    context: context,
+                    id: '10119757-0fad-11f1-893f-4567899876cvb',
+                    name: 'John Anderson',
+                    location: 'Calicut',
+                    contactEmail: 'john@gmail.com',
+                    contactPhone: '7984674746',
+                    specialized: 'iPhone, Smartphone, Laptop',
+                    experience: '2 Years',
+                    rating: '0',
+                    jobsCompleted: '1 Completed',
+                  ),
+                  buildTechnicianCard(
+                    context: context,
+                    id: '10119757-0fad-11f1-893f-4567899876cvb',
+                    name: 'Jaison',
+                    location: 'Palakkad',
+                    contactEmail: 'jaison@gmail.com',
+                    contactPhone: '7984987632',
+                    specialized: 'iPhone, Smartphone, Laptop',
+                    experience: '7 Years',
+                    rating: '4.5',
+                    jobsCompleted: '1124 Completed',
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-              buildTechnicianCard(
-                context: context,
-                id: '10119757-0fad-11f1-893f-4567899876cvb',
-                name: 'John Anderson',
-                location: 'Calicut',
-                contactEmail: 'john@gmail.com',
-                contactPhone: '7984674746',
-                specialized: 'iPhone, Smartphone, Laptop',
-                experience: '2 Years',
-                rating: '0',
-                jobsCompleted: '1 Completed',
-              ),
-              buildTechnicianCard(
-                context: context,
-                id: '10119757-0fad-11f1-893f-4567899876cvb',
-                name: 'jaison ',
-                location: 'Palakkad',
-                contactEmail: 'jaison@gmail.com',
-                contactPhone: '7984987632',
-                specialized: 'iPhone, Smartphone, Laptop',
-                experience: '7 Years',
-                rating: '4.5',
-                jobsCompleted: '1124 Completed',
-              ),
-            ],
+            ),
           ),
-        ),
+          DraggableFabMenu(adminDashboardKey: _technicianKey),
+        ],
       ),
-      drawer: AdminDraw(),
     );
   }
 
@@ -134,7 +100,7 @@ class Techicianpage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF282845),
+        color: const Color(0xFF718355),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -181,7 +147,7 @@ class Techicianpage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  backgroundColor: const Color(0xFF1E1E2E),
+                  backgroundColor: const Color(0xFF718355),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -235,10 +201,7 @@ class Techicianpage extends StatelessWidget {
                                 ),
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              onPressed: () {
-                                // Block action to be implemented
-                                Navigator.pop(context);
-                              },
+                              onPressed: null, // Disable until implemented
                               child: const Text(
                                 "Block",
                                 style: TextStyle(
@@ -264,29 +227,6 @@ class Techicianpage extends StatelessWidget {
                               onPressed: () => Navigator.pop(context),
                               child: const Text(
                                 "Remove",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF61DAFB),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text(
-                                "Close",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,

@@ -9,13 +9,13 @@ class AddDeviceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(),
+      appBar: AppBar(backgroundColor: Color.fromARGB(255, 85, 105, 53),iconTheme: IconThemeData(color: Colors.white),),
       body: Center(
         child: Container(
           width: 350,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 45, 45, 83),
+            color: const Color(0xFF718355),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: AppColors.grey),
           ),
@@ -73,10 +73,10 @@ class AddDeviceScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBluePurple,
+                      backgroundColor: Color.fromARGB(255, 85, 105, 53),
                     ),
                     onPressed: () {},
-                    child: const Text("Add", style: TextStyle(color: Colors.white,fontSize: 18)),
+                    child: const Text("Add", style: TextStyle(color: Colors.white ,fontSize: 18)),
                   ),
                 ],
               )

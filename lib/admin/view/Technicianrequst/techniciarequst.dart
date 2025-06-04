@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
 import 'package:mobile_servies/admin/widgets.dart';
+import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:mobile_servies/user/View/UserHome/user_home.dart';
 
 class Techniciarequstpage extends StatefulWidget {
   const Techniciarequstpage({super.key});
@@ -9,73 +12,65 @@ class Techniciarequstpage extends StatefulWidget {
 }
 
 class _TechniciarequstpageState extends State<Techniciarequstpage> {
+  final GlobalKey _technicianRqstKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2E),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+                AppLogo(),
+                const SizedBox(height: 30),
+                const Text(
+                  "Technician Requests",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    fontSize: 32,
+                  ),
+                ),
+                const Text(
+                  "Manage bookings, services, devices, and technicians",
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                const SizedBox(height: 25),
+                _buildTechnicianRequestCard(
+                  applicantID: "ba7391b9-2d70-11f0-b8d7-862ccfb06e0c",
+                  contact: "john@gmail.com\n8768839855",
+                  experience: "3",
+                  specialisation: "Android, iOS",
+                  appliedDate: "May 12, 2025",
+                  status: "Pending",
+                ),
+                _buildTechnicianRequestCard(
+                  applicantID: "ba7391b9-2d70-11f0-b8d7-862ccfb06e0c",
+                  contact: "Jabeel@gmail.com\n7902511693",
+                  experience: "5",
+                  specialisation: "Mobile Expert",
+                  appliedDate: "May 18, 2025",
+                  status: "Approved",
+                ),
+                _buildTechnicianRequestCard(
+                  applicantID: "a7391b9-2d70-11f0-b8d7-862ccfb06e0",
+                  contact: "rohitsharma@gmail.com",
+                  experience: "2",
+                  specialisation: "iOS Specialist",
+                  appliedDate: "May 25, 2025",
+                  status: "Rejected",
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
-        ),
-        backgroundColor: const Color(0xFF181850),
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              const Text("Mobile", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF61DAFB), fontSize: 30)),
-              const Text("Mend", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 30)),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined, color: Colors.white70, size: 26),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: false,
+          DraggableFabMenu(adminDashboardKey: _technicianRqstKey),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 25),
-            const Text("Technician Request", style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white, fontSize: 32)),
-            const Text("Manage bookings, services, devices, and technicians", style: TextStyle(color: Colors.grey, fontSize: 16)),
-            const SizedBox(height: 25),
-            _buildTechnicianRequestCard(
-              applicantID: "ba7391b9-2d70-11f0-b8d7-862ccfb06e0c",
-              contact: "john@gmail.com\n8768839855",
-              experience: "3",
-              specialisation: "Android, iOS",
-              appliedDate: "May 12, 2025",
-              status: "Pending",
-            ),
-            _buildTechnicianRequestCard(
-              applicantID: "ba7391b9-2d70-11f0-b8d7-862ccfb06e0c",
-              contact: "Jabeel@gmail.com\n7902511693",
-              experience: "5",
-              specialisation: "Mobile Expert",
-              appliedDate: "May 18, 2025",
-              status: "Approved",
-            ),
-            _buildTechnicianRequestCard(
-              applicantID: "a7391b9-2d70-11f0-b8d7-862ccfb06e0",
-              contact: "rohitsharma@gmail.com",
-              experience: "2",
-              specialisation: "iOS Specialist",
-              appliedDate: "May 25, 2025",
-              status: "Rejected",
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
-      drawer: AdminDraw(),
     );
   }
 
@@ -107,7 +102,7 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: const Color(0xFF1E1E2E),
+            backgroundColor: const Color(0xFF718355),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,20 +145,18 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
                       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4CAF50), // Green for Approve
+                          backgroundColor: const Color(0xFF4CAF50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        onPressed: status.toLowerCase() == "approved" ? null : () {
-                          // Add approve logic here
-                          setState(() {
-                            // Example: Update status (replace with actual backend call)
-                            // status = "Approved";
-                          });
-                          Navigator.pop(context);
-                        },
+                        onPressed: status.toLowerCase() == "approved"
+                            ? null
+                            : () {
+                                // Implement approve logic (e.g., API call)
+                                Navigator.pop(context);
+                              },
                         child: const Text(
                           "Approve",
                           style: TextStyle(
@@ -180,45 +173,20 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
                       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE53935), // Red for Reject
+                          backgroundColor: const Color(0xFFE53935),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        onPressed: status.toLowerCase() == "rejected" ? null : () {
-                          // Add reject logic here
-                          setState(() {
-                            // Example: Update status (replace with actual backend call)
-                            // status = "Rejected";
-                          });
-                          Navigator.pop(context);
-                        },
+                        onPressed: status.toLowerCase() == "rejected"
+                            ? null
+                            : () {
+                                // Implement reject logic (e.g., API call)
+                                Navigator.pop(context);
+                              },
                         child: const Text(
                           "Reject",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF61DAFB), // Cyan for Close
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text(
-                          "Close",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -238,7 +206,7 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF282845),
+          color: const Color(0xFF718355),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -281,8 +249,6 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
                       color: Colors.white70,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -304,11 +270,8 @@ class _TechniciarequstpageState extends State<Techniciarequstpage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-            
               ],
             ),
-            const SizedBox(width: 8),
           ],
         ),
       ),

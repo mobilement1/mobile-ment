@@ -7,10 +7,10 @@ Widget searchField(){
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search by ID, name or device...',
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
           prefixIcon: const Icon(Icons.search, color: Colors.white70),
           filled: true,
-          fillColor: Colors.white.withOpacity(0.1),
+          fillColor: Colors.white.withOpacity(0.2),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),

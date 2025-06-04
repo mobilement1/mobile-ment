@@ -32,7 +32,7 @@ class UserAuthService {
       log("Register response data: ${response.data}");
 
       if (response.statusCode == 201) {
-        final token = response.data['data']?['token']as String;
+        final token = response.data['data']?['token'];
         log("Response token: $token");
 
         if (token.isNotEmpty) {

@@ -50,9 +50,9 @@ class BottomNavTech extends StatelessWidget {
           ),
         ],
         currentIndex: navigationProvider.selectedIndex,
-        selectedItemColor: AppColors.appBarMobileTitle,
-        unselectedItemColor: AppColors.grey,
-        backgroundColor: AppColors.appBarBg,
+        selectedItemColor: AppColors.whiteClr,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        backgroundColor: Color.fromARGB(255, 85, 105, 53),
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           Provider.of<TechNavigationProvider>(context, listen: false).setIndex(index);

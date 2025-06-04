@@ -8,16 +8,7 @@ class PrivacypolicyTech extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBluePurple,
-      appBar: AppBar(
-        backgroundColor: AppColors.darkBluePurple,
-        title: Text(
-          'Privacy Policy',
-          style: TextStyle(color: AppColors.whiteClr),
-        ),
-        iconTheme: IconThemeData(color: AppColors.whiteClr),
-        elevation: 0,
-      ),
+     appBar: AppBar(backgroundColor:  Color.fromARGB(255, 85, 105, 53),iconTheme: IconThemeData(color:  Color.fromARGB(255, 255, 255, 254)),),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(

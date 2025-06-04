@@ -18,16 +18,8 @@ class AboutUsTech extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBluePurple,
-      appBar: AppBar(
-        backgroundColor: AppColors.darkBluePurple,
-        title: Text(
-          'About Us',
-          style: TextStyle(color: AppColors.whiteClr),
-        ),
-        iconTheme: IconThemeData(color: AppColors.whiteClr),
-        elevation: 0,
-      ),
+           appBar: AppBar(backgroundColor:  Color.fromARGB(255, 85, 105, 53),iconTheme: IconThemeData(color:  Color.fromARGB(255, 255, 255, 254)),),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -61,9 +53,9 @@ We’re committed to simplifying mobile repair with just a few taps. Thank you f
               GestureDetector(
                 onTap: _launchWebsite,
                 child: Text(
-                  '🌐 Visit our website: https://mobile-mend-ui.vercel.app/',
+                  '🌐 Visit our website:\nhttps://mobile-mend-ui.vercel.app/',
                   style: TextStyle(
-                    color: Colors.blueAccent,
+                    color: Colors.blue,fontSize: 17,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -71,12 +63,12 @@ We’re committed to simplifying mobile repair with just a few taps. Thank you f
               const SizedBox(height: 10),
               Text(
                 '📧 Contact: support@mobilemend.com',
-                style: TextStyle(color: AppColors.whiteClr),
+                style: TextStyle(color: AppColors.whiteClr,fontSize: 16),
               ),
               const SizedBox(height: 20),
               Text(
                 "Together, let's keep your devices running like new!",
-                style: TextStyle(color: AppColors.whiteClr),
+                style: TextStyle(color: AppColors.whiteClr,fontSize: 16),
               ),
             ],
           ),

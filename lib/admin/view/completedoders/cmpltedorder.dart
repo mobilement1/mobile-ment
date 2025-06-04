@@ -1,115 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
 import 'package:mobile_servies/admin/widgets.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:mobile_servies/user/View/UserHome/user_home.dart';
 
 class Cmpltedorderpage extends StatelessWidget {
-  const Cmpltedorderpage({super.key});
+  Cmpltedorderpage({super.key});
+
+  final GlobalKey _cmpltOrders = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2E),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppLogo(),
+                      const SizedBox(height: 30),
+                      const Text(
+                        "Completed Orders",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 32,
+                        ),
+                      ),
+                      const Text(
+                        "Manage bookings, services, devices, and technicians",
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFF718355)),
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _buildCompletedCard(
+                              context,
+                              serviceID: "6da27ea9-36cf-47af-b565-a9660823c8ab",
+                              customerName: "Habeeb",
+                              device: "S23 Ultra",
+                              issue: "Charging not Working",
+                              date: "15/05/2024",
+                              location: "Calicut",
+                              amount: 499.0,
+                              service: "Charging Repair",
+                              status: "Completed",
+                            ),
+                            _buildCompletedCard(
+                              context,
+                              serviceID: "abc-123",
+                              customerName: "Riyas",
+                              device: "iPhone 12",
+                              issue: "Screen Broken",
+                              date: "16/05/2024",
+                              location: "Feroke",
+                              amount: 899.0,
+                              service: "Camera clear",
+                              status: "Completed",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        backgroundColor: const Color(0xFF181850),
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              const Text(
-                "Mobile",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF61DAFB),
-                  fontSize: 30,
-                ),
-              ),
-              const Text(
-                "Mend",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white70,
-                  size: 26,
-                ),
-                onPressed: () {
-                  // Notification handling
-                },
-              ),
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: false,
+          DraggableFabMenu(adminDashboardKey: _cmpltOrders),
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 25),
-              const Text(
-                "Completed Orders",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontSize: 32,
-                ),
-              ),
-              const Text(
-                "Manage bookings, services, devices, and technicians",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              const SizedBox(height: 25),
-              _buildCompletedCard(
-                context,
-                serviceID: "6da27ea9-36cf-47af-b565-a9660823c8ab",
-                customerName: "Habeeb",
-                device: "S23 Ultra",
-                issue: "Charging not Working",
-                date: "15/05/2024",
-                location: "Calicut",
-                amount: 499.0,
-                service: "Charging Repair",
-                status: "Completed",
-              ),
-              _buildCompletedCard(
-                context,
-                serviceID: "abc-123",
-                customerName: "Riyas",
-                device: "iPhone 12",
-                issue: "Screen Broken",
-                date: "16/05/2024",
-                location: "Feroke",
-                amount: 899.0,
-                service: "Camera clear",
-                status: "Completed",
-              ),
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
-      ),
-      drawer: AdminDraw(),
     );
   }
 
   Widget _buildCompletedCard(
-    BuildContext context,
-    {
+    BuildContext context, {
     required String serviceID,
     required String customerName,
     required String device,
@@ -124,7 +113,7 @@ class Cmpltedorderpage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF282845),
+        color: const Color(0xFF718355),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -203,7 +192,7 @@ class Cmpltedorderpage extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          backgroundColor: const Color(0xFF1E1E2E),
+                          backgroundColor: const Color(0xFF718355),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
