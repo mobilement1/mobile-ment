@@ -4,9 +4,7 @@ class TextConstants {
  static const device="Device";
  static const booking="Booking";
  static const account="Account";
- static const title1="Mobile";
- static const title2="Mend";
- static const proffesion="Proffessional Repair Service";
+static const proffesion="Proffessional Repair Service";
  static const weCome="We Come To     ";
  static const fix="Fix Your Device";
  static const homeOroffice='''Professional, convenient repairs at your home or office. No need to visit a store or ship your device.''';
@@ -47,4 +45,8 @@ static const deviceSer='Your Device Services & Status';
  static const TechApplication='Tecnician Application';
  static const Applytojoinourteamofprofessional="Apply to join our team of professional repair technicians";
  static const ProfessionalInformation="Professional Information";
+ static const quikActions="Quick Actions";
+ static const access="Access your services instantly";
+ static const sheduled="Schedule Repair";
+ static const viewSer="View Services";
 }

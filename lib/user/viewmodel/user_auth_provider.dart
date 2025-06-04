@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/user/UserModel/loginmodel.dart';
-import 'package:mobile_servies/user/UserModel/registermodel.dart';
-import 'package:mobile_servies/user/UserServices/user_authService.dart';
+import 'package:mobile_servies/user/UserModel/AuthModel/loginmodel.dart';
+import 'package:mobile_servies/user/UserModel/AuthModel/registermodel.dart';
+import 'package:mobile_servies/user/UserServices/AuthService/user_authService.dart';
 import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
 
 class UserAuthProvider extends ChangeNotifier {
