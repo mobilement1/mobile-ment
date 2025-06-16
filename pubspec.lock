@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
-  carousel_slider:
-    dependency: "direct main"
-    description:
-      name: carousel_slider
-      sha256: "7b006ec356205054af5beaef62e2221160ea36b90fb70a35e4deacd49d0349ae"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
   characters:
     dependency: transitive
     description:
@@ -248,6 +240,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  geocoding:
+    dependency: "direct main"
+    description:
+      name: geocoding
+      sha256: "606be036287842d779d7ec4e2f6c9435fc29bbbd3c6da6589710f981d8852895"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
+  geocoding_android:
+    dependency: transitive
+    description:
+      name: geocoding_android
+      sha256: fe7df2e35dc49a5176af634ff9c7b0312d9a2adc94320b936a56241f8028bbbc
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
+  geocoding_ios:
+    dependency: transitive
+    description:
+      name: geocoding_ios
+      sha256: "43bde988312feb1a3cb6c3d514e9f4b04b564d1884fa56bd8241030bbb3bde36"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
+  geocoding_platform_interface:
+    dependency: transitive
+    description:
+      name: geocoding_platform_interface
+      sha256: "8c2c8226e5c276594c2e18bfe88b19110ed770aeb7c1ab50ede570be8b92229b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   google_fonts:
     dependency: "direct main"
     description:
@@ -288,8 +312,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  jwt_decoder:
+    dependency: "direct main"
+    description:
+      name: jwt_decoder
+      sha256: "54774aebf83f2923b99e6416b4ea915d47af3bde56884eb622de85feabbc559f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   latlong2:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: latlong2
       sha256: "98227922caf49e6056f91b6c56945ea1c7b166f28ffcd5fb8e72fc0b453cc8fe"

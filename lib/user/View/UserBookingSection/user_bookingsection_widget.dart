@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_servies/user/View/UserBookingSection/addAddress.dart';
-import 'package:mobile_servies/user/constants/textconstants.dart';
 
+
+import 'package:mobile_servies/user/viewmodel/addressProvider.dart';
+import 'package:mobile_servies/user/viewmodel/bookingProvider.dart';
+import 'package:provider/provider.dart';
 
 Widget buildDropdown({
   required String? value,
@@ -53,12 +56,11 @@ Widget buildDropdown({
   );
 }
 
-
-
 Widget customButton({
   required String label,
-  required VoidCallback onPressed,
+  required VoidCallback? onPressed,
   IconData? icon,
+  bool isLoading=false,
   bool hasBorder = false,
 }) {
   return ElevatedButton(
@@ -72,8 +74,18 @@ Widget customButton({
             : BorderSide.none,
       ),
     ),
-    onPressed: onPressed,
-    child: Row(
+    onPressed:isLoading?null:onPressed,
+    
+    child:isLoading?SizedBox(
+      height: 20,
+      width: 20,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: Colors.white,
+      ),
+    )
+    
+    : Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
@@ -87,7 +99,7 @@ Widget customButton({
         icon != null
             ? Row(
                 children: [
-                   Gap(10),
+                  Gap(10),
                   Icon(icon, color: const Color(0xFF718355)),
                 ],
               )
@@ -97,117 +109,157 @@ Widget customButton({
   );
 }
 
-  
-
-Widget showAddressDialog(BuildContext context){
-  List<String> savedAddresses = [];
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color.fromARGB(255, 85, 105, 53),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        
-      ),
-    ),
-    onPressed: () {
-      showDialog(
+void showAddressDialog(BuildContext context) async {
+ 
+  showDialog(
     context: context,
-    builder: (BuildContext context) {
+    builder: (_) {
       return Dialog(
-        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Select or Add Address",
-                style: GoogleFonts.poppins(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF2E2E2E),
-                ),
-              ),
-              const Gap(10),
-              savedAddresses.isNotEmpty
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: savedAddresses
-                          .map((address) => Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  address,
-                                  style: GoogleFonts.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xFF2E2E2E),
+          child: Consumer<Addressprovider>(
+            builder: (context, value, child) {
+              if (value.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              final addresses = value.addressList;
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Select or Add Address",
+                      style: TextStyle(fontSize: 20)),
+                  const SizedBox(height: 10),
+                  addresses.isNotEmpty
+                      ? SizedBox(
+                          // Set max height so ListView fits inside dialog
+                          height: 300,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: addresses.length,
+                            itemBuilder: (context, index) {
+                              final address = addresses[index];
+                              final isSelected = value.selectedIndex == index;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  final summary =
+                                      "${address.addressDetail}\n${address.street}\n${address.pincode}";
+                                  final addressProvider = Provider.of<Addressprovider>(context, listen: false);
+addressProvider.setSelectedAddress(summary, address.id!, index);
+                                      Provider.of<BookingProviderUser>(context, listen: false)
+    .selectedAddressID = address.id;// Update selected index in provider
+                                  Navigator.pop(
+                                    context,
+                                    summary,
+                                  );
+                                },
+                                child: Card(
+                                  color: const Color(0xFFE9F5DB),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: isSelected
+                                        ? const BorderSide(
+                                            color: Colors.black, width: 2)
+                                        : BorderSide.none,
+                                  ),
+                                  elevation: 3,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.location_on,
+                                            color: Colors.red),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "${address.addressDetail}\n${address.street}\n${address.pincode}",
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ))
-                          .toList(),
-                    )
-                  : Text(
-                      "No saved addresses",
-                      style: GoogleFonts.openSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-              const Gap(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Cancel",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF8D6E63),
-                      ),
-                    ),
-                  ),
-                  customButton(
-                    label: 'Add Address',
-                    icon: null,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>  AddAddressPage(),
+                              );
+                            },
+                          ),
+                        )
+                      : const Text(
+                          "No Saved Address",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400),
                         ),
-                      );
-                    },
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Cancel"),
+                      ),
+                      customButton(
+                        label: 'Add Address',
+                        icon: null,
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => AddAddressPage()),
+                          );
+                          if (result != null) {
+                            await value.getAddressList();
+                            Navigator.pop(context);
+                            showAddressDialog(context);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
         ),
       );
     },
   );
-    },
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          TextConstants.selectAddress,
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
-        ),
-        
-      ],
+}
+
+Widget customTextField({
+  required TextEditingController controller,
+  required String labelText,
+  required IconData prefixIcon,
+  TextInputType keyboardType = TextInputType.text,
+}) {
+  return TextField(
+    controller: controller,
+    keyboardType: keyboardType,
+    style: GoogleFonts.openSans(color: const Color(0xFF2E2E2E)),
+    decoration: InputDecoration(
+      labelText: labelText,
+      labelStyle: GoogleFonts.openSans(color: const Color(0xFF8D8D8D)),
+      prefixIcon: Icon(prefixIcon, color: const Color(0xFF5A5A5A)),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFF8D8D8D), width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFF718355), width: 2),
+      ),
     ),
   );
 }

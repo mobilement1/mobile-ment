@@ -1,20 +1,20 @@
-class BookingModel {
+class BookingModelUser {
   final String addressID;
   final String deviceID;
   final String serviceID;
-  final String technicianID;
+  final String? technicianID;
   final String issue;
 
-  BookingModel({
+  BookingModelUser({
     required this.addressID,
     required this.deviceID,
     required this.serviceID,
-    required this.technicianID,
+  this.technicianID,
     required this.issue,
   });
 
-  factory BookingModel.fromJson(Map<String, dynamic> json) {
-    return BookingModel(
+  factory BookingModelUser.fromJson(Map<String, dynamic> json) {
+    return BookingModelUser(
       addressID: json['addressID'],
       deviceID: json['deviceID'],
       serviceID: json['serviceID'],
@@ -28,7 +28,9 @@ class BookingModel {
       'addressID': addressID,
       'deviceID': deviceID,
       'serviceID': serviceID,
+     if (technicianID != null && technicianID!.isNotEmpty)
       'technicianID': technicianID,
+
       'issue': issue,
     };
   }

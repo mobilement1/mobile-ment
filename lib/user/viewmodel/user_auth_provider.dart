@@ -92,15 +92,18 @@ class UserAuthProvider extends ChangeNotifier {
      if (response == "success") {
       successMessage = 'Registration Successful!';
       errorMessage = '';
-      
+      setLoading(false);
+      notifyListeners();
+      return "success";
     } else {
       errorMessage = response;
       successMessage = '';
+      setLoading(false);
+  notifyListeners();
+  return errorMessage; 
     }
 
-    setLoading(false);
-   notifyListeners();
-    return response;
+   
   }
 
   /// Login User
@@ -128,10 +131,14 @@ class UserAuthProvider extends ChangeNotifier {
     final response = await _authService.loginUser(user);
 
    if (response == "success") {
+     
       successMessage = 'Login Successful!';
       errorMessage = '';
       userRole=await _authService.getUserRole();
       isAdmin=userRole=='Admin';
+      
+  //     final addressProvider = Provider.of<Addressprovider>(context, listen: false);
+  // await addressProvider.loadSelectedAddress();
     } else {
       errorMessage = response;
       successMessage = '';

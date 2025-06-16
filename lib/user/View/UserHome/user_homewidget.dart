@@ -6,6 +6,7 @@ import 'package:mobile_servies/user/utils/utils.dart';
 import 'package:mobile_servies/user/view/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
 
+
 Widget text(String text, Color color, double size, FontWeight fontWeight) {
   return Text(
     text,
@@ -72,6 +73,7 @@ void showLogoutDialog(BuildContext context, UserAuthProvider authProvider) {
         ),
         TextButton(
           onPressed: () {
+            // Provider.of<Addressprovider>(context, listen: false).clearSelectedAddress();
             authProvider.logoutUser();
             Navigator.pushAndRemoveUntil(
               context,
