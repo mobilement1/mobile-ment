@@ -1,136 +1,170 @@
-// import 'package:file_picker/file_picker.dart';
-// import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
-// import 'package:mobile_servies/user/UserModel/techRequestModel.dart';
-// import 'package:mobile_servies/user/UserServices/techRequestService.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:location/location.dart';
+import 'package:mobile_servies/user/UserModel/techRequestModel.dart';
+import 'package:mobile_servies/user/UserServices/techRequestService.dart';
+import 'package:mobile_servies/user/constants/constant_api/const_url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class BecomeTechnicianRqstProvider extends ChangeNotifier{
-//   bool isLoading = false;
-//   String? errorMessage;
-//   bool isSuccess = false;
-//   String? resumePath;
-//   double? latitude;
-//   double? longitude;
-//   final TextEditingController experienceController = TextEditingController();
-//   final TextEditingController specializationController = TextEditingController();
-//   final TextEditingController bioController = TextEditingController();
-//   final TextEditingController placeController = TextEditingController();
-//   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-//   final BecomTechnicianRqstService becomTechnicianRqstService = BecomTechnicianRqstService();
+class TechnicianApplicationProvider with ChangeNotifier {
+  final TextEditingController experienceController = TextEditingController();
+  final TextEditingController specializationController = TextEditingController();
+  final TextEditingController placeController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
 
+  String? resumePath;
+  double? longitude;
+  double? latitude;
+  bool isLoading = false;
+  String? errorMessage;
 
-// BecomeTechnicianRqstProvider(){
-//   getCurrentLocation();
-// }
+  Future<void> pickResume() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
 
-// Future<void> getCurrentLocation()async{
-//   bool serviceEnabled;
-//   LocationPermission permission; 
+      if (result != null) {
+        File file = File(result.files.single.path!);
+        int fileSize = await file.length();
 
-//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   if(!serviceEnabled){
-//     errorMessage = "Location services are diabled";
-//     notifyListeners();
-//     return;
-//   }
+        if (fileSize > 50 * 1024) {
+          errorMessage = 'File size must be less than 50KB';
+          notifyListeners();
+          return;
+        }
 
-//   permission =await Geolocator.checkPermission();
-//   if(permission == LocationPermission.denied){
-//     permission = await Geolocator.requestPermission();
+        resumePath = file.path;
+        errorMessage = null;
+        notifyListeners();
+      }
+    } catch (e) {
+      errorMessage = 'Failed to pick file: ${e.toString()}';
+      notifyListeners();
+    }
+  }
 
-//     if(permission == LocationPermission.denied){
-//       errorMessage = "Location permission denied";
-//       notifyListeners();
-//       return;
-//     }
-//   }
+  Future<void> getCurrentLocation() async {
+    Location location = Location();
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-//   if(permission == LocationPermission.deniedForever){
-//      errorMessage = 'Location permissions are permanently denied';
-//       notifyListeners();
-//       return;
-//   }
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        errorMessage = 'Please enable location services in your device settings';
+        notifyListeners();
+        return;
+      }
+    }
 
-//   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-//   latitude = position.latitude;
-//   longitude = position.longitude;
-//   notifyListeners();
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        errorMessage = 'Location permissions are required to submit your application';
+        notifyListeners();
+        return;
+      }
+    }
 
-// }
+    try {
+      LocationData locationData = await location.getLocation();
+      longitude = locationData.longitude;
+      latitude = locationData.latitude;
+      errorMessage = null;
+      notifyListeners();
+    } catch (e) {
+      errorMessage = 'Failed to get location: ${e.toString()}';
+      notifyListeners();
+    }
+  }
 
+  Future<bool> submitApplication() async {
+    if (resumePath == null) {
+      errorMessage = 'Please upload your resume';
+      notifyListeners();
+      return false;
+    }
 
-// Future<void> pickResume() async{
-//   FilePickerResult? result= await FilePicker.platform.pickFiles(
-//     type: FileType.custom,
-//     allowedExtensions: ['pdf']
-//   );
-//   if(result != null){
-//     resumePath =result.files.single.path;
-//     notifyListeners();
-//   }
-// }
+    if (longitude == null || latitude == null) {
+      errorMessage = 'Please enable location services';
+      notifyListeners();
+      return false;
+    }
 
-// Future<void> submitTechnicianApplication()async{
-//   if(formKey.currentState!.validate() && resumePath != null && latitude !=null && longitude != null){
-//     isLoading = true;
-//     errorMessage = null;
-//       isSuccess = false;
-//       notifyListeners();
+    if (experienceController.text.isEmpty ||
+        specializationController.text.isEmpty ||
+        placeController.text.isEmpty ||
+        bioController.text.isEmpty) {
+      errorMessage = 'Please fill all fields';
+      notifyListeners();
+      return false;
+    }
 
-      
-//       final technician = BecomeTechnicianRqstModel(
-//         experience: int.parse(experienceController.text),
-//         resume: resumePath!,
-//         specialization: specializationController.text,
-//         bio: bioController.text,
-//         place: placeController.text,
-//         longitude: longitude!,
-//         latitude: latitude!,
-//       );
+    try {
+      isLoading = true;
+      notifyListeners();
 
-//       final result= await becomTechnicianRqstService.submitTechnicianApplication(technician, resumePath!);
-//       isLoading =false ;
+      TechnicianApplication application = TechnicianApplication(
+        experience: int.parse(experienceController.text),
+        resumePath: resumePath!,
+        specialization: specializationController.text,
+        bio: bioController.text,
+        place: placeController.text,
+        longitude: longitude!,
+        latitude: latitude!,
+      );
 
-//        if (result['success']) {
-//         isSuccess = true;
-//         formKey.currentState!.reset();
-//         experienceController.clear();
-//         specializationController.clear();
-//         bioController.clear();
-//         placeController.clear();
-//         resumePath = null;
-//       } else {
-//         errorMessage = result['error'];
-//       }
-//       notifyListeners();
-//     } else {
-//       errorMessage = 'Please fill all fields, upload a resume, and enable location';
-//       notifyListeners();
-//     }
-//   }
+      final success = await TechnicianApplicationService().submitApplication(application);
+      isLoading = false;
 
-  
-//   void resetForm() {
-//     formKey.currentState?.reset();
-//     experienceController.clear();
-//     specializationController.clear();
-//     bioController.clear();
-//     placeController.clear();
-//     resumePath = null;
-//     errorMessage = null;
-//     isSuccess = false;
-//     notifyListeners();
-//   }
+      if (success) {
+        // Check user role via /api/Auth/me to detect immediate approval
+        final prefs = await SharedPreferences.getInstance();
+        final token = await prefs.getString('auth_token');
+        if (token != null) {
+          try {
+            final dio = Dio();
+            dio.options.headers = {'Authorization': 'Bearer $token'};
+            final response = await dio.get('${ApiConstants.baseURL}/api/Auth/me');
+            if (response.statusCode == 200 && response.data['data']?['role'] == 'Technician') {
+              await prefs.setString('user_role', 'Technician');
+              errorMessage =
+                  'Technician Request Approved!\nYou are now registered as a Technician.\nPlease log in through the Technician Portal to access your dashboard and manage service requests.';
+            } else {
+              errorMessage = 'Application submitted successfully! Awaiting admin approval.';
+            }
+          } catch (e) {
+            errorMessage = 'Application submitted successfully! Awaiting admin approval.';
+          }
+        } else {
+          errorMessage = 'Application submitted successfully! Awaiting admin approval.';
+        }
+      } else {
+        errorMessage = 'Failed to submit application.';
+      }
 
-//   @override
-//   void dispose() {
-//     experienceController.dispose();
-//     specializationController.dispose();
-//     bioController.dispose();
-//     placeController.dispose();
-//     super.dispose();
-//   }
+      notifyListeners();
+      return success;
+    } catch (e) {
+      errorMessage = 'Error submitting application: ${e.toString()}';
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
 
-// }
-
-
+  @override
+  void dispose() {
+    experienceController.dispose();
+    specializationController.dispose();
+    placeController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+}

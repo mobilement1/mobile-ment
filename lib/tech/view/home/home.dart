@@ -8,11 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_servies/admin/view/Dashbord/widject.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/constants/text.dart';
-import 'package:mobile_servies/tech/screens/home/notification.dart';
-import 'package:mobile_servies/tech/screens/home/widget/container.dart';
-import 'package:mobile_servies/tech/screens/profile/profile_tech.dart';
+import 'package:mobile_servies/tech/view/home/notification.dart';
+import 'package:mobile_servies/tech/view/home/widget/container.dart';
+import 'package:mobile_servies/tech/view/profile/profile_tech.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:mobile_servies/tech/widgets/barchart.dart';
+import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
 import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 
 class HomePageTech extends StatelessWidget {
@@ -23,14 +24,14 @@ class HomePageTech extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: Column(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Gap(35),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: mobileMendWdgtWithContainer(),
+              child: AppLogo(),
             ),
-            const Gap(30), // Space at the top with green background
+            const Gap(30), 
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(

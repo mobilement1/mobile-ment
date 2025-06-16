@@ -1,5 +1,3 @@
-
-
 // import 'dart:math' as math;
 // import 'dart:ui';
 // import 'package:flutter/cupertino.dart';
@@ -12,6 +10,8 @@
 // import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
 // import 'package:mobile_servies/admin/view/Technicians/techician.dart';
 // import 'package:mobile_servies/admin/view/completedoders/cmpltedorder.dart';
+// import 'package:mobile_servies/admin/widgets.dart';
+// import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 
 // // Singleton to persist FAB position
 // class FabPositionManager {
@@ -148,14 +148,15 @@
 //   Widget build(BuildContext context) {
 //     final screenSize = MediaQuery.of(context).size;
 //     final safeArea = MediaQuery.of(context).padding;
-//     const menuSize = 280.0; 
+//     const menuWidth = 350.0; 
+//     const menuHeight = 250.0; 
 //     const fabSize = 56.0;
-//     double menuLeft = _fabX - (menuSize / 2) + (fabSize / 2);
-//     double menuTop = _fabY - menuSize - 16 - safeArea.bottom;
+//     double menuLeft = _fabX - (menuWidth / 2) + (fabSize / 2);
+//     double menuTop = _fabY - menuHeight - 16 - safeArea.bottom;
 
 //     if (menuLeft < safeArea.left + 16) menuLeft = safeArea.left + 16;
-//     if (menuLeft + menuSize > screenSize.width - safeArea.right - 16) {
-//       menuLeft = screenSize.width - menuSize - safeArea.right - 16;
+//     if (menuLeft + menuWidth > screenSize.width - safeArea.right - 16) {
+//       menuLeft = screenSize.width - menuWidth - safeArea.right - 16;
 //     }
 //     if (menuTop < safeArea.top + 16) menuTop = _fabY + fabSize + 16;
 
@@ -280,53 +281,58 @@
 //   }
 
 //   Widget _buildExpandedMenu(BuildContext context) {
-//     const double menuSize = 320.0;
-//     const double radius = 110.0; 
+//     const double menuWidth = 350.0;
+//     const double menuHeight = 200.0;
 //     final List<Map<String, dynamic>> menuItems = [
 //       {
 //         'label': 'Dashboard',
 //         'icon': CupertinoIcons.square_grid_2x2,
-//         'page':  Dashbordpage(),
+//         'page': Dashbordpage(),
 //       },
 //       {
 //         'label': 'Bookings',
 //         'icon': CupertinoIcons.calendar,
-//         'page':  Bookingpage(),
+//         'page': Bookingpage(),
 //       },
 //       {
 //         'label': 'Completed',
 //         'icon': CupertinoIcons.checkmark_circle,
-//         'page':  Cmpltedorderpage(),
+//         'page': Cmpltedorderpage(),
 //       },
 //       {
 //         'label': 'Devices',
 //         'icon': CupertinoIcons.device_phone_portrait,
-//         'page':  Devicepage(),
+//         'page': Devicepage(),
 //       },
 //       {
 //         'label': 'Services',
 //         'icon': CupertinoIcons.wrench,
-//         'page':  Servicepage(),
+//         'page': Servicepage(),
 //       },
 //       {
 //         'label': 'Requests',
 //         'icon': CupertinoIcons.person_add,
-//         'page':  Techniciarequstpage(),
+//         'page': Techniciarequstpage(),
 //       },
 //       {
 //         'label': 'Technicians',
 //         'icon': CupertinoIcons.person_3,
-//         'page':  Techicianpage(),
+//         'page': Techicianpage(),
+//       },
+//       {
+//         'label': 'Logout',
+//         'icon':  CupertinoIcons.square_arrow_right,
+//         'page':showLogoutDialog,
 //       },
 //     ];
 
 //     return ClipRRect(
-//       borderRadius: BorderRadius.circular(menuSize / 2),
+//       borderRadius: BorderRadius.circular(15.0),
 //       child: BackdropFilter(
 //         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
 //         child: Container(
-//           width: menuSize,
-//           height: menuSize,
+//           width: menuWidth,
+//           height: menuHeight,
 //           decoration: BoxDecoration(
 //             color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
 //             border: Border.all(
@@ -334,28 +340,17 @@
 //               width: 0.5,
 //             ),
 //           ),
-//           child: Stack(
-//             alignment: Alignment.center,
+//           child: GridView.count(
+//             crossAxisCount: 4,
+//             padding: const EdgeInsets.all(16.0),
+//             mainAxisSpacing: 10.0,
+//             crossAxisSpacing: 10.0,
 //             children: List.generate(menuItems.length, (index) {
-//               final double angle = 2 * math.pi * index / menuItems.length - math.pi / 2; // Start from top
-//               final double x = radius * math.cos(angle);
-//               final double y = radius * math.sin(angle);
-
-//               return Positioned(
-//                 left: menuSize / 2 + x - 40, // Adjust for item size
-//                 top: menuSize / 2 + y - 40,
-//                 child: FadeTransition(
-//                   opacity: _animation,
-//                   child: ScaleTransition(
-//                     scale: _animation,
-//                     child: _buildMenuItem(
-//                       context: context,
-//                       label: menuItems[index]['label'],
-//                       icon: menuItems[index]['icon'],
-//                       page: menuItems[index]['page'],
-//                     ),
-//                   ),
-//                 ),
+//               return _buildMenuItem(
+//                 context: context,
+//                 label: menuItems[index]['label'],
+//                 icon: menuItems[index]['icon'],
+//                 page: menuItems[index]['page'],
 //               );
 //             }),
 //           ),
@@ -374,7 +369,6 @@
 //       width: 70,
 //       height: 70,
 //       decoration: BoxDecoration(
-        
 //         color: CupertinoColors.systemGrey6.withOpacity(0.9),
 //         borderRadius: BorderRadius.circular(15),
 //         border: Border.all(
@@ -393,10 +387,10 @@
 //             children: [
 //               Icon(
 //                 icon,
-//                 color:  Color.fromARGB(255, 85, 105, 53),
+//                 color: const Color.fromARGB(255, 85, 105, 53),
 //                 size: 24,
 //               ),
-//                SizedBox(height: 6),
+//               const SizedBox(height: 6),
 //               Text(
 //                 label,
 //                 style: const TextStyle(
@@ -418,6 +412,7 @@
 // }
 
 
+
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -430,6 +425,11 @@ import 'package:mobile_servies/admin/view/Servicess/service.dart';
 import 'package:mobile_servies/admin/view/Technicianrequst/techniciarequst.dart';
 import 'package:mobile_servies/admin/view/Technicians/techician.dart';
 import 'package:mobile_servies/admin/view/completedoders/cmpltedorder.dart';
+import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
+import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
+import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
+import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:provider/provider.dart';
 
 // Singleton to persist FAB position
 class FabPositionManager {
@@ -472,15 +472,14 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300), // iOS-like duration
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _animation = CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeInOutCubic, // iOS-like springy curve
+      curve: Curves.easeInOutCubic,
     );
 
-    // Set initial FAB position
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final screenSize = MediaQuery.of(context).size;
       final safeArea = MediaQuery.of(context).padding;
@@ -504,7 +503,6 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
             _fabY = screenSize.height - fabSize - safeArea.bottom - margin;
           }
 
-          // Ensure FAB stays within safe screen boundaries
           if (_fabX + fabSize > screenSize.width - safeArea.right) {
             _fabX = screenSize.width - fabSize - safeArea.right - margin;
           }
@@ -562,12 +560,14 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
     _toggleMenu();
   }
 
+ 
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final safeArea = MediaQuery.of(context).padding;
-    const menuWidth = 350.0; 
-    const menuHeight = 250.0; 
+    const menuWidth = 350.0;
+    const menuHeight = 250.0;
     const fabSize = 56.0;
     double menuLeft = _fabX - (menuWidth / 2) + (fabSize / 2);
     double menuTop = _fabY - menuHeight - 16 - safeArea.bottom;
@@ -705,37 +705,42 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
       {
         'label': 'Dashboard',
         'icon': CupertinoIcons.square_grid_2x2,
-        'page': Dashbordpage(),
+        'action': () => _navigateToPage(context,  Dashbordpage()),
       },
       {
         'label': 'Bookings',
         'icon': CupertinoIcons.calendar,
-        'page': Bookingpage(),
+        'action': () => _navigateToPage(context, const Bookingpage()),
       },
       {
         'label': 'Completed',
         'icon': CupertinoIcons.checkmark_circle,
-        'page': Cmpltedorderpage(),
+        'action': () => _navigateToPage(context,  Cmpltedorderpage()),
       },
       {
         'label': 'Devices',
         'icon': CupertinoIcons.device_phone_portrait,
-        'page': Devicepage(),
+        'action': () => _navigateToPage(context,  Devicepage()),
       },
       {
         'label': 'Services',
         'icon': CupertinoIcons.wrench,
-        'page': Servicepage(),
+        'action': () => _navigateToPage(context,  Servicepage()),
       },
       {
         'label': 'Requests',
         'icon': CupertinoIcons.person_add,
-        'page': Techniciarequstpage(),
+        'action': () => _navigateToPage(context, const Techniciarequstpage()),
       },
       {
         'label': 'Technicians',
         'icon': CupertinoIcons.person_3,
-        'page': Techicianpage(),
+        'action': () => _navigateToPage(context,  Techicianpage()),
+      },
+      {
+        'label': 'Logout',
+        'icon': CupertinoIcons.square_arrow_right,
+        'action': () => showLogoutDialog(context, Provider.of<UserAuthProvider>(context, listen: false)),
       },
     ];
 
@@ -763,7 +768,7 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
                 context: context,
                 label: menuItems[index]['label'],
                 icon: menuItems[index]['icon'],
-                page: menuItems[index]['page'],
+                action: menuItems[index]['action'],
               );
             }),
           ),
@@ -776,7 +781,7 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
     required BuildContext context,
     required String label,
     required IconData icon,
-    required Widget page,
+    required VoidCallback action,
   }) {
     return Container(
       width: 70,
@@ -793,7 +798,7 @@ class _DraggableFabMenuState extends State<DraggableFabMenu> with SingleTickerPr
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
-          onTap: () => _navigateToPage(context, page),
+          onTap: action,
           borderRadius: BorderRadius.circular(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

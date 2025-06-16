@@ -198,10 +198,10 @@ class tabBarWidgetDashboardHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding( 
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0), // Added padding
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0), 
       child: TabBar(
-        labelColor: const Color(0xFF2E2E2E),
-        unselectedLabelColor: const Color.fromARGB(255, 255, 255, 255),
+        labelColor: const Color.fromARGB(255, 255, 255, 255),
+        unselectedLabelColor: const Color.fromARGB(255, 206, 202, 202),
         indicatorColor: const Color(0xFF718355),
         indicatorWeight: 3,
         labelStyle: GoogleFonts.poppins(

@@ -9,15 +9,15 @@ class Editservice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C2C3A),
-    appBar: customAppBar(),
+      appBar: AppBar(backgroundColor: Color.fromARGB(255, 85, 105, 53),iconTheme: IconThemeData(color: Colors.white),),
+
       body: Center(
         child: Container(
           height: 600,
           width: 350,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-           color: const Color.fromARGB(255, 45, 45, 83),
+           color: const Color(0xFF718355),
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(12),
           ),
@@ -96,7 +96,7 @@ class Editservice extends StatelessWidget {
                   const SizedBox(width: 12),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBluePurple,
+                      backgroundColor: Color.fromARGB(255, 85, 105, 53),
                     ),
                     onPressed: () {},
                     child: const Text("Save", style: TextStyle(color: Colors.white,fontSize: 18)),

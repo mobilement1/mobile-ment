@@ -44,6 +44,17 @@ dependencies:
   shared_preferences: 
   file_picker:  
   google_fonts: ^6.2.1
+  lottie: ^3.3.1
+  path_provider:
+  path:
+  location:
+  app_settings: ^6.1.1
+  intl: ^0.20.2
+  permission_handler: ^12.0.0+1
+  jwt_decoder: ^2.0.1
+  shimmer: ^3.0.0
+  
+
   
   
 

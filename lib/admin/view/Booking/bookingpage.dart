@@ -1,80 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile_servies/admin/controller/bookingprovider.dart';
 import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
 import 'package:mobile_servies/admin/widgets.dart';
-import 'package:mobile_servies/tech/constants/colors.dart';
-import 'package:mobile_servies/user/View/UserHome/user_home.dart';
+import 'package:mobile_servies/tech/widgets/shimmer.dart';
+import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
+import 'package:provider/provider.dart';
 
-class Bookingpage extends StatefulWidget {
+
+class Bookingpage extends StatelessWidget {
   const Bookingpage({Key? key}) : super(key: key);
 
   @override
-  State<Bookingpage> createState() => _BookingpageState();
-}
-
-class _BookingpageState extends State<Bookingpage> {
-  String selectedFilter = 'All';
-  final List<String> filterOptions = ['All', 'Pending', 'Completed', 'Cancelled'];
-  final GlobalKey _bookingPgKey = GlobalKey();
-
-  // Sample data (replace with dynamic source)
-  final List<Map<String, dynamic>> bookings = [
-    {
-      'customerName': 'Emma Johnson',
-      'service': 'Screen Replacement',
-      'device': 'S23 Ultra',
-      'date': 'May 10, 2025',
-      'amount': 149.99,
-      'status': 'Completed',
-      'isCompleted': true,
-      'isScheduled': false,
-    },
-    {
-      'customerName': 'Michael Brown',
-      'service': 'Battery Replacement',
-      'device': 'iPhone 13',
-      'date': 'May 11, 2025',
-      'amount': 79.99,
-      'status': 'In Progress',
-      'isCompleted': false,
-      'isScheduled': false,
-    },
-    {
-      'customerName': 'Sarah Davis',
-      'service': 'Data Recovery',
-      'device': 'Nokia',
-      'date': 'May 12, 2025',
-      'amount': 199.99,
-      'status': 'Scheduled',
-      'isCompleted': false,
-      'isScheduled': true,
-    },
-    {
-      'customerName': 'Jabeel',
-      'service': 'Screen Replacement',
-      'device': 'Vivo',
-      'date': 'May 18, 2025',
-      'amount': 799.0,
-      'status': 'Completed',
-      'isCompleted': true,
-      'isScheduled': false,
-    },
-  ];
-
-  void onFilterChanged(String? newValue) {
-    if (newValue == null) return;
-    setState(() {
-      selectedFilter = newValue;
-    });
-  }
-
-  List<Map<String, dynamic>> getFilteredBookings() {
-    if (selectedFilter == 'All') return bookings;
-    return bookings.where((booking) => booking['status'] == selectedFilter).toList();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final filteredBookings = getFilteredBookings();
+    final GlobalKey bookingPgKey = GlobalKey();
+    final provider = Provider.of<BookingProvider>(context, listen: false);
+
+    if (!provider.isLoading && provider.bookings.isEmpty && provider.error.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        provider.fetchBookings();
+      });
+    }
 
     return Scaffold(
       body: Stack(
@@ -89,7 +35,7 @@ class _BookingpageState extends State<Bookingpage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AppLogo(),
+                       AppLogo(),
                       const SizedBox(height: 24),
                       const Text(
                         "Bookings",
@@ -109,26 +55,39 @@ class _BookingpageState extends State<Bookingpage> {
                         children: [
                           Text(
                             "All Bookings",
-                            key: _bookingPgKey,
+                            key: bookingPgKey,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                           ),
-                          DropdownButton<String>(
-                            value: selectedFilter,
-                            dropdownColor: const Color(0xFF718355),
-                            style: const TextStyle(color: Colors.white, fontSize: 14),
-                            items: filterOptions.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value, style: const TextStyle(color: Colors.white)),
+                          Consumer<BookingProvider>(
+                            builder: (context, value, child) {
+                              return DropdownButton<String>(
+                                value: value.selectedFilter,
+                                dropdownColor: const Color(0xFF718355),
+                                style:  TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                                items: value.filterOptions.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value,
+                                        style:
+                                            const TextStyle(color: Colors.white)),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  if (newValue != null) {
+                                    value.setFilter(newValue);
+                                  }
+                                },
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                                underline:
+                                    Container(height: 1, color: Colors.white70),
                               );
-                            }).toList(),
-                            onChanged: onFilterChanged,
-                            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-                            underline: Container(height: 1, color: Colors.white70),
+                            },
                           ),
                         ],
                       ),
@@ -149,19 +108,60 @@ class _BookingpageState extends State<Bookingpage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: filteredBookings.map((booking) => _buildBookingCard(
-                            customerName: booking['customerName'],
-                            service: booking['service'],
-                            device: booking['device'],
-                            date: booking['date'],
-                            amount: booking['amount'],
-                            status: booking['status'],
-                            isCompleted: booking['isCompleted'],
-                            isScheduled: booking['isScheduled'],
-                          )).toList(),
-                        ),
+                      child: Consumer<BookingProvider>(
+                        builder: (context, provider, child) {
+                          if (provider.isLoading) {
+                            return buildShimmerList();
+                          }
+                          if (provider.error.isNotEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    provider.error,
+                                    style: const TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: provider.refresh,
+                                    child: const Text("Retry"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          if (provider.bookings.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                "No bookings available",
+                                style:
+                                    TextStyle(fontSize: 16, color: Colors.grey),
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            itemCount: provider.bookings.length,
+                            itemBuilder: (context, index) {
+                              final booking = provider.bookings[index];
+                              return _buildBookingCard(
+                                context: context,
+                                customerName: booking.customerName ?? 'Unknown',
+                                service: booking.serviceName ?? 'Unknown',
+                                device: booking.deviceName ?? 'Unknown',
+                                date: booking.createdAt != null
+                                    ? DateFormat('MMM d, yyyy')
+                                        .format(booking.createdAt!)
+                                    : 'Unknown',
+                                amount: booking.amount ?? 0.0,
+                                status: booking.status ?? 'Unknown',
+                                statusColor: booking.statusColor,
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -169,28 +169,22 @@ class _BookingpageState extends State<Bookingpage> {
               ],
             ),
           ),
-          DraggableFabMenu(adminDashboardKey: _bookingPgKey),
+          DraggableFabMenu(adminDashboardKey: bookingPgKey),
         ],
       ),
     );
   }
 
   Widget _buildBookingCard({
+    required BuildContext context,
     required String customerName,
     required String service,
     required String device,
     required String date,
     required double amount,
     required String status,
-    bool isCompleted = true,
-    bool isScheduled = false,
+    required Color statusColor,
   }) {
-    Color statusColor = isCompleted
-        ? const Color(0xFF4CAF50)
-        : isScheduled
-            ? const Color(0xFFFFA726)
-            : const Color(0xFF61DAFB);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -311,7 +305,8 @@ class _BookingpageState extends State<Bookingpage> {
                         _buildDetailRow("Service", service, Colors.white70),
                         _buildDetailRow("Device", device, Colors.white70),
                         _buildDetailRow("Date", date, Colors.white70),
-                        _buildDetailRow("Amount", "\$${amount.toStringAsFixed(2)}", Colors.white),
+                        _buildDetailRow(
+                            "Amount", "\$${amount.toStringAsFixed(2)}", Colors.white),
                         _buildDetailRow("Status", status, statusColor),
                       ],
                     ),

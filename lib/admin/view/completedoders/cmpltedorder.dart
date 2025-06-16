@@ -1,98 +1,167 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile_servies/admin/controller/completedOrder_Provider.dart';
+import 'package:mobile_servies/admin/service/completed_order_admin_service.dart';
 import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
-import 'package:mobile_servies/admin/widgets.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
-import 'package:mobile_servies/user/View/UserHome/user_home.dart';
+import 'package:mobile_servies/tech/widgets/shimmer.dart';
+import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
+import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
+import 'package:provider/provider.dart';
+import 'package:dio/dio.dart';
 
 class Cmpltedorderpage extends StatelessWidget {
   Cmpltedorderpage({super.key});
 
   final GlobalKey _cmpltOrders = GlobalKey();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppLogo(),
-                      const SizedBox(height: 30),
-                      const Text(
-                        "Completed Orders",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontSize: 32,
+    return ChangeNotifierProvider(
+      create: (_) => CompletedorderProvider(
+        CompletedOrderService(
+          dio: Dio(),
+          baseURL: 'https://mobilemend-backend.onrender.com',
+        ),
+      )..fetchCompletedOrders(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppLogo(),
+                        const SizedBox(height: 30),
+                        const Text(
+                          "Completed Orders",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 32,
+                          ),
                         ),
-                      ),
-                      const Text(
-                        "Manage bookings, services, devices, and technicians",
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF718355)),
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            _buildCompletedCard(
-                              context,
-                              serviceID: "6da27ea9-36cf-47af-b565-a9660823c8ab",
-                              customerName: "Habeeb",
-                              device: "S23 Ultra",
-                              issue: "Charging not Working",
-                              date: "15/05/2024",
-                              location: "Calicut",
-                              amount: 499.0,
-                              service: "Charging Repair",
-                              status: "Completed",
-                            ),
-                            _buildCompletedCard(
-                              context,
-                              serviceID: "abc-123",
-                              customerName: "Riyas",
-                              device: "iPhone 12",
-                              issue: "Screen Broken",
-                              date: "16/05/2024",
-                              location: "Feroke",
-                              amount: 899.0,
-                              service: "Camera clear",
-                              status: "Completed",
-                            ),
-                          ],
+                        const Text(
+                          "Manage bookings, services, devices, and technicians",
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 25),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF718355)),
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Consumer<CompletedorderProvider>(
+                          builder: (context, value, child) {
+                            if (value.isLoading) {
+                              return buildShimmerList();
+                            }
+                            if (value.error != null) {
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      value.error!,
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    if (value.error!.contains('Authentication failed'))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 16.0),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserLogin(),));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.green,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Log In',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    if (!value.error!.contains('Authentication failed'))
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 16.0),
+                                        child: ElevatedButton(
+                                          onPressed: () => value.fetchCompletedOrders(),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.green,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Retry',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              );
+                            }
+                            if (value.completedOrders.isEmpty) {
+                              return const Center(child: Text('No completed orders found'));
+                            }
+                            return ListView.builder(
+                              itemCount: value.completedOrders.length,
+                              itemBuilder: (context, index) {
+                                final order = value.completedOrders[index];
+                                return _buildCompletedCard(
+                                  context,
+                                  serviceID: order.id,
+                                  customerName: order.customerName ?? 'Unknown',
+                                  device: order.device ?? 'Unknown',
+                                  issue: order.issue ?? 'Unknown',
+                                  date: order.date != null
+                                      ? DateFormat('dd/MM/yyyy').format(order.date!)
+                                      : 'Unknown',
+                                  location: order.location ?? 'Unknown',
+                                  amount: order.amount ?? 0.0,
+                                  service: order.service ?? 'Unknown',
+                                  status: order.status,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          DraggableFabMenu(adminDashboardKey: _cmpltOrders),
-        ],
+            DraggableFabMenu(adminDashboardKey: _cmpltOrders),
+          ],
+        ),
       ),
     );
   }
@@ -123,12 +192,12 @@ class Cmpltedorderpage extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: AppColors.green.withOpacity(0.2),
+              color: Color.fromARGB(255, 93, 183, 96).withOpacity(0.3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              Icons.settings_backup_restore_outlined,
-              color: AppColors.green,
+              Icons.task_alt_rounded,
+              color: const Color.fromARGB(255, 182, 227, 185),
               size: 30,
             ),
           ),

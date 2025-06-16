@@ -48,7 +48,7 @@ Widget homeContainers([IconData? icon, String? textContainer, String? textMain])
                 Text(
                   textMain ?? "",
                   style: GoogleFonts.poppins(
-                    color: const Color(0xFF2E2E2E),
+                    color: const Color.fromARGB(255, 255, 255, 255),
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                   ),

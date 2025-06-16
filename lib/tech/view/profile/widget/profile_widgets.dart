@@ -8,7 +8,7 @@ Widget rowWithText({String? txt, IconData? icn}) {
       
     crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icn, color: AppColors.blue, size: 24),
+        Icon(icn, color: AppColors.whiteClr, size: 24),
         const SizedBox(width: 10),
         Text(
           txt ?? "",
@@ -85,7 +85,7 @@ Widget jobsDoneRatingsExperience({
   IconData icon = Icons.star,
 }) {
   return Container(
-    height: 100,width: 100,decoration: BoxDecoration(
+    height: 100,width: 110,decoration: BoxDecoration(
        gradient: const LinearGradient(
                     colors: [Color(0xFF718355),Color(0xFF718355)],
                     begin: Alignment.bottomCenter,
@@ -94,28 +94,30 @@ Widget jobsDoneRatingsExperience({
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [SizedBox(height: 18,),
+      children: [SizedBox(height: 20,),
         showIcon
             ? Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [SizedBox(width: 10,),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: AppColors.whiteClr,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: AppColors.whiteClr,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Icon(icon, color: const Color.fromARGB(255, 255, 255, 255), size: 24),
+                  Icon(icon, color:  Colors.white, size: 30),
                 ],
               )
             : Text(
                 title,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800
                 ),
               ),
         Text(
@@ -129,3 +131,4 @@ Widget jobsDoneRatingsExperience({
     ),
   );
 }
+

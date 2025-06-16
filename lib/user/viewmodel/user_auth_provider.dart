@@ -1,193 +1,185 @@
-// import 'package:flutter/material.dart';
-// import 'package:mobile_servies/user/UserModel/loginmodel.dart';
-// import 'package:mobile_servies/user/UserModel/registermodel.dart';
-// import 'package:mobile_servies/user/UserServices/user_authService.dart';
-// import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_servies/user/UserModel/loginmodel.dart';
+import 'package:mobile_servies/user/UserModel/registermodel.dart';
+import 'package:mobile_servies/user/UserServices/user_authService.dart';
+import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
 
-// class UserAuthProvider extends ChangeNotifier {
-//   final UserAuthService _authService = UserAuthService();
+class UserAuthProvider extends ChangeNotifier {
+  final UserAuthService _authService = UserAuthService();
 
-//   // Controllers for Register
-//   final nameController = TextEditingController();
-//   final userNameController = TextEditingController();
-//   final phoneController = TextEditingController();
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   final confirmPasswordController = TextEditingController();
+  // Controllers for Register
+  final nameController = TextEditingController();
+  final userNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-//   // Controllers for Login
-//   final loginUserNameController = TextEditingController();
-//   final loginPasswordController = TextEditingController();
+  // Controllers for Login
+  final loginUserNameController = TextEditingController();
+  final loginPasswordController = TextEditingController();
 
-//   String errorMessage = '';
-//   String successMessage = ''; 
-//   bool isLoading = false;
+  String errorMessage = '';
+  String successMessage = '';
+  bool isLoading = false;
+  String? userRole; // Stores role: "User", "Technician", or "Admin"
 
-//   void setLoading(bool value) {
-//     isLoading = value;
-//     notifyListeners();
-//   }
+  void setLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
 
-//   bool isPasswordHidden = true;
- 
-//   void togglePasswordVisibility() {
-//     isPasswordHidden = !isPasswordHidden;
-//     notifyListeners();
-//   }
+  bool isPasswordHidden = true;
 
-//   bool isConfirmPasswordHidden = true;
- 
-//   void toggleConfirmPasswordVisibility() {
-//     isConfirmPasswordHidden = !isConfirmPasswordHidden;
-//     notifyListeners();
-//   }
+  void togglePasswordVisibility() {
+    isPasswordHidden = !isPasswordHidden;
+    notifyListeners();
+  }
 
-//   /// Clear any error message
-//   void clearMessages() {
-//     errorMessage = '';
-//     successMessage = '';
-//     notifyListeners();
-//   }
+  bool isConfirmPasswordHidden = true;
 
-//   String?userRole;
-//   bool isAdmin=false;
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordHidden = !isConfirmPasswordHidden;
+    notifyListeners();
+  }
 
-//   /// Register User
-//   Future<String> registerUser(BuildContext context) async {
-//     setLoading(true);
-//      clearMessages();
-//     final name = nameController.text.trim();
-//     final username = userNameController.text.trim();
-//     final phone = phoneController.text.trim();
-//     final email = emailController.text.trim();
-//     final password = passwordController.text;
-//     final confirmPassword = confirmPasswordController.text;
+  /// Clear any error message
+  void clearMessages() {
+    errorMessage = '';
+    successMessage = '';
+    notifyListeners();
+  }
 
-//     final validations = [
-//       SimpleValidator.validateName(name),
-//       SimpleValidator.validateUsername(username),
-//       SimpleValidator.validatePhone(phone),
-//       SimpleValidator.validateEmail(email),
-//       SimpleValidator.validatePassword(password),
-//       SimpleValidator.validateConfirmPassword(password, confirmPassword),
-//     ];
+  /// Register User
+  Future<String> registerUser(BuildContext context) async {
+    setLoading(true);
+    clearMessages();
+    final name = nameController.text.trim();
+    final username = userNameController.text.trim();
+    final phone = phoneController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
 
-//     for (final result in validations) {
-//       if (result != null) {
-//         errorMessage = result;
-//         setLoading(false);
-//         return errorMessage;
-//       }
-//     }
+    final validations = [
+      SimpleValidator.validateName(name),
+      SimpleValidator.validateUsername(username),
+      SimpleValidator.validatePhone(phone),
+      SimpleValidator.validateEmail(email),
+      SimpleValidator.validatePassword(password),
+      SimpleValidator.validateConfirmPassword(password, confirmPassword),
+    ];
 
-//     final user = Registermodel(
-//       name: name,
-//       userName: username,
-//       phone: phone,
-//       email: email,
-//       password: password,
-//     );
+    for (final result in validations) {
+      if (result != null) {
+        errorMessage = result;
+        setLoading(false);
+        return errorMessage;
+      }
+    }
 
-//     final response = await _authService.registerUser(user);
-//      if (response == "success") {
-//       successMessage = 'Registration Successful!';
-//       errorMessage = '';
-      
-//     } else {
-//       errorMessage = response;
-//       successMessage = '';
-//     }
+    final user = Registermodel(
+      name: name,
+      userName: username,
+      phone: phone,
+      email: email,
+      password: password,
+    );
 
-//     setLoading(false);
-//    notifyListeners();
-//     return response;
-//   }
+    final response = await _authService.registerUser(user);
+    if (response == "success") {
+      successMessage = 'Registration Successful!';
+      errorMessage = '';
+    } else {
+      errorMessage = response;
+      successMessage = '';
+    }
 
-//   /// Login User
-//   Future<String> loginUser(BuildContext context) async {
-//     setLoading(true);
-//     clearMessages();
-//     final username = loginUserNameController.text.trim();
-//     final password = loginPasswordController.text.trim();
+    setLoading(false);
+    notifyListeners();
+    return response;
+  }
 
-//     final validations = [
-//       SimpleValidator.validateUsername(username),
-//       SimpleValidator.validatePassword(password),
-//     ];
+  /// Login User
+  Future<String> loginUser(BuildContext context) async {
+    setLoading(true);
+    clearMessages();
+    final username = loginUserNameController.text.trim();
+    final password = loginPasswordController.text.trim();
 
-//     for (final result in validations) {
-//       if (result != null) {
-//         errorMessage = result;
-//         setLoading(false);
-//             notifyListeners();
-//         return errorMessage;
-//       }
-//     }
+    final validations = [
+      SimpleValidator.validateUsername(username),
+      SimpleValidator.validatePassword(password),
+    ];
 
-//     final user = LoginModel(userName: username, password: password);
-//     final response = await _authService.loginUser(user);
+    for (final result in validations) {
+      if (result != null) {
+        errorMessage = result;
+        setLoading(false);
+        notifyListeners();
+        return errorMessage;
+      }
+    }
 
-//    if (response == "success") {
-//       successMessage = 'Login Successful!';
-//       errorMessage = '';
-//       userRole=await _authService.getUserRole();
-//       isAdmin=userRole=='Admin';
-//     } else {
-//       errorMessage = response;
-//       successMessage = '';
-//       isAdmin=false;
-//     }
-//     setLoading(false);
+    final user = LoginModel(userName: username, password: password);
+    final response = await _authService.loginUser(user);
 
-//     notifyListeners();
-    
-//     return response;
-//   }
+    if (response == "success") {
+      successMessage = 'Login Successful!';
+      errorMessage = '';
+      userRole = await _authService.getUserRole();
+    } else {
+      errorMessage = response;
+      successMessage = '';
+      userRole = null;
+    }
+    setLoading(false);
+    notifyListeners();
+    return response;
+  }
 
-//   /// Get stored token
-//   Future<String?> getUserToken() async {
-//     return await _authService.getToken();
-//   }
+  /// Get stored token
+  Future<String?> getUserToken() async {
+    return await _authService.getToken();
+  }
 
-//   /// Check if user is logged in
-//   Future<bool> isUserLoggedIn() async {
-//     final token = await _authService.getToken();
-//     return token != null&&token.isNotEmpty;
-//   }
+  /// Check if user is logged in
+  Future<bool> isUserLoggedIn() async {
+    final token = await _authService.getToken();
+    return token != null && token.isNotEmpty;
+  }
 
-//   /// Logout
-//   Future<void> logoutUser() async {
-//     await _authService.logout();
-//     clearAllFields();
-//     isAdmin=false;
-//     notifyListeners();
-//   }
+  /// Logout
+  Future<void> logoutUser() async {
+    await _authService.logout();
+    clearAllFields();
+    notifyListeners();
+  }
 
-//   /// Clear all controllers and state
-//   void clearAllFields() {
-//     nameController.clear();
-//     userNameController.clear();
-//     phoneController.clear();
-//     emailController.clear();
-//     passwordController.clear();
-//     confirmPasswordController.clear();
-//     loginUserNameController.clear();
-//     loginPasswordController.clear();
-//     errorMessage = '';
-//       successMessage = '';
-//       isAdmin=false;
-//     notifyListeners();
-//   }
+  /// Clear all controllers and state
+  void clearAllFields() {
+    nameController.clear();
+    userNameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    loginUserNameController.clear();
+    loginPasswordController.clear();
+    errorMessage = '';
+    successMessage = '';
+    userRole = null;
+    notifyListeners();
+  }
 
-//   void disposeControllers() {
-//   nameController.dispose();
-//   userNameController.dispose();
-//   phoneController.dispose();
-//   emailController.dispose();
-//   passwordController.dispose();
-//   confirmPasswordController.dispose();
-//   loginUserNameController.dispose();
-//   loginPasswordController.dispose();
-// }
-
-// }
+  void disposeControllers() {
+    nameController.dispose();
+    userNameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    loginUserNameController.dispose();
+    loginPasswordController.dispose();
+  }
+}

@@ -10,6 +10,7 @@ import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AdminDraw extends StatelessWidget {
   const AdminDraw({super.key});
@@ -36,14 +37,14 @@ class AdminDraw extends StatelessWidget {
           _buildTile(context, Icons.devices, "Devices",  Devicepage()),
           _buildTile(context, Icons.engineering, "Technicians",  Techicianpage()),
           _buildTile(context, Icons.check_circle, "Completed Orders",  Cmpltedorderpage()),
-          _buildTile(context, Icons.engineering, "Technician Requests", const Techniciarequstpage()),
+          _buildTile(context, Icons.engineering, "Technician Requests",  Techniciarequstpage()),
           Consumer<UserAuthProvider>(
             builder: (context, authpro, child) {
               return ListTile(
                 leading: const Icon(Icons.logout, color: Colors.white),
                 title: const Text("Logout", style: TextStyle(color: Colors.white)),
                 onTap: () {
-                  _showLogoutDialog(context, authpro);
+                  showLogoutDialog(context, authpro);
                 },
               );
             },
@@ -63,11 +64,11 @@ class AdminDraw extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, UserAuthProvider authpro) {
+  void showLogoutDialog(BuildContext context, UserAuthProvider authProvider) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E2E),
+        backgroundColor: Color.fromARGB(255, 85, 105, 53),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -104,7 +105,7 @@ class AdminDraw extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBluePurple, 
+                    
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -127,7 +128,7 @@ class AdminDraw extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.red, 
+                      backgroundColor: AppColors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -135,7 +136,7 @@ class AdminDraw extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(ctx).pop();
-                      authpro.logoutUser();
+                      authProvider.logoutUser();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (ctx) =>  UserLogin()),
@@ -158,5 +159,5 @@ class AdminDraw extends StatelessWidget {
         ],
       ),
     );
-  }
-}
+  }}
+

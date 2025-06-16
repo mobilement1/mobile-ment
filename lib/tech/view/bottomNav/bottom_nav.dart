@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/controller/providers/Bottomnavbar_provider.dart';
-import 'package:mobile_servies/tech/screens/assigned/assigned_tech.dart';
-import 'package:mobile_servies/tech/screens/completed/completed_tech.dart';
-import 'package:mobile_servies/tech/screens/home/home.dart';
-import 'package:mobile_servies/tech/screens/inProgress/inProgress_tech.dart';
-import 'package:mobile_servies/tech/screens/profile/profile_tech.dart';
+import 'package:mobile_servies/tech/view/assigned/assigned_tech.dart';
+import 'package:mobile_servies/tech/view/completed/completed_tech.dart';
+import 'package:mobile_servies/tech/view/home/home.dart';
+import 'package:mobile_servies/tech/view/inProgress/inProgress_tech.dart';
+import 'package:mobile_servies/tech/view/profile/profile_tech.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavTech extends StatelessWidget {
@@ -50,9 +50,9 @@ class BottomNavTech extends StatelessWidget {
           ),
         ],
         currentIndex: navigationProvider.selectedIndex,
-        selectedItemColor: AppColors.whiteClr,
-        unselectedItemColor: Colors.white.withOpacity(0.5),
-        backgroundColor: Color.fromARGB(255, 85, 105, 53),
+        selectedItemColor: Color.fromARGB(255, 85, 105, 53),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           Provider.of<TechNavigationProvider>(context, listen: false).setIndex(index);
