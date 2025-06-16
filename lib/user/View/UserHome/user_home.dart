@@ -139,6 +139,7 @@ class MainContentSection extends StatelessWidget {
       text(TextConstants.access, Color(0xFF5A5A5A), 16, FontWeight.w400),
         const Gap(20),
         Row(
+          
           children: [
             Expanded(
               child: ActionCard(
@@ -190,6 +191,7 @@ class MainContentSection extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ); 
   }
-}
+}  
+
