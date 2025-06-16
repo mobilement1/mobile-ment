@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
 import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
@@ -53,6 +54,11 @@ class _SplashState extends State<Splash> {
 
     
     if (token!=null&&token.isNotEmpty) {
+      final isExpired=JwtDecoder.isExpired(token);
+      log("token expired:$isExpired");
+      if (isExpired) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>UserLogin()));
+      }else{
       if (userRole=='Admin') {
          Navigator.pushReplacement(
         context,
@@ -64,7 +70,7 @@ Navigator.pushReplacement(
         MaterialPageRoute(builder: (context) =>  UserBottom()),
       );
       }
-      
+      } 
     } else {
       Navigator.pushReplacement(
         context,

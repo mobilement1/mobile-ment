@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:mobile_servies/main.dart';
 import 'package:mobile_servies/user/constants/constant_api/const_url.dart';
 import 'package:mobile_servies/user/UserModel/AuthModel/loginmodel.dart';
 import 'package:mobile_servies/user/UserModel/AuthModel/registermodel.dart';
@@ -12,7 +14,41 @@ class UserAuthService {
   final String loginUrl = ApiConstants.loginUrl;
   final String logoutUrl=ApiConstants.logoutUrl;
   String?userRole;
-
+ // ✅ ADDED: Interceptor inside constructor
+UserAuthService(){
+  dio.interceptors.add(InterceptorsWrapper(
+    onError: (DioException e, ErrorInterceptorHandler handler)async {
+      if (e.response?.statusCode==401) {
+        log("Access token expaired  loggin out");
+        //
+        final prefs=await SharedPreferences.getInstance();
+        await prefs.clear();//clear all saved user data
+        //navigate to login
+        navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route)=>false);
+        
+        //
+        // final refreshed=await refreshAccessToken();
+        // if (refreshed) {
+        //   final prefs=await SharedPreferences.getInstance();
+        //   final newToken=prefs.getString('auth_token');
+        //   final clonedRequest=e.requestOptions;
+        //   clonedRequest.headers['Athorization']='Bearer $newToken';
+        //   try {
+        //     final response=await dio.fetch(clonedRequest);
+        //     return handler.resolve(response);
+        //   } catch (err) {
+        //     log("Retry failed after refresh");
+        //     return handler.reject(err as DioException);
+        //   }
+        // }else{
+        //   log("Refresh token failed.Logging out");
+        //   return handler.reject(e);
+        // }
+      }
+      return handler.next(e);
+    },
+  ));
+}
   // REGISTER   
   Future<String> registerUser(Registermodel user) async {
     try {
@@ -31,7 +67,7 @@ class UserAuthService {
       log("Register response status: ${response.statusCode}");
       log("Register response data: ${response.data}");
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201||response.statusCode==200) {
         final token = response.data['data']?['token']as String;
         log("Response token: $token");
 
@@ -72,15 +108,32 @@ class UserAuthService {
 
       if (response.statusCode == 200) {
         final token = response.data['data']?['token'];
+        // final refreshToken=response.data['data']?['refreshToken'];
         userRole=response.data['data']?['role'];
+        
         log("Response token: $token");
         log("Response role: $userRole");
-
+        // log("Response refreshToken$refreshToken");
+ 
         if (token != null&&token.isNotEmpty) {
            log("Saving token: $token");
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('auth_token', token);
           await prefs.setString('user_role', userRole??'user');
+
+          // if (refreshToken !=null && refreshToken.isNotEmpty) {
+          //   await prefs.setString('refresh_token', refreshToken);
+          //   log("RefreshToken saved to shared preferences");
+          // }else{
+          //   log("Refreshtoken not found in response");
+          // }
+          //
+         final decoded=JwtDecoder.decode(token);
+         final userId=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+         if (userId !=null) {
+           await prefs.setString('user_id', userId);
+            log("User ID saved to SharedPreferences: $userId");
+         }
           log("Token and role saved to SharedPreferences");
           
         }else{
@@ -96,7 +149,44 @@ class UserAuthService {
       log("Dio login status code: ${e.response?.statusCode}");
       return e.response?.data['message'] ?? "Unexpected error";
     }
-  }
+
+    
+   }
+//  REFRESH ACCESS TOKEN
+//   Future<bool> refreshAccessToken()async{
+// final prefs=await SharedPreferences.getInstance();
+// final userId=prefs.getString('user_id');
+// final refreshToken=prefs.getString('refresh_token');
+// if (userId==null || refreshToken==null) {
+//   log("cannot refreshtoken :userId or refrshtoken missing");
+//   return false;
+// }
+// try {
+//   final response=await dio.post('${ApiConstants.baseURL}/api/Auth/refresh-token?userid=$userId',
+//   options: Options(
+//     headers: {
+//       'Authorization':'Bearer $refreshToken',
+//       'Content-Type':'application/json',
+//     }
+//   )
+//   );
+//   if (response.statusCode==200) {
+//     final newToken=response.data['data']?['token'];
+//     if (newToken!=null && newToken.isNotEmpty) {
+//       await prefs.setString('auth_token', newToken);
+//       log('Access token refreshed and saved');
+//       return true;
+//     }else{
+//        log("Refresh API success but token missing");
+//     }
+//   }else{
+//     log("Refresh api failed:${response.statusCode}");
+//   }
+// } catch (e) {
+//   log("error during token refersh:$e");
+// }
+// return false;
+//   }
 
   // GET TOKEN
   Future<String?> getToken() async {
@@ -138,7 +228,9 @@ class UserAuthService {
       log("Error calling logout API: $e");
     }
     await prefs.remove('auth_token');
+    // await prefs.remove('refresh_token'); 
     await prefs.remove('user_role');
+    
     log("Token removed from SharedPreferences");
   }
 }

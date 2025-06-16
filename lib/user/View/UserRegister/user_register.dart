@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -158,6 +160,7 @@ class _UserRegisterState extends State<UserRegister> {
                                       false) {
                                     final response = await authProvider
                                         .registerUser(context);
+                                           log("Register response: $response");
                                     if (response == 'success') {
                                       Navigator.pushReplacement(
                                         context,
@@ -211,6 +214,7 @@ class _UserRegisterState extends State<UserRegister> {
                               ),
                               TextButton(
                                 onPressed: () {
+                                  
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
