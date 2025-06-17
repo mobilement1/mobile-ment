@@ -10,6 +10,7 @@ import 'package:mobile_servies/tech/controller/completed_provider.dart';
 import 'package:mobile_servies/tech/controller/providers/Bottomnavbar_provider.dart';
 import 'package:mobile_servies/tech/controller/providers/Profilestatus_provider.dart';
 import 'package:mobile_servies/tech/controller/providers/assigned_provider.dart';
+import 'package:mobile_servies/tech/controller/providers/dashboard_provider.dart';
 import 'package:mobile_servies/tech/controller/providers/inProgress_provider.dart';
 import 'package:mobile_servies/tech/controller/providers/profile_provider.dart';
 import 'package:mobile_servies/tech/view/bottomNav/bottom_nav.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => InProgressTechProvider()),
         ChangeNotifierProvider(create: (context) => CompletedTechProvider()),
         ChangeNotifierProvider(create: (context) => TechnicianProfileProvider()),
+        ChangeNotifierProvider(create: (context) => DashboardProvider()),
     ],
       child: MaterialApp(
            debugShowCheckedModeBanner: false,

@@ -16,6 +16,7 @@ class InProgressTechProvider with ChangeNotifier {
     'InProgress': 0,
     'Completed': 0,
   };
+  
 
   final Map<String, bool> isCompleting = {};
   final Map<String, bool> isReassigning = {};

@@ -8,7 +8,7 @@ Widget homeContainers([IconData? icon, String? textContainer, String? textMain])
   return Expanded(
     child: SizedBox(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
         child: Card(shadowColor: Colors.black87,
           color: Color(0xFF718355),
           elevation: 2,

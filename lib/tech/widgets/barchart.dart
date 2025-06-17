@@ -1,8 +1,3 @@
-
-
-
-import 'dart:ui';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -22,33 +17,40 @@ class CustomBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (monthlyData.isEmpty) {
+      return const Center(child: Text(',no chart data available'));
+    }
+
     final List<String> months = monthlyData.keys.toList();
     final double maxValue = monthlyData.values
         .expand((metric) => metric.values)
-        .reduce((a, b) => a > b ? a : b);
+        .fold<double>(0, (a, b) => a > b ? a : b);
 
-    const double fixedBarWidth = 25;
-    const double groupSpacing = 20;
-    final double chartWidth =
-        months.length * (metrics.length * fixedBarWidth + groupSpacing * 2);
+    // Ensure a reasonable minimum maxY to avoid division by zero
+    final double chartMaxY = maxValue <= 0 ? 100 : maxValue + maxValue * 0.2;
+    final double interval = chartMaxY / 4;
+
+    const double barWidth = 20; // Reduced for better spacing
+    const double groupSpacing = 15;
+    final double chartWidth = months.length * (metrics.length * barWidth + groupSpacing);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Column(
         children: [
           Container(
-            width: chartWidth,
+            width: chartWidth < 300 ? 300 : chartWidth, // Minimum width for small datasets
             height: 340,
             padding: const EdgeInsets.all(16),
             child: BarChart(
               BarChartData(
-                maxY: (maxValue < 100 ? 100 : maxValue + maxValue * 0.2),
+                maxY: chartMaxY,
                 minY: 0,
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: maxValue / 4,
+                      interval: interval,
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toInt().toString(),
@@ -66,7 +68,7 @@ class CustomBarChart extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
-                        int index = value.toInt();
+                        final index = value.toInt();
                         return Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
@@ -99,10 +101,10 @@ class CustomBarChart extends StatelessWidget {
                       (metricIndex) => BarChartRodData(
                         toY: monthlyData[months[monthIndex]]![metrics[metricIndex]] ?? 0,
                         color: colors[metricIndex],
-                        width: fixedBarWidth,
+                        width: barWidth,
                         borderRadius: BorderRadius.circular(8),
                         backDrawRodData: BackgroundBarChartRodData(
-                          toY: maxValue + (maxValue * 0.2),
+                          toY: chartMaxY,
                           color: const Color(0xFF8D8D8D).withOpacity(0.1),
                         ),
                       ),
@@ -113,7 +115,7 @@ class CustomBarChart extends StatelessWidget {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
-                  horizontalInterval: maxValue / 4,
+                  horizontalInterval: interval,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
                       color: const Color(0xFF8D8D8D).withOpacity(0.2),
@@ -124,7 +126,7 @@ class CustomBarChart extends StatelessWidget {
                 alignment: BarChartAlignment.spaceEvenly,
                 groupsSpace: groupSpacing,
               ),
-              swapAnimationDuration: const Duration(milliseconds: 800),
+              swapAnimationDuration: const Duration(milliseconds: 300),
               swapAnimationCurve: Curves.easeInOut,
             ),
           ),
@@ -144,6 +146,7 @@ class CustomBarChart extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: colors[index],
                           shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                       const Gap(8),
