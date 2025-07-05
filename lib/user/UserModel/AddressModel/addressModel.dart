@@ -21,7 +21,7 @@ required this.longitude
 
  factory AddressModel.fromJson(Map<String,dynamic>json){
   return AddressModel(
-    id: json["addressID"],
+    id: json["addressID"]?? json["id"],
     addressDetail: json['addressDetail'], 
     city:json ['city'],
      pincode: json['pincode'],

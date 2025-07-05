@@ -8,7 +8,7 @@ Widget rowWithText({String? txt, IconData? icn}) {
       
     crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icn, color: AppColors.blue, size: 24),
+        Icon(icn, color: AppColors.whiteClr, size: 24),
         const SizedBox(width: 10),
         Text(
           txt ?? "",
@@ -43,32 +43,32 @@ class SpecialisationWidget extends StatelessWidget {
             "Smartphone Repair",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.smartphone, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Laptop Service",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.laptop, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Network Setup",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.wifi, color: AppColors.blue),
+         backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         Chip(
           label: Text(
             "Hardware Installation",
             style: TextStyle(color: AppColors.whiteClr),
           ),
-          backgroundColor: Color.fromARGB(255, 47, 47, 58),
-          avatar: Icon(Icons.computer, color: AppColors.blue),
+          backgroundColor: Color(0xFF718355),
+          avatar: Icon(Icons.smartphone, color: Color.fromARGB(255, 255, 255, 255)),
         ),
       ],
     );
@@ -85,43 +85,45 @@ Widget jobsDoneRatingsExperience({
   IconData icon = Icons.star,
 }) {
   return Container(
-    height: 100,width: 100,decoration: BoxDecoration(
+    height: 100,width: 110,decoration: BoxDecoration(
        gradient: const LinearGradient(
-                    colors: [AppColors.darkBluePurple, AppColors.justSample],
+                    colors: [Color(0xFF718355),Color(0xFF718355)],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),borderRadius: BorderRadius.circular(15)
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [SizedBox(height: 18,),
+      children: [SizedBox(height: 20,),
         showIcon
             ? Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [SizedBox(width: 10,),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: AppColors.whiteClr,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: AppColors.whiteClr,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Icon(icon, color: AppColors.grey, size: 24),
+                  Icon(icon, color:  Colors.white, size: 30),
                 ],
               )
             : Text(
                 title,
                 style: const TextStyle(
-                  color: AppColors.whiteClr,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800
                 ),
               ),
         Text(
           subtitle,
           style: const TextStyle(
-            color: AppColors.grey,
+            color: Colors.white70,
             fontSize: 16,
           ),
         ),

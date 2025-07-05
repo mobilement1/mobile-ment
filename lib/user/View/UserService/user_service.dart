@@ -1,19 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_servies/user/View/UserBookingSection/user_bookingsection_widget.dart';
+
 import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
 import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
+import 'package:mobile_servies/user/viewmodel/userServiceProvider.dart';
+import 'package:provider/provider.dart';
 
-class UserService extends StatelessWidget {
+class UserService extends StatefulWidget {
   final bool showBackButton;
   const UserService({super.key, this.showBackButton = false});
 
   @override
+  State<UserService> createState() => _UserServiceState();
+}
+
+class _UserServiceState extends State<UserService> {
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    searchController=TextEditingController();
+    Future.delayed(Duration.zero,(){
+Provider.of<UserServiceProvider>(context,listen: false).fetchServices();
+    });
+  }
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -53,7 +76,7 @@ class UserService extends StatelessWidget {
                                     ),
                                   ),
                                   Gap(30),
-                                  if (showBackButton)
+                                  if (widget.showBackButton)
                                     Positioned(
                                       top: 100,
                                       right: 10,
@@ -88,6 +111,9 @@ class UserService extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: TextField(
                             controller: searchController,
+                            onChanged: (value) {
+                              context.read<UserServiceProvider>().filterServices(value);
+                            },
                             decoration: InputDecoration(
                               hintText: 'Search Services',
                               hintStyle: GoogleFonts.openSans(
@@ -138,115 +164,129 @@ class UserService extends StatelessWidget {
                           ),
                         ),
                         const Gap(20),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              color: Color(0xFFE9F5DB),
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                        Consumer<UserServiceProvider>(
+                          builder: (context,provider,child) {
+                            if (provider.isLoading) {
+                              return Center(child: CircularProgressIndicator(),);
+                            }
+                            final services=provider.filteredServices;
+                            if (services.isEmpty) {
+                              return Center(child: text("No Service Available", Colors.red, 25, FontWeight.bold),);
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: services.length,
+                              itemBuilder: (context, index) {
+                               final service=services[index];
+                                return Card(
+                                  color: Color(0xFFE9F5DB),
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                       Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Expanded(
+      child: Text(
+        service.serviceName,
+        style: GoogleFonts.poppins(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: const Color.fromARGB(255, 111, 111, 111),
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+    if (service.isPopular)
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 85, 105, 53),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.thumb_up_outlined, color:Colors.white, size: 18),
+            const Gap(5),
+            Text(
+              'Popular',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+  ],
+),
+
+                                        const Gap(5),
                                         text(
-                                          'Increase Storage',
+                                          'INR ${service.price.toStringAsFixed(2)}',
                                           Color.fromARGB(255, 111, 111, 111),
-                                          20,
+                                          16,
                                           FontWeight.w600,
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.thumb_up_outlined,
-                                                color: const Color(0xFF718355),
-                                                size: 18,
-                                              ),
-                                              const Gap(5),
-                                              text(
-                                                'Popular',
-                                                Color(0xFF718355),
-                                                12,
-                                                FontWeight.w600,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Gap(5),
-                                    text(
-                                      'INR 2499.00',
-                                      Color.fromARGB(255, 111, 111, 111),
-                                      16,
-                                      FontWeight.w600,
-                                    ),
-                                    const Gap(7),
-                                    text(
-                                      'Increase your phone storage',
-                                      Color.fromARGB(255, 111, 111, 111),
-                                      14,
-                                      FontWeight.w400,
-                                    ),
-                                    const Gap(10),
-                                    Row(
-                                      children: [
-                                        icon(Icons.watch_later_rounded,
-                                            Colors.green),
-                                        const Gap(5),
+                                        const Gap(7),
                                         text(
-                                          '90 min',
-                                          const Color.fromARGB(
-                                              255, 111, 111, 111),
-                                          14,
-                                          FontWeight.w500,
-                                        ),
-                                        const Gap(20),
-                                        icon(Icons.local_offer_outlined,
-                                            Colors.green),
-                                        const Gap(5),
-                                        text(
-                                          'Repair',
+                                          service.description,
                                           Color.fromARGB(255, 111, 111, 111),
                                           14,
-                                          FontWeight.w500,
+                                          FontWeight.w400,
                                         ),
+                                        const Gap(10),
+                                        Row(
+                                          children: [
+                                            icon(Icons.watch_later_rounded,
+                                                Colors.green),
+                                            const Gap(5),
+                                            text(
+                                              '${service.duration} min',
+                                              const Color.fromARGB(
+                                                  255, 111, 111, 111),
+                                              14,
+                                              FontWeight.w500,
+                                            ),
+                                            const Gap(20),
+                                            icon(Icons.local_offer_outlined,
+                                                Colors.green),
+                                            const Gap(5),
+                                            text(
+                                              service.category,
+                                              Color.fromARGB(255, 111, 111, 111),
+                                              14,
+                                              FontWeight.w500,
+                                            ),
+                                          ],
+                                        ),
+                                        const Gap(20),
+                                        // Align(
+                                        //   alignment: Alignment.centerRight,
+                                        //   child: customButton(
+                                        //     label: 'Book Now',
+                                        //     icon: Icons.arrow_forward,
+                                        //     onPressed: () {
+                                        //       // Add booking functionality here
+                                        //     },
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
-                                    const Gap(20),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: customButton(
-                                        label: 'Book Now',
-                                        icon: Icons.arrow_forward,
-                                        onPressed: () {
-                                          // Add booking functionality here
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             );
-                          },
+                          }
                         ),
                         const Gap(20),
                       ],

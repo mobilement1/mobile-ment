@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/user/UserModel/AddressModel/addressModel.dart';
 import 'package:mobile_servies/user/View/UserBookingSection/showDialogueScrn.dart';
 import 'package:mobile_servies/user/View/UserBookingSection/user_bookingsection_widget.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
@@ -35,7 +36,16 @@ class _BookRepairPageState extends State<BookRepairPage> {
       Provider.of<DeviceServiceProvider>(context, listen: false)
           .fetchServices();
       Provider.of<DeviceServiceProvider>(context, listen: false).fetchDevices();
-      bookingProvider.selectedAddressID = addressProvider.selectedAddressID;
+   bookingProvider.setSelectedAddressID(
+  addressProvider.selectedAddressID,
+  addressProvider.addressList.firstWhere(
+    (address) => address.id == addressProvider.selectedAddressID,
+    orElse: () => AddressModel(
+      id: '', addressDetail: '', city: '', pincode: '', state: '', street: '', latitude: 0.0, longitude: 0.0,
+    ),
+  ),
+);
+
     });
   }
 

@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/user/UserModel/RepairModel/repairModel.dart';
 import 'package:mobile_servies/user/View/UserBooking/userbookingWidget.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
 
 class BookingDetailPage extends StatefulWidget {
-  final Map<String, String> booking;
-
+  final BookingModelUser booking;
   const BookingDetailPage({super.key, required this.booking});
 
   @override
@@ -15,15 +14,17 @@ class BookingDetailPage extends StatefulWidget {
 }
 
 class _BookingDetailPageState extends State<BookingDetailPage> {
-  bool isCustomerDetailsExpanded = true;
+  bool isCustomerDetailsExpanded = false;
 
   @override
   Widget build(BuildContext context) {
+    final booking = widget.booking;
+    final cost = booking.costDetails;
+
     return Scaffold(
-    
       body: Column(
         children: [
-          const Gap(100), // Space at the top with green background
+          const Gap(100),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -39,39 +40,29 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Header
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              "Booking Details",
-                              style: GoogleFonts.poppins(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0xFF2E2E2E),
-                                letterSpacing: 0.5,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    offset: const Offset(2, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
+                          Text(
+                            "Booking Details",
+                            style: GoogleFonts.poppins(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF2E2E2E),
                             ),
                           ),
                           IconButton(
                             icon: icon(Icons.arrow_back, const Color(0xFF5A5A5A)),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ],
                       ),
                       const Gap(20),
+
+                      // Booking Info Card
                       Card(
-                        color: Color.fromARGB(255, 218, 243, 179),
+                        color: const Color.fromARGB(255, 218, 243, 179),
                         elevation: 2,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         child: Padding(
@@ -79,42 +70,45 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              rowWidget("Device:", "${widget.booking['device']}", 20),
+                              rowWidget("Device:", booking.device ?? '', 20),
                               const Gap(10),
-                              rowWidget("Service:", "${widget.booking['service']}", 20),
+                              rowWidget("Service:", booking.service ?? '', 20),
                               const Gap(10),
-                              rowWidget("Date:", "${widget.booking['date']}", 20),
+                              rowWidget("Date:", formatDateTime(booking.date ?? ''), 20),
+
                               const Gap(10),
-                              rowWidget("Status:", "${widget.booking['status']}", 20, color: Colors.green),
+                              rowWidget("Status:", booking.status ?? '', 20, color: Colors.green),
                               const Gap(10),
-                              rowWidget("Technician:", "${widget.booking['technician']}", 20),
+                              rowWidget("Technician:", booking.technician ?? '', 20),
                               const Gap(10),
-                              rowWidget("Payment:", "${widget.booking['payment']}", 20),
+                              rowWidget("Payment:", booking.payment ?? '', 20),
                             ],
                           ),
                         ),
                       ),
                       const Gap(30),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Cost Breakdown',
-                          style: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF2E2E2E),
-                          ),
-                        ),
+
+                      // Cost Breakdown
+                      Text(
+                        "Cost Breakdown",
+                        style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w600),
                       ),
                       const Gap(15),
-                      bulletText('Service Charge: ₹399', const Color(0xFF5A5A5A), 16, FontWeight.w400),
-                      const Gap(10),
-                      bulletText('Travel Allowance: ₹157.43', const Color(0xFF5A5A5A), 16, FontWeight.w400),
-                      const Gap(10),
-                      bulletText('Booking Charge: ₹199', const Color(0xFF5A5A5A), 16, FontWeight.w400),
-                      const Gap(10),
-                      bulletText('Total Cost: ₹755.43', const Color(0xFF2E2E2E), 18, FontWeight.w600),
+                      if (cost != null) ...[
+  bulletRichText("Service Charge:", "₹${cost.serviceCharge.toStringAsFixed(2)}"),
+  const Gap(10),
+  bulletRichText("Travel Allowance:", "₹${cost.travelAllowance.toStringAsFixed(2)}"),
+  const Gap(10),
+  bulletRichText("Booking Charge:", "₹${cost.bookingCharge.toStringAsFixed(2)}"),
+  const Gap(10),
+  bulletRichText("Total Cost:", "₹${cost.totalBookingCost.toStringAsFixed(2)}"),
+] else
+  const Text("Cost details not available", style: TextStyle(color: Colors.red)),
+
+
                       const Gap(30),
+
+                      // Toggle Customer Details
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: InkWell(
@@ -126,15 +120,17 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           child: Row(
                             children: [
                               Text(
-                                isCustomerDetailsExpanded ? "Show Customer Details" : "Hide Details",
+                                isCustomerDetailsExpanded ? "Hide Customer Details" : "Show Customer Details",
                                 style: GoogleFonts.poppins(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF718355),
+                                  color: Color.fromARGB(255, 85, 105, 53),
                                 ),
                               ),
                               Icon(
-                                isCustomerDetailsExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                                isCustomerDetailsExpanded
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down,
                                 color: const Color(0xFF718355),
                               ),
                             ],
@@ -142,9 +138,11 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                       const Gap(10),
-                      if (!isCustomerDetailsExpanded)
+
+                      // Customer Details
+                      if (isCustomerDetailsExpanded)
                         Card(
-                          color: Color.fromARGB(255, 218, 243, 179),
+                          color: const Color.fromARGB(255, 218, 243, 179),
                           elevation: 2,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           child: Padding(
@@ -161,13 +159,13 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                   ),
                                 ),
                                 const Gap(15),
-                                rowWidget("Name:", "Zeenath", 20),
+                                rowWidget("Name:", booking.customerName ?? '', 20),
                                 const Gap(10),
-                                rowWidget("Email:", "zeenathtc961@gmail.com", 20),
+                                rowWidget("Email:", booking.email ?? '', 20,color: const Color.fromARGB(255, 1, 95, 173)),
                                 const Gap(10),
-                                rowWidget("Phone:", "7306706964", 20),
+                                rowWidget("Phone:", booking.phone ?? '', 20),
                                 const Gap(10),
-                                rowWidget("Address:", "Pallikkal Bazar, Malappuram - 673638", 20),
+                                rowWidget("Address:", "${booking.street ?? ''}, ${booking.city ?? ''}, ${booking.pincode ?? ''}", 20),
                               ],
                             ),
                           ),
@@ -184,4 +182,3 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     );
   }
 }
-

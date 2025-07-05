@@ -69,30 +69,77 @@ log('Sending address data: ${user.toJson()}');
       throw Exception("$e");
     }
   }
-
-  Future<String> deleteAddressUser(String id) async {
-    try {
-       final prefs = await SharedPreferences.getInstance();
-final token = prefs.getString('auth_token');
-      final response = await dio.delete("${ApiConstants.deleteAdderess}/$id",
+Future<String> deleteAddressUser(String id) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+final url = "${ApiConstants.deleteAddress}/$id";
+    log("Deleting address with ID: $id");
+    log("Calling URL: $url");
+    final response = await dio.delete(
+     url,
       options: Options(
-        headers:  {
-      'Authorization': 'Bearer $token',
-       'Content-Type': 'application/json',
-    },
-  ),
-      );
-      
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        log("Successfully deleted address");
-        return "success";
-      } else {
-        log("Delete failed: ${response.statusMessage}");
-        return response.data['message'] ?? "Failed to delete";
-      }
-    } on DioException catch (e) {
-      log("DioException in deleteAddressUser: $e");
-      return e.response?.data['message']?.toString() ?? e.message ?? "Unexpected delete error";
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      log("✅ Successfully deleted address");
+      return "success";
+    } else {
+      log("❌ Delete failed: ${response.data}");
+      return response.data['message'] ?? "Failed to delete";
     }
+  } on DioException catch (e) {
+    log("🛑 DioException in deleteAddressUser: $e");
+    return e.response?.data['message'] ?? "Unexpected delete error";
   }
+}
+
+
+Future<String> updateAddressUser(AddressModel user) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    final url = "${ApiConstants.updateAddress}/${user.id}";
+    log("🔁 Updating address ID: ${user.id}");
+    log("📤 Sending data: ${user.toJson()}");
+
+    final response = await dio.put(
+      url,
+      data: user.toJson(),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      log("✅ Address updated successfully");
+      return "success";
+    } else {
+      log("❌ Update failed: ${response.data}");
+      return response.data['message'] ?? "Failed to update address";
+    }
+  } on DioException catch (e) {
+  log("🛑 DioException in updateAddressUser: $e");
+
+  final errorData = e.response?.data;
+  if (errorData is Map<String, dynamic>) {
+    return errorData['message'] ?? "Unexpected error during update";
+  } else {
+    log("⚠️ Unexpected response format: $errorData");
+    return "Unexpected error during update";
+  }
+}
+
+}
+
+
 }

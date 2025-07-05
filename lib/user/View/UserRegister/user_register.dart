@@ -138,6 +138,13 @@ class _UserRegisterState extends State<UserRegister> {
                               authProvider.errorMessage,
                               style: const TextStyle(color: Colors.red),
                             ),
+
+                            //
+                             if (authProvider.successMessage.isNotEmpty)
+                            Text(
+                              authProvider.successMessage,
+                              style: const TextStyle(color: Colors.green),
+                            ),
                           const Gap(10),
                           Container(
                             width: double.infinity,
@@ -146,8 +153,8 @@ class _UserRegisterState extends State<UserRegister> {
                               borderRadius: BorderRadius.circular(30),
                               gradient: const LinearGradient(
                                 colors: [
-                                  Colors.green,
-                          Color.fromARGB(255, 41, 41, 41)
+                                  Color.fromARGB(255, 113, 137, 74),
+                          Colors.black
                                 ],
                               ),
                             ),
@@ -161,7 +168,11 @@ class _UserRegisterState extends State<UserRegister> {
                                     final response = await authProvider
                                         .registerUser(context);
                                            log("Register response: $response");
+                                           log("👉 Final register response: $response");
+log("👉 isLoading: ${authProvider.isLoading}");
+
                                     if (response == 'success') {
+                                       await Future.delayed(Duration(seconds: 2));
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

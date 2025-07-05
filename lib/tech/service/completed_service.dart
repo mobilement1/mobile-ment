@@ -1,0 +1,129 @@
+import 'dart:developer';
+import 'package:dio/dio.dart';
+import 'package:mobile_servies/tech/model/complete_model.dart';
+import 'package:mobile_servies/user/UserServices/AuthService/user_authService.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+class CompletedTaskService {
+  final Dio _dio = Dio(BaseOptions(
+    baseUrl: 'https://mobilemend-backend.onrender.com',
+  ));
+  final UserAuthService _authService = UserAuthService();
+
+  Future<String?> _getAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    log('ℹ Retrieved token: ${token != null ? 'present' : 'null'}');
+    return token;
+  }
+
+  Future<List<CompletedModel>> fetchCompletedTasks({
+    required String technicianId,
+    String status = 'Completed',
+  }) async {
+    final token = await _getAuthToken();
+    if (token == null) throw Exception('Not authenticated');
+
+    try {
+      log('ℹ Fetching completed tasks with technicianId: $technicianId, status: $status');
+      final response = await _dio.get(
+        '/api/Booking/get-booking',
+        queryParameters: {
+          'status': status,
+          'technicianId': technicianId,
+        },
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
+      );
+
+      log('ℹ API Response: ${response.data}');
+      log('ℹ Status Code: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        if (response.data is Map && response.data['data'] != null) {
+          final data = response.data['data'];
+          if (data is List) {
+            log('ℹ Parsed ${data.length} completed tasks from list');
+            if (data.isEmpty) {
+              log('ℹ No completed tasks returned for technicianId: $technicianId, status: $status');
+              return [];
+            }
+            return data.map((json) => CompletedModel.fromJson(json)).toList();
+          } else if (data is Map<String, dynamic>) {
+            log('ℹ Parsed single completed task from data object');
+            return [CompletedModel.fromJson(data)];
+          } else {
+            log('⚠ Unexpected data format: Expected List or Map, got ${data.runtimeType}');
+            throw Exception('Unexpected data format');
+          }
+        } else if (response.data is List) {
+          final data = response.data as List;
+          log('ℹ Parsed ${data.length} completed tasks from direct list response');
+          if (data.isEmpty) {
+            log('ℹ No completed tasks returned for technicianId: $technicianId, status: $status');
+            return [];
+          }
+          return data.map((json) => CompletedModel.fromJson(json)).toList();
+        } else {
+          log('⚠ Unexpected response format: Expected Map with "data" or List, got ${response.data.runtimeType}');
+          throw Exception('Unexpected response format');
+        }
+      }
+      throw Exception('Failed to load completed tasks: Status ${response.statusCode}');
+    } on DioException catch (e) {
+      log('❌ Error fetching completed tasks: ${e.response?.data ?? e.message}, Status: ${e.response?.statusCode}');
+      throw Exception('Failed to load completed tasks: ${e.response?.data['errors'] ?? e.message}');
+    }
+  }
+
+  Future<Map<String, int>> fetchTaskCounts(String technicianId) async {
+    final token = await _getAuthToken();
+    if (token == null) throw Exception('Not authenticated');
+
+    final counts = <String, int>{
+      'Assigned': 0,
+      'InProgress': 0,
+      'Completed': 0
+    };
+    final statuses = ['Assigned', 'InProgress', 'Completed'];
+
+    try {
+      for (final status in statuses) {
+        log('ℹ Fetching task count for status: $status, technicianId: $technicianId');
+        final response = await _dio.get(
+          '/api/Booking/get-booking',
+          queryParameters: {
+            'status': status,
+            'technicianId': technicianId,
+          },
+          options: Options(headers: {
+            'Authorization': 'Bearer $token',
+          }),
+        );
+
+        log('ℹ Task Count Response for $status: ${response.data}');
+
+        if (response.statusCode == 200) {
+          if (response.data is Map && response.data['data'] is List) {
+            counts[status] = (response.data['data'] as List).length;
+          } else if (response.data is List) {
+            counts[status] = (response.data as List).length;
+          } else {
+            log('⚠ Invalid response for $status: ${response.data.runtimeType}');
+            counts[status] = 0;
+          }
+        } else {
+          log('⚠ Non-200 status for $status: ${response.statusCode}');
+          counts[status] = 0;
+        }
+      }
+      log('ℹ Task counts: $counts');
+      return counts;
+    } on DioException catch (e) {
+      log('❌ Error fetching counts: ${e.response?.data ?? e.message}, Status: ${e.response?.statusCode}');
+      throw Exception('Failed to load counts: ${e.response?.data['errors'] ?? e.message}');
+    }
+  }
+}

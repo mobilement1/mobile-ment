@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
+import 'package:mobile_servies/user/UserModel/AddressModel/addressModel.dart';
 
 import 'package:mobile_servies/user/UserModel/RepairModel/repairModel.dart';
 import 'package:mobile_servies/user/UserServices/RepairServices/repairService.dart';
@@ -10,6 +11,7 @@ class BookingProviderUser with ChangeNotifier {
   final BookingServiceUSer service = BookingServiceUSer();
 
   List<BookingModelUser> bookings = [];
+  AddressModel?selectedAddressModel;
   bool isLoading = false;
 
   String errorMessage = '';
@@ -21,6 +23,7 @@ class BookingProviderUser with ChangeNotifier {
   String? selectedTechnicianID;
   String? selectedAddressID;
   String issueDescription = '';
+    
 
 
 
@@ -31,7 +34,11 @@ class BookingProviderUser with ChangeNotifier {
     notifyListeners();
 
     try {
-      bookings = await service.fetchBookingSer(); // store the fetched list
+      bookings = await service.fetchBookingSer();
+      
+      log("📦 Total bookings fetched: ${bookings.length}");
+
+     
     } catch (e) {
       errorMessage = e.toString();
       log("Fetch Booking Error: $errorMessage");
@@ -43,10 +50,11 @@ class BookingProviderUser with ChangeNotifier {
 
    // ✅ Fetch best technician suggestions based on location
   Future<List<dynamic>> fetchNearbyTechnicians() async {
-    if (selectedAddressID == null || selectedDeviceID == null) {
+    if (selectedDeviceID == null||selectedAddressModel==null) {
       log("❌ Address ID or Device ID missing");
       return [];
     }
+    
     final technicians = await service.getBestTechnicians(selectedAddressID!, selectedDeviceID!);
     return technicians;
   }
@@ -67,26 +75,32 @@ class BookingProviderUser with ChangeNotifier {
       }
 
 log("🔍 Booking Debug Info:");
-log("Device ID: ${selectedDeviceID ?? 'Not selected'}");
-log("Service ID: ${selectedServiceID ?? 'Not selected'}");
-log("Address ID: ${selectedAddressID ?? 'Not selected'}");
-log("Technician ID: ${selectedTechnicianID ?? 'Not selected'}");
-log("Issue: ${issueDescription.isEmpty ? 'Empty' : issueDescription}");
-
+log("Device ID: $selectedDeviceID");
+    log("Service ID: $selectedServiceID");
+    log("Address ID: $selectedAddressID");
+    log("Technician ID: $selectedTechnicianID");
+    log("Issue: $issueDescription");
       BookingModelUser model = BookingModelUser(
         addressID: selectedAddressID!,
         deviceID: selectedDeviceID!,
         serviceID: selectedServiceID!,
         technicianID: selectedTechnicianID ?? '', // optional
         issue: issueDescription,
+        date: DateTime.now().toIso8601String(), 
       );
       final result=await service.addBookingSer(model);
            if (result["success"]) {
              successMessage = "Booking added successfully";
-             notifyListeners();
+
+
+            Map<String, dynamic>? technicianInfo;
+      if (model.technicianID != null && model.technicianID!.isNotEmpty) {
+        technicianInfo = await service.fetchTechnicianById(model.technicianID!);
+      }
+             
              return{
               "success":true,
-              "technician":result["technician"],
+              "technician": technicianInfo?['name'] ??''
              };
            }else{
             errorMessage = result['message'] ?? "Booking failed";
@@ -107,6 +121,7 @@ log("Issue: ${issueDescription.isEmpty ? 'Empty' : issueDescription}");
     }
   }
 
+
   void setSelectedDeviceID(String? id) {
   selectedDeviceID = id;
   notifyListeners();
@@ -123,8 +138,9 @@ void setSelectedTechnicianID(String? id) {
   notifyListeners();
 }
 
-void setSelectedAddressID(String? id) {
+void setSelectedAddressID(String? id,AddressModel?address) {
   selectedAddressID = id;
+  selectedAddressModel=address;
   notifyListeners();
 }
 

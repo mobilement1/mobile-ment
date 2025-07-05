@@ -95,6 +95,48 @@ Widget ProfileMenu() {
             }
           },
           itemBuilder: (context) => [
+            PopupMenuItem<String>(
+      enabled: false, // Disable click
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 129, 86, 238).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+              child:icon(Icons.person, Colors.blue), 
+            ),
+   
+            Gap(10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  authProvider.userDetails?.name ?? 'User Name',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  authProvider.userDetails?.role??"Role",
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+     PopupMenuDivider(),
             buildMenuItem(
               value: 'technician',
               icon: Icons.build,
