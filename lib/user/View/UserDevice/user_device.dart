@@ -7,13 +7,36 @@ import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/decoration/decoration.dart';
 import 'package:mobile_servies/user/view/userhome/user_homewidget.dart';
+import 'package:mobile_servies/user/viewmodel/userDeviceProvider.dart';
+import 'package:provider/provider.dart';
 
-class UserDevice extends StatelessWidget {
+class UserDevice extends StatefulWidget {
   const UserDevice({super.key});
 
   @override
+  State<UserDevice> createState() => _UserDeviceState();
+}
+
+class _UserDeviceState extends State<UserDevice> {
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+   
+    super.initState();
+    searchController=TextEditingController();
+    Future.delayed(Duration.zero,(){
+      Provider.of<UserDeviceProvider>(context,listen: false).fetchDevices();
+    });
+  }
+   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
+
     return Scaffold(
      
       body: Stack(
@@ -75,6 +98,9 @@ class UserDevice extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             child: TextField(
                               controller: searchController,
+                              onChanged: (value) {
+                                context.read<UserDeviceProvider>().filteredDevices(value);
+                              },
                               decoration: InputDecoration(
                                 hintText: 'Search Devices',
                                 hintStyle: GoogleFonts.openSans(
@@ -126,113 +152,126 @@ class UserDevice extends StatelessWidget {
                             ),
                           ),
                         
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                color: Color(0xFFE9F5DB),
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Consumer<UserDeviceProvider>(
+                            builder: (context,provider,child) {
+                              if (provider.isLoading) {
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                              final devices=provider.filteredDevice;
+                              if (devices.isEmpty) {
+                                return Center(child: text("No Device Available", Colors.red, 25, FontWeight.bold),);
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: devices.length,
+                                
+                                itemBuilder: (context, index) {
+                                  final device=devices[index];
+                                  return Card(
+                                    color: Color(0xFFE9F5DB),
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              icon(Icons.phone_iphone, Colors.green),
-                                              const Gap(10),
-                                              Text(
-                                                'iPhone 13',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w600,
-                                                  color:  const Color.fromARGB(255, 103, 102, 102)
+                                              Row(
+                                                children: [
+                                                  icon(Icons.phone_iphone, Colors.green),
+                                                  const Gap(10),
+                                                  Text(
+                                                    device.deviceName,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.w600,
+                                                      color:  const Color.fromARGB(255, 103, 102, 102)
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                                  borderRadius: BorderRadius.circular(15),
+                                                ),
+                                                child: Text(
+                                                  device.deviceType,
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: const Color(0xFF718355),
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(255, 255, 255, 255),
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
+                                          const Gap(5),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 40.0),
                                             child: Text(
-                                              'SmartPhone',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                color: const Color(0xFF718355),
+                                             device.brand,
+                                              style: GoogleFonts.openSans(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color.fromARGB(255, 103, 102, 102),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      const Gap(5),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 40.0),
-                                        child: Text(
-                                          'Apple',
-                                          style: GoogleFonts.openSans(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color.fromARGB(255, 103, 102, 102),
+                                          const Gap(15),
+                                          Row(
+                                            children: [
+                                              icon(Icons.info, Colors.green),
+                                              const Gap(10),
+                                              Text(
+                                                'Model:${device.model}',
+                                                style: GoogleFonts.openSans(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color.fromARGB(255, 103, 102, 102)
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                      const Gap(15),
-                                      Row(
-                                        children: [
-                                          icon(Icons.info, Colors.green),
                                           const Gap(10),
-                                          Text(
-                                            'Model: A2634',
-                                            style: GoogleFonts.openSans(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromARGB(255, 103, 102, 102)
+                                          Row(
+                                            children: [
+                                              icon(Icons.calendar_month, Colors.green),
+                                              const Gap(10),
+                                              Text(
+                                                'Released:${device.releaseYear.toString()}',
+                                                style: GoogleFonts.openSans(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color.fromARGB(255, 103, 102, 102)
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Gap(20),
+                                          Center(
+                                            child: customButton(
+                                              label: TextConstants.viewDetails,
+                                              icon: null,
+                                              onPressed: () {
+                                                showDeviceDetailDialog(context,device);
+                                              },
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const Gap(10),
-                                      Row(
-                                        children: [
-                                          icon(Icons.calendar_month, Colors.green),
-                                          const Gap(10),
-                                          Text(
-                                            'Released: 2021',
-                                            style: GoogleFonts.openSans(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromARGB(255, 103, 102, 102)
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Gap(20),
-                                      Center(
-                                        child: customButton(
-                                          label: TextConstants.viewDetails,
-                                          icon: null,
-                                          onPressed: () {
-                                            showDeviceDetailDialog(context);
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
-                            },
+                            }
                           ),
                           const Gap(20),
                         ],
@@ -247,6 +286,5 @@ class UserDevice extends StatelessWidget {
       ),
     );
   }
-
-  }
+}
 

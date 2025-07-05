@@ -32,6 +32,19 @@ void setSelectedAddress(String address,String id, int index) {
   selectedAddress = address;
   selectedIndex = index;
   selectedAddressID=id;
+
+  final found=addressList.firstWhere((addr)=>addr.id==id,
+  orElse: () => AddressModel(addressDetail: "",
+   city: "", 
+   pincode: '',
+    state: "", 
+    street: "",
+     latitude: 0.0, 
+     longitude: 0.0),
+  );
+  if (found.latitude!=0.0&&found.longitude!=0.0) {
+    selectedLatLng=LatLng(found.latitude, found.longitude);
+  }
   saveSelectedAddress(index,);
   notifyListeners();
 }
@@ -221,6 +234,50 @@ Future<void> clearSelectedAddress() async {
   selectedAddress = null;
   selectedIndex = null;
   notifyListeners();
+}
+
+Future<void> deleteAddress(String id) async {
+  try {
+    final result = await service.deleteAddressUser(id);
+    if (result == "success") {
+      if (selectedAddressID == id) {
+        await clearSelectedAddress();
+      }
+      addressList.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      errorMessage = result;
+      notifyListeners();
+    }
+  } catch (e) {
+    errorMessage = "Failed to delete address: $e";
+    notifyListeners();
+  }
+}
+Future<bool> updateAddressProvider(AddressModel updatedAddress) async {
+  clearMessages();
+  setLoading(true);
+
+  try {
+    final result = await service.updateAddressUser(updatedAddress);
+    setLoading(false);
+
+    if (result == "success") {
+      successMessage = "Address updated successfully!";
+      await getAddressList(); // refresh UI
+      notifyListeners();
+      return true;
+    } else {
+      errorMessage = result;
+      notifyListeners();
+      return false;
+    }
+  } catch (e) {
+    setLoading(false);
+    errorMessage = "Failed to update address: $e";
+    notifyListeners();
+    return false;
+  }
 }
 
 

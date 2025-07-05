@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_servies/user/View/UserBookingSection/addAddress.dart';
+import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 
 
 import 'package:mobile_servies/user/viewmodel/addressProvider.dart';
@@ -57,7 +61,7 @@ Widget buildDropdown({
 }
 
 Widget customButton({
-  required String label,
+  required dynamic label,
   required VoidCallback? onPressed,
   IconData? icon,
   bool isLoading=false,
@@ -110,7 +114,8 @@ Widget customButton({
 }
 
 void showAddressDialog(BuildContext context) async {
- 
+ final provider = Provider.of<Addressprovider>(context, listen: false);
+  await provider.getAddressList();
   showDialog(
     context: context,
     builder: (_) {
@@ -143,50 +148,86 @@ void showAddressDialog(BuildContext context) async {
                               final address = addresses[index];
                               final isSelected = value.selectedIndex == index;
 
-                              return GestureDetector(
-                                onTap: () {
-                                  final summary =
-                                      "${address.addressDetail}\n${address.street}\n${address.pincode}";
-                                  final addressProvider = Provider.of<Addressprovider>(context, listen: false);
-addressProvider.setSelectedAddress(summary, address.id!, index);
-                                      Provider.of<BookingProviderUser>(context, listen: false)
-    .selectedAddressID = address.id;// Update selected index in provider
-                                  Navigator.pop(
-                                    context,
-                                    summary,
-                                  );
-                                },
-                                child: Card(
-                                  color: const Color(0xFFE9F5DB),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: isSelected
-                                        ? const BorderSide(
-                                            color: Colors.black, width: 2)
-                                        : BorderSide.none,
-                                  ),
-                                  elevation: 3,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.location_on,
-                                            color: Colors.red),
-                                        const SizedBox(width: 10),
-                                        Text(
-                                          "${address.addressDetail}\n${address.street}\n${address.pincode}",
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
+                              return Slidable(
+  key: ValueKey(address.id),
+  endActionPane: ActionPane(
+    motion: const ScrollMotion(),
+    children: [
+      
+      SlidableAction(
+        onPressed: (_) async {
+          final confirm = await showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: text("Confirm Delete", Colors.black, 15, FontWeight.bold),
+              content: text("Are you sure you want to delete this address?", Colors.black, 15, FontWeight.normal),
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
+                TextButton(onPressed: () => Navigator.pop(context, true), child: const Text("Delete")),
+              ],
+            ),
+          );
+
+          if (confirm == true) {
+            log("🗑️ Deleting address with id: ${address.id}");
+            final addressId = address.id!;
+            await value.deleteAddress(addressId);
+            if (value.errorMessage.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Address deleted successfully")),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Failed to delete address: ${value.errorMessage}")),
+              );
+              await value.getAddressList();
+            }
+          }
+        },
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        icon: Icons.delete,
+        label: 'Delete',
+      ),
+    ],
+  ),
+  child: GestureDetector(
+    onTap: () {
+      final summary = "${address.addressDetail}\n${address.street}\n${address.pincode}";
+      final addressProvider = Provider.of<Addressprovider>(context, listen: false);
+      addressProvider.setSelectedAddress(summary, address.id!, index);
+      Provider.of<BookingProviderUser>(context, listen: false).setSelectedAddressID(address.id!, address);
+      Navigator.pop(context, summary);
+    },
+    child: Card(
+      color: const Color(0xFFE9F5DB),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: isSelected ? const BorderSide(color: Colors.black, width: 2) : BorderSide.none,
+      ),
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Icon(Icons.location_on, color: Colors.red),
+            const SizedBox(width: 10),
+            Text(
+              "${address.addressDetail}\n${address.street}\n${address.pincode}",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
                             },
                           ),
                         )

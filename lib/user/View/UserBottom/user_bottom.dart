@@ -6,7 +6,7 @@ import 'package:mobile_servies/user/View/UserDevice/user_device.dart';
 import 'package:mobile_servies/user/View/UserHome/user_home.dart';
 import 'package:mobile_servies/user/View/UserService/user_service.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
-import 'package:mobile_servies/user/view/useraccount/user_profile.dart';
+
 
 class UserBottom extends StatefulWidget {
   const UserBottom({super.key});
@@ -23,7 +23,7 @@ class _UserBottomState extends State<UserBottom> {
     const UserService(),
     const UserDevice(),
     const UserBooking(),
-    const UserProfile(),
+    // const UserProfile(),
   ];
 
   @override
@@ -65,10 +65,10 @@ class _UserBottomState extends State<UserBottom> {
               icon: const Icon(Icons.book, size: 28),
               label: TextConstants.booking,
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person, size: 28),
-              label: TextConstants.account,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: const Icon(Icons.person, size: 28),
+            //   label: TextConstants.account,
+            // ),
           ],
           backgroundColor: Colors.transparent,
           type: BottomNavigationBarType.fixed,

@@ -289,22 +289,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
                                 final provider = Provider.of<Addressprovider>(
                                     context,
                                     listen: false);
-                                // final isValid = provider.validateFields();
-                                // if (!isValid) {
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //     SnackBar(
-                                //         content: Text(provider.errorMessage)),
-                                //   );
-                                //   return;
-                                // }
+                                
                                 final success =
                                     await provider.addAddressProvider();
                                 if (success) {
                                  Navigator.pop(context);
-                                  // final summaryAddress =
-                                  //     "${provider.addressName.text}, ${provider.streetAddress.text}, ${provider.pincodeController.text}";
-                                  // Navigator.pop(context,
-                                  //     summaryAddress); // Close and return data
+                                  
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

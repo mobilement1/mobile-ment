@@ -1,8 +1,12 @@
+
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/user/UserModel/AuthModel/loginmodel.dart';
 import 'package:mobile_servies/user/UserModel/AuthModel/registermodel.dart';
+import 'package:mobile_servies/user/UserModel/AuthModel/userDetails.dart';
 import 'package:mobile_servies/user/UserServices/AuthService/user_authService.dart';
 import 'package:mobile_servies/user/View/UserRegister/validationrgister.dart';
+
 
 class UserAuthProvider extends ChangeNotifier {
   final UserAuthService _authService = UserAuthService();
@@ -18,7 +22,7 @@ class UserAuthProvider extends ChangeNotifier {
   // Controllers for Login
   final loginUserNameController = TextEditingController();
   final loginPasswordController = TextEditingController();
-
+ UserDetailsModel?userDetails;
   String errorMessage = '';
   String successMessage = ''; 
   bool isLoading = false;
@@ -51,17 +55,19 @@ class UserAuthProvider extends ChangeNotifier {
 
   String?userRole;
   bool isAdmin=false;
-
-  /// Register User
-  Future<String> registerUser(BuildContext context) async {
+  bool isTechnician=false;
+//Register User
+Future<String> registerUser(BuildContext context) async {
+  try {
     setLoading(true);
-     clearMessages();
+    clearMessages();
+
     final name = nameController.text.trim();
     final username = userNameController.text.trim();
     final phone = phoneController.text.trim();
     final email = emailController.text.trim();
-    final password = passwordController.text;
-    final confirmPassword = confirmPasswordController.text;
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
     final validations = [
       SimpleValidator.validateName(name),
@@ -75,7 +81,6 @@ class UserAuthProvider extends ChangeNotifier {
     for (final result in validations) {
       if (result != null) {
         errorMessage = result;
-        setLoading(false);
         return errorMessage;
       }
     }
@@ -89,23 +94,28 @@ class UserAuthProvider extends ChangeNotifier {
     );
 
     final response = await _authService.registerUser(user);
-     if (response == "success") {
-      successMessage = 'Registration Successful!';
-      errorMessage = '';
-      setLoading(false);
-      notifyListeners();
-      return "success";
-    } else {
-      errorMessage = response;
-      successMessage = '';
-      setLoading(false);
-  notifyListeners();
-  return errorMessage; 
-    }
+    log("registerUser response: $response");
+if (response.toLowerCase().contains("registration successful")) {
+  successMessage = response; // show full message in UI
+  return "success";
+}
 
    
+     else {
+      errorMessage = response;
+      return errorMessage;
+    }
+  } catch (e) {
+    errorMessage = "Something went wrong: $e";
+    return errorMessage;
+  } finally {
+    setLoading(false); // ✅ ensures loading spinner stops
+    notifyListeners(); // ✅ updates the UI
   }
+}
 
+
+  
   /// Login User
   Future<String> loginUser(BuildContext context) async {
     setLoading(true);
@@ -134,11 +144,12 @@ class UserAuthProvider extends ChangeNotifier {
      
       successMessage = 'Login Successful!';
       errorMessage = '';
+      await fetchUserDetailsAgain();
       userRole=await _authService.getUserRole();
       isAdmin=userRole=='Admin';
+      isTechnician=userRole=='Technician';
       
-  //     final addressProvider = Provider.of<Addressprovider>(context, listen: false);
-  // await addressProvider.loadSelectedAddress();
+      
     } else {
       errorMessage = response;
       successMessage = '';
@@ -150,6 +161,36 @@ class UserAuthProvider extends ChangeNotifier {
     
     return response;
   }
+  
+Future<void> loadAllUserInfo() async {
+  await fetchUserDetailsAgain(); 
+  userRole = await _authService.getUserRole();
+  isAdmin = userRole == 'Admin';
+  isTechnician=userRole=='Technician';
+  notifyListeners();
+}
+
+
+//
+  Future<void>fetchUserDetailsAgain()async{
+    final data=await _authService.getUserDetails();
+    if (data !=null) {
+      userDetails=UserDetailsModel.fromJson(data);
+      userRole=userDetails?.role;
+      log("✅ Name: ${userDetails?.name}");
+      log("Role:${userDetails?.role}");
+      notifyListeners();
+    }else{
+      log("❌ User details not available.");
+    }
+  }
+
+  /// Fetch user profile details from API
+Future<Map<String, dynamic>?> getUserDetailsPro() async {
+  return await _authService.getUserDetails();
+  
+}
+
 
   /// Get stored token
   Future<String?> getUserToken() async {
@@ -167,6 +208,7 @@ class UserAuthProvider extends ChangeNotifier {
     await _authService.logout();
     clearAllFields();
     isAdmin=false;
+    isTechnician=false;
     notifyListeners();
   }
 
@@ -183,6 +225,7 @@ class UserAuthProvider extends ChangeNotifier {
     errorMessage = '';
       successMessage = '';
       isAdmin=false;
+      userDetails=null;
     notifyListeners();
   }
 

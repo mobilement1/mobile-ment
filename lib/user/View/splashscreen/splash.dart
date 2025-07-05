@@ -3,6 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
+import 'package:mobile_servies/tech/controller/completed_provider.dart';
+import 'package:mobile_servies/tech/controller/providers/assigned_provider.dart';
+import 'package:mobile_servies/tech/controller/providers/dashboard_provider.dart';
+import 'package:mobile_servies/tech/controller/providers/inProgress_provider.dart';
+import 'package:mobile_servies/tech/screens/bottomNav/bottom_nav.dart';
 import 'package:mobile_servies/user/View/UserBottom/user_bottom.dart';
 import 'package:mobile_servies/user/View/UserLogin/user_login.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
@@ -22,6 +27,10 @@ class _SplashState extends State<Splash> {
     super.initState();
   
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<InProgressTechProvider>(context, listen: false).initialize();
+      Provider.of<CompletedTechProvider>(context, listen: false).initialize();
+       Provider.of<AssignedTechProvider>(context, listen: false).initialize();
+         Provider.of<DashboardProvider>(context, listen: false).fetchDashboardData();
       checkLogin();
     });
   }
@@ -64,7 +73,11 @@ class _SplashState extends State<Splash> {
         context,
         MaterialPageRoute(builder: (context) => Dashbordpage()), 
       );
-      }else{
+      }else if(userRole == 'Technician'){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavTech()));
+      }
+      
+      else{
 Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) =>  UserBottom()),

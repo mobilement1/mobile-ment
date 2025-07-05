@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_servies/admin/view/Dashbord/dashbord.dart';
+import 'package:mobile_servies/tech/screens/bottomNav/bottom_nav.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_servies/user/View/UserRegister/registerwidget.dart';
 import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
@@ -93,8 +94,8 @@ class UserLogin extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             gradient: const LinearGradient(
-                              colors: [Colors.green,
-                          Color.fromARGB(255, 41, 41, 41)],
+                              colors: [Color.fromARGB(255, 113, 137, 74),
+                          Colors.black],
                             ),
                           ),
                           child: Material(
@@ -111,13 +112,19 @@ class UserLogin extends StatelessWidget {
                                   authProvider.setLoading(false);
                                   if (!context.mounted) return;
                                   if (result == 'success') {
+                                    // Get user details and store
+                                       
+                                    //
                                     if (authProvider.isAdmin) {
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (ctx) =>
                                                   Dashbordpage()));
-                                    } else {
+                                    }else if(authProvider.isTechnician){
+                                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (ctx)=>BottomNavTech()) );
+                                    } 
+                                    else {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

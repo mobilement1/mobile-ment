@@ -1,136 +1,172 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/admin/controller/dashboard_provider.dart';
 
-import 'package:mobile_servies/tech/constants/colors.dart'; // Needed for max()
+Widget buildServiceStatsTab(AdminDashboardProvider provider) {
+    if (provider.isLoading && provider.metrics == null) {
+      return const Center(child:  CircularProgressIndicator(color:  Color.fromARGB(255, 85, 105, 53)));
+    }
 
+    if (provider.error != null) {
+      return Center(
+        child: Text(
+          "Error loading data: ${provider.error}",
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
 
-class HorizontalBarChart extends StatelessWidget {
-  const HorizontalBarChart({super.key});
+    final services = provider.getPopularServices();
+    final maxValue = services.isNotEmpty
+        ? services.map((e) => e.count).reduce((a, b) => a > b ? a : b).toDouble()
+        : 1.0;
 
-  @override
-  Widget build(BuildContext context) {
-    final labels = [
-      'Battery Replacement',
-      'Screen Replacement',
-      'Camera Cleaning',
-      'Board Change',
-      'Charging Port Repair',
-      'Storage Increase'
-    ];
-    final values = [8.0, 20.0, 5.0, 4.0, 3.0, 3.0];
-    
-    // ✅ FIXED: Use the highest value in the list for scaling
-    final maxBarValue = values.reduce(max);
-
-    return SizedBox(
-      height: 400,
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(labels.length, (index) {
-          return Bar(
-            value: values[index],
-            maxValue: maxBarValue,
-            label: labels[index],
-            gradientColors: const [
-            Color.fromARGB(121, 97, 218, 251),Color.fromARGB(144, 97, 218, 251)
-            ],
-          );
-        }),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Service Statistics",
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF2E2E2E),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            "Most requested services",
+            style: GoogleFonts.openSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFF5A5A5A),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: services.length,
+              itemBuilder: (context, index) {
+                final service = services[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            height: 36,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5E5E5),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                          Container(
+                            height: 35,
+                            width: (service.count / maxValue) * MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                bottomRight: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF97A97C), Color(0xFF718355)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  offset: const Offset(3, 3),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            right: 10,
+                            top: 0,
+                            bottom: 0,
+                            child: Center(
+                              child: Text(
+                                service.count.toString(),
+                                style: TextStyle(
+                                  color: const Color(0xFF2E2E2E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(1, 1),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        service.type,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF5A5A5A),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
-}
 
-class Bar extends StatelessWidget {
-  final double value;
-  final double maxValue;
-  final String label;
-  final List<Color> gradientColors;
-
-  const Bar({
-    super.key,
-    required this.value,
-    required this.maxValue,
-    required this.label,
-    this.gradientColors = const [Colors.blue, Colors.lightBlueAccent],
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final maxWidth = constraints.maxWidth;
-      final barWidth = (value / maxValue) * maxWidth;
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 36,
-                width: maxWidth,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(214, 255, 107, 139),
-                  borderRadius: BorderRadius.circular(0),
-                ),
-              ),
-              // Foreground bar
-              Container(
-                height: 35,
-                width: barWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20)),
-                  gradient: LinearGradient(
-                    colors: gradientColors,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: gradientColors.last.withOpacity(0.6),
-                      offset: const Offset(3, 3),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-              ),
-              // Value text
-              Positioned(
-                right: 10,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                  child: Text(
-                    value.toInt().toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black38,
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.white70,
-            ),
-            textAlign: TextAlign.left,
-          ),
-        ],
-      );
-    });
+  double calculateMaxY(AdminDashboardProvider provider) {
+    if (provider.metrics == null || provider.metrics!.revenueChartData.isEmpty) {
+      return 10.0;
+    }
+    
+    final maxRevenue = provider.metrics!.revenueChartData
+        .map((e) => e.revenue)
+        .reduce((a, b) => a > b ? a : b);
+    final maxExpense = provider.metrics!.revenueChartData
+        .map((e) => e.expense)
+        .reduce((a, b) => a > b ? a : b);
+    
+    // Convert to thousands and add 20% padding
+    return ((maxRevenue > maxExpense ? maxRevenue : maxExpense) / 1000 * 1.2).ceilToDouble();
   }
-}
+
+  Widget buildLegendItem({required Color color, required String label}) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: TextStyle(
+            color: Color(0xFF5A5A5A),
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }

@@ -7,6 +7,8 @@ import 'package:mobile_servies/user/View/UserHome/user_homewidget.dart';
 import 'package:mobile_servies/user/View/UserService/user_service.dart';
 import 'package:mobile_servies/user/constants/textconstants.dart';
 import 'package:mobile_servies/user/utils/utils.dart';
+import 'package:mobile_servies/user/viewmodel/user_auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -27,6 +29,10 @@ class _UserHomeState extends State<UserHome> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _initializeAnimations();
+    Future.microtask((){
+final authProvider = Provider.of<UserAuthProvider>(context, listen: false);
+  authProvider.loadAllUserInfo(); 
+    });
   }
 
   void _initializeAnimations() {
@@ -141,39 +147,45 @@ class MainContentSection extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: ActionCard(
-                TextConstants.book,
-               TextConstants.sheduled,
-                Icons.calendar_today_outlined,
-               LinearGradient(
-    colors: [Color(0xFF718355), Color(0xFF8B9D7A)],
-  ),
-                () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const BookRepairPage(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
+              child: SizedBox(
+                height: 180,
+                child: ActionCard(
+                  TextConstants.book,
+                 TextConstants.sheduled,
+                  Icons.calendar_today_outlined,
+                 LinearGradient(
+                    colors: [Color(0xFF718355), Color(0xFF8B9D7A)],
                   ),
+                  () => Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const BookRepairPage(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                    ),
+                  ),
+                  false
                 ),
-                false
               ),
             ),
             const Gap(16),
             Expanded(
-              child: ActionCard(
-                TextConstants.view,
-             TextConstants.viewSer ,
-                Icons.visibility_outlined,
-                
-                null,
-                () => Navigator.push(
-                  context,MaterialPageRoute(builder: (ctx)=>UserService(showBackButton: true,))
+              child: SizedBox(
+                height: 180,
+                child: ActionCard(
+                  TextConstants.view,
+                             TextConstants.viewSer ,
+                  Icons.visibility_outlined,
                   
+                  null,
+                  () => Navigator.push(
+                    context,MaterialPageRoute(builder: (ctx)=>UserService(showBackButton: true,))
+                    
+                  ),
+                  true
                 ),
-                true
               ),
             ),
           ],

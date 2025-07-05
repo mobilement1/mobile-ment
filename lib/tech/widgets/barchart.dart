@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/tech/constants/colors.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomBarChart extends StatelessWidget {
   final Map<String, Map<String, double>> monthlyData;
@@ -16,145 +17,119 @@ class CustomBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (monthlyData.isEmpty) {
+      return const Center(child: Text('No chart data available'));
+    }
+
     final List<String> months = monthlyData.keys.toList();
     final double maxValue = monthlyData.values
         .expand((metric) => metric.values)
-        .reduce((a, b) => a > b ? a : b);
+        .fold<double>(0, (a, b) => a > b ? a : b);
 
-    const double fixedBarWidth = 25;
-    const double groupSpacing = 20;
-    final double chartWidth =
-        months.length * (metrics.length * fixedBarWidth + groupSpacing * 2);
+    final double chartMaxY = maxValue <= 0 ? 100 : maxValue + maxValue * 0.2;
+    final double interval = chartMaxY / 4;
+
+    const double barWidth = 20; 
+    const double groupSpacing = 15;
+    final double chartWidth = months.length * (metrics.length * barWidth + groupSpacing);
 
     return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+      scrollDirection: Axis.horizontal,
       child: Column(
         children: [
           Container(
-            height: 380, 
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.grey.shade900,
-                  AppColors.appBarBg,
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
+            width: chartWidth < 300 ? 300 : chartWidth, 
+            height: 340,
             padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                width: chartWidth,
-                height: maxValue + 250,
-                child: BarChart(
-                  BarChartData(
-                    maxY: (maxValue < 100 ? 100 : maxValue + maxValue * 0.2),
-
-                    minY: 0,
-                    titlesData: FlTitlesData(
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: maxValue / 4,
-                          getTitlesWidget: (value, meta) {
-                            return Text(
-                              value.toInt().toString(),
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            );
-                          },
-                          reservedSize: 40,
-                        ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            int index = value.toInt();
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Text(
-                                index < months.length ? months[index] : '',
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            );
-                          },
-                          interval: 1,
-                          reservedSize: 30,
-                        ),
-                      ),
-                      rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                    ),
-                    barGroups: List.generate(
-                      months.length,
-                      (monthIndex) => BarChartGroupData(
-                        x: monthIndex,
-                        barRods: List.generate(
-                          metrics.length,
-                          (metricIndex) => BarChartRodData(
-                            toY: monthlyData[months[monthIndex]]![metrics[metricIndex]] ?? 0,
-                            gradient: LinearGradient(
-                              colors: [
-                                colors[metricIndex],
-                                colors[metricIndex].withOpacity(0.7),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                            width: fixedBarWidth,
-                            borderRadius: BorderRadius.circular(8),
-                            backDrawRodData: BackgroundBarChartRodData(
-                              toY: maxValue + (maxValue * 0.2),
-                              color: Colors.white.withOpacity(0.05),
-                            ),
+            child: BarChart(
+              BarChartData(
+                maxY: chartMaxY,
+                minY: 0,
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: interval,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: GoogleFonts.openSans(
+                            color: const Color(0xFF5A5A5A),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ),
-                      ),
-                    ),
-                    borderData: FlBorderData(show: false),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: maxValue / 4,
-                      getDrawingHorizontalLine: (value) {
-                        return FlLine(
-                          color: Colors.white.withOpacity(0.1),
-                          strokeWidth: 1,
                         );
                       },
+                      reservedSize: 40,
                     ),
-                   
-                    alignment: BarChartAlignment.spaceEvenly,
-                    groupsSpace: groupSpacing,
                   ),
-                  swapAnimationDuration: const Duration(milliseconds: 800),
-                  swapAnimationCurve: Curves.easeInOut,
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        final index = value.toInt();
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            index < months.length ? months[index] : '',
+                            style: GoogleFonts.poppins(
+                              color: const Color(0xFF2E2E2E),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      },
+                      interval: 1,
+                      reservedSize: 30,
+                    ),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
+                barGroups: List.generate(
+                  months.length,
+                  (monthIndex) => BarChartGroupData(
+                    x: monthIndex,
+                    barRods: List.generate(
+                      metrics.length,
+                      (metricIndex) => BarChartRodData(
+                        toY: monthlyData[months[monthIndex]]![metrics[metricIndex]] ?? 0,
+                        color: colors[metricIndex],
+                        width: barWidth,
+                        borderRadius: BorderRadius.circular(8),
+                        backDrawRodData: BackgroundBarChartRodData(
+                          toY: chartMaxY,
+                          color: const Color(0xFF8D8D8D).withOpacity(0.1),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(show: false),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  horizontalInterval: interval,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: const Color(0xFF8D8D8D).withOpacity(0.2),
+                      strokeWidth: 1,
+                    );
+                  },
+                ),
+                alignment: BarChartAlignment.spaceEvenly,
+                groupsSpace: groupSpacing,
               ),
+              swapAnimationDuration: const Duration(milliseconds: 300),
+              swapAnimationCurve: Curves.easeInOut,
             ),
-          ),SizedBox(height: 10,),
+          ),
+          const Gap(10),
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: Row(
@@ -170,13 +145,14 @@ class CustomBarChart extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: colors[index],
                           shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const Gap(8),
                       Text(
                         metrics[index],
-                        style: const TextStyle(
-                          color: Colors.white70,
+                        style: GoogleFonts.openSans(
+                          color: const Color(0xFF5A5A5A),
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),

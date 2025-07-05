@@ -1,23 +1,19 @@
-
 import 'package:flutter/material.dart';
-import 'package:mobile_servies/tech/constants/colors.dart';
 import 'package:mobile_servies/tech/controller/providers/Bottomnavbar_provider.dart';
 import 'package:mobile_servies/tech/screens/assigned/assigned_tech.dart';
 import 'package:mobile_servies/tech/screens/completed/completed_tech.dart';
 import 'package:mobile_servies/tech/screens/home/home.dart';
 import 'package:mobile_servies/tech/screens/inProgress/inProgress_tech.dart';
-import 'package:mobile_servies/tech/screens/profile/profile_tech.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavTech extends StatelessWidget {
   const BottomNavTech({super.key});
 
   static final List<Widget> pages = <Widget>[
-    const HomePageTech(),
-    const AssignedPageTech(),
-    const InprogressTechPagessss(),
-    const CompletedPageTech(),
-    const ProfilePageTech(),
+     HomePageTech(),
+     AssignedPageTech(),
+     InprogressTechPagessss(),
+     CompletedPageTech(),
   ];
 
   @override
@@ -44,15 +40,11 @@ class BottomNavTech extends StatelessWidget {
             icon: Icon(Icons.check_circle),
             label: 'Completed',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
         ],
         currentIndex: navigationProvider.selectedIndex,
-        selectedItemColor: AppColors.appBarMobileTitle,
-        unselectedItemColor: AppColors.grey,
-        backgroundColor: AppColors.appBarBg,
+        selectedItemColor: Color.fromARGB(255, 85, 105, 53),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           Provider.of<TechNavigationProvider>(context, listen: false).setIndex(index);

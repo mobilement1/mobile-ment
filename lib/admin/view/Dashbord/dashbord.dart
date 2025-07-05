@@ -1,165 +1,233 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/admin/controller/dashboard_provider.dart';
 import 'package:mobile_servies/admin/view/Dashbord/flChart_lines.dart';
 import 'package:mobile_servies/admin/view/Dashbord/flchart_horizonatal.dart';
 import 'package:mobile_servies/admin/view/Dashbord/widject.dart';
-import 'package:mobile_servies/admin/widgets.dart';
-class Dashbordpage extends StatelessWidget {
+import 'package:mobile_servies/admin/view/DragBtn/draggable_button.dart';
+import 'package:mobile_servies/tech/widgets/userIcon.dart';
+import 'package:mobile_servies/user/View/UserHome/homeHeader.dart';
+import 'package:provider/provider.dart';
+
+class Dashbordpage extends StatefulWidget {
   const Dashbordpage({super.key});
+
+  @override
+  State<Dashbordpage> createState() => _DashbordpageState();
+}
+
+class _DashbordpageState extends State<Dashbordpage> with SingleTickerProviderStateMixin {
+  final GlobalKey _dashKey = GlobalKey();
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AdminDashboardProvider>(context, listen: false).fetchDashboardData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2E),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        backgroundColor: const Color(0xFF181850),
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              const Text(
-                "Mobile",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF61DAFB),
-                  fontSize: 30,
-                ),
-              ),
-              const Text(
-                "Mend",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white70,
-                  size: 26,
-                ),
-                onPressed: () {
-                  // Notification handling
-                },
-              ),
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
+      body: Stack(
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Admin Dashboard",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontSize: 32,
+              const SizedBox(height: 50),
+               Row(
+                 children: [
+                   Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    child: AppLogo(),
+                                 ),
+                                 Spacer(),
+                                 UserMenuPopup(),SizedBox(width: 15,),
+                 ],
+               ),
+              _buildTabBar(),
+              const SizedBox(height: 10),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF5F5F5),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(40),
+                      topLeft: Radius.circular(40),
                     ),
                   ),
-                ],
-              ),
-              Text(
-                "Manage bookings , services, devices, and technicians",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              const SizedBox(height: 25),
-              // Stats Cards Row
-              Row(
-                children: [
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.attach_money_rounded,
-                      title: "Revenue",
-                      value: "\$8,942",
-                      isPositive: true,
-                    ),
+                  child: Consumer<AdminDashboardProvider>(
+                    builder: (context, provider, _) {
+                      return TabBarView(
+                        controller: _tabController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          buildKeyMetricsTab(provider),
+                          buildRevenueTab(provider),
+                          buildServiceStatsTab(provider),
+                        ],
+                      );
+                    },
                   ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.shopping_bag_outlined,
-                      title: "Bookings",
-                      value: "149",
-                      isPositive: true,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-              Row(
-                children: [
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.engineering,
-                      title: "Technicians",
-                      value: "\$8,942",
-                      isPositive: true,
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.money,
-                      title: "Profit",
-                      value: "\$8,942",
-                      isPositive: true,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-
-        
-buildChartContainer(),
-              const SizedBox(height: 25),
-
-              // Recent Bookings Section
-              const Text(
-                "Popular Services",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
-              Text(
-                "Most requested repair services",
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: const Color(0xFF61DAFB).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Container(height: 450,width: double.infinity,decoration: BoxDecoration(),
-                  
-                  child: HorizontalBarChart()),
-              ),
-              Gap(20),
             ],
           ),
-        ),
+          DraggableFabMenu(adminDashboardKey: _dashKey),
+        ],
       ),
-      drawer: AdminDraw(),
     );
   }
+
+  Widget _buildTabBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TabBar(
+        controller: _tabController,
+        labelColor: const Color.fromARGB(255, 255, 255, 255),
+        unselectedLabelColor: const Color.fromARGB(255, 206, 202, 202),
+        indicatorColor: const Color(0xFF718355),
+        indicatorWeight: 3,
+        labelStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+        ),
+        tabs: const [
+          Tab(text: "Key Metrics"),
+          Tab(text: "Revenue"),
+          Tab(text: "Service Stats"),
+        ],
+      ),
+    );
+  }
+
+  Widget buildKeyMetricsTab(AdminDashboardProvider provider) {
+    if (provider.isLoading && provider.metrics == null) {
+      return const Center(child: CircularProgressIndicator(color:  Color.fromARGB(255, 85, 105, 53),));
+    }
+
+    if (provider.error != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              "Error: ${provider.error}",
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => provider.fetchDashboardData(),
+              child: const Text("Retry"),
+            ),
+          ],
+        ),
+      );
+    }
+     if (provider.metrics == null) {
+    return const Center(child: Text("No data available"));
+  }
+
+    final metrics = provider.metrics!;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Admin Dashboard",
+            style: GoogleFonts.poppins(
+              fontSize: 38,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF2E2E2E),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Manage Bookings, Services, Devices, and Technicians",
+            style: GoogleFonts.openSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFF5A5A5A),
+            ),
+          ),
+          const SizedBox(height: 30),
+          Text(
+            "Key Metrics",
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF2E2E2E),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            "Overview of performance indicators",
+            style: GoogleFonts.openSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFF5A5A5A),
+            ),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StatCard(
+                icon: Icons.monetization_on,
+                title: "Total\nRevenue",
+                value: "\₹ ${(metrics.totalRevenue / 1000).toStringAsFixed(1)}K",
+                isPositive: true,
+              ),
+              const SizedBox(width: 15),
+              StatCard(
+                icon: Icons.book_online,
+                title: "Completed Bookings",
+                value: metrics.totalCompletedBookings.toString(),
+                isPositive: metrics.totalCompletedBookings > 0,
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // StatCard(
+              //   icon: Icons.people,
+              //   title: "Online Technicians",
+              //   value: metrics.activeTechnicians.toString(),
+              //   isPositive: true,
+              // ),
+              // const SizedBox(width: 20),
+              StatCard(
+                icon: Icons.attach_money,
+                title: "Total Profit",
+                value: "\₹ ${(metrics.totalProfit).toStringAsFixed(1)}",
+                isPositive: metrics.totalProfit > 0,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+ 
 }

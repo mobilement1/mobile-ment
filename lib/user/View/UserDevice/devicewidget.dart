@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_servies/user/UserModel/DeviceModel/userDeviceModel.dart';
 
 Widget detailRow(String label, String value) {
   return Padding(
@@ -29,7 +30,7 @@ Widget detailRow(String label, String value) {
   );
 }
 
-void showDeviceDetailDialog(BuildContext context) {
+void showDeviceDetailDialog(BuildContext context,Userdevicemodel device) {
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -53,10 +54,10 @@ void showDeviceDetailDialog(BuildContext context) {
                   ),
                 ),
                  Gap(10),
-                detailRow('Brand', 'Samsung'),
-                detailRow('Model', 'S23'),
-                detailRow('Type', 'Smartphone'),
-                detailRow('Release Year', '2024'),
+                detailRow('Brand', device.brand),
+                detailRow('Model', device.model),
+                detailRow('Type', device.deviceType),
+                detailRow('Release Year', device.releaseYear.toString()),
                  Gap(10),
                 Text(
                   '⚠ Common Issues',
@@ -68,10 +69,10 @@ void showDeviceDetailDialog(BuildContext context) {
                 ),
                 Wrap(
                   spacing: 6,
-                  children: [
-                    Chip(
+                  children: (device.commonIssues.split(',')).map((issue){
+                    return Chip(
                       label: Text(
-                        'display',
+                        issue.trim(),
                         style: GoogleFonts.openSans(
                           fontSize: 14,
                           color: const Color(0xFF2E2E2E),
@@ -79,8 +80,10 @@ void showDeviceDetailDialog(BuildContext context) {
                       ),
                       backgroundColor: Colors.orange[100],
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ],
+                    );
+                  }).toList()
+                    
+                  
                 ),
                 const Gap(10),
                 Text(
@@ -93,10 +96,10 @@ void showDeviceDetailDialog(BuildContext context) {
                 ),
                 Wrap(
                   spacing: 6,
-                  children: [
-                    Chip(
+                  children: (device.repairableComponents.split(',')).map((component){
+                    return Chip(
                       label: Text(
-                        'display',
+                        component.trim(),
                         style: GoogleFonts.openSans(
                           fontSize: 14,
                           color: const Color(0xFF2E2E2E),
@@ -104,30 +107,9 @@ void showDeviceDetailDialog(BuildContext context) {
                       ),
                       backgroundColor: Color.fromARGB(255, 218, 243, 179),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                    Chip(
-                      label: Text(
-                        'battery',
-                        style: GoogleFonts.openSans(
-                          fontSize: 14,
-                          color: const Color(0xFF2E2E2E),
-                        ),
-                      ),
-                      backgroundColor: Color.fromARGB(255, 218, 243, 179),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                    Chip(
-                      label: Text(
-                        'camera',
-                        style: GoogleFonts.openSans(
-                          fontSize: 14,
-                          color: const Color(0xFF2E2E2E),
-                        ),
-                      ),
-                      backgroundColor: Color.fromARGB(255, 218, 243, 179),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ],
+                    );
+                  }).toList()
+                    
                 ),
                 const Gap(10),
                 Align(

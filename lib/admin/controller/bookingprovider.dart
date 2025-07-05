@@ -2,47 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:mobile_servies/admin/Model/bookingmodel.dart';
 import 'package:mobile_servies/admin/service/bookingservice.dart';
 
-class BookingProvider extends ChangeNotifier {
-  final BookingService _bookingService = BookingService();
+class BookingProvider with ChangeNotifier {
+  final BookingService service;
+  List<Booking> bookings = [];
+  bool isLoading = false;
+  String error = '';
+  String selectedFilter = 'All';
+  String searchQuery = '';
+   List<String> filterOptions = [
+    'All',
+    'Assigned',
+    'InProgress',
+    'Accepted',
+    'Rejected',
+    'Reassigned',
+    'Completed',
+  ];
 
-  List<Booking> _bookings = [];
-  List<Booking> get bookings => _bookings;
+  BookingProvider({BookingService? service}) : service = service ?? BookingService();
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  String _filter = 'All';
-  String get filter => _filter;
-
-  List<String> filterOptions = ['All', 'Pending', 'Completed', 'Cancelled'];
-
-  // Fetch bookings from API
-  Future<void> loadBookings() async {
-    _isLoading = true;
+  Future<void> fetchBookings() async {
+    isLoading = true;
+    error = '';
     notifyListeners();
 
     try {
-      _bookings = await _bookingService.fetchBookings();
+      bookings = await service.getBookings(
+        status: selectedFilter == 'All' ? null : selectedFilter,
+        searchString: searchQuery.isEmpty ? null : searchQuery,
+      );
+      if (bookings.isEmpty && searchQuery.isNotEmpty) {
+        error = 'No bookings found for search query "$searchQuery"';
+      } else if (bookings.isEmpty) {
+        error = 'No bookings available';
+      }
     } catch (e) {
-      _bookings = [];
-      // Handle error or log
+      error = e.toString();
+      bookings = [];
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
-  // Change filter
-  void changeFilter(String newFilter) {
-    _filter = newFilter;
-    notifyListeners();
+  void setFilter(String filter) {
+    selectedFilter = filter;
+    fetchBookings();
   }
 
-  // Get filtered bookings
-  List<Booking> get filteredBookings {
-    if (_filter == 'All') return _bookings;
-    return _bookings
-        .where((b) => b.status.toLowerCase() == _filter.toLowerCase())
-        .toList();
+  void setSearchQuery(String query) {
+    searchQuery = query;
+    fetchBookings();
+  }
+
+  void resetFilter() {
+    selectedFilter = 'All';
+    searchQuery = '';
+    fetchBookings();
+  }
+
+  void refresh() {
+    error = '';
+    fetchBookings();
   }
 }

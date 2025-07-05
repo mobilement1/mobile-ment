@@ -25,13 +25,24 @@ final response = await dio.post(ApiConstants.confirmBooking, data: json,
       })
       );
     if (response.statusCode == 201|| response.statusCode == 200) {
-      final technicianData=response.data['data'];
-        log('Booking successful, $technicianData'); 
+      final data=response.data['data'];
+      if (data is List && data.isNotEmpty && data.first is Map<String, dynamic>) {
+          final firstTechnician = data.first as Map<String, dynamic>;
+        log('✅ Booking successful, technician: $firstTechnician');
+  return {
+    "success": true,
+    "technician": firstTechnician,
+  };
+      }else{
+        log('⚠ Booking successful but technician data missing or invalid');
+      }
+       
         return {
           "success":true,
-          "technician":technicianData,
+          "technician":null,
         };
       } else {
+         log('⚠ Booking successful but technician data missing or invalid');
         return {
           "success":false,
           "message":response.data['message']??'Booking failed',
@@ -78,6 +89,41 @@ Future<List<dynamic>> getBestTechnicians(String addressId, String deviceId) asyn
   }
 }
 
+Future<Map<String, dynamic>?> fetchTechnicianById(String technicianId) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString("auth_token");
+
+  try {
+    final response = await dio.get(
+      '${ApiConstants.getTechnician}?technicianId=$technicianId',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final data=response.data['data'];
+      if (data is Map<String,dynamic>) {
+        return data;
+      }else{
+        log("❌ Invalid technician data format: $data");
+        return null;
+      }
+      
+    } else {
+      log('❌ Failed to fetch technician: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    log('❌ Error fetching technician: $e');
+    return null;
+  }
+}
+
+
 
    Future<List<BookingModelUser>>fetchBookingSer()async{
    try {
@@ -88,8 +134,14 @@ Future<List<dynamic>> getBestTechnicians(String addressId, String deviceId) asyn
        'Content-Type': 'application/json',
 
      }));
-     final data = response.data['data'] as List;
-return data.map((json) => BookingModelUser.fromJson(json)).toList();
+
+    if (response.statusCode == 200) {
+  final data = response.data['data'] as List;
+  return data.map((json) => BookingModelUser.fromJson(json)).toList();
+} else {
+  log('❌ Failed to fetch bookings: ${response.statusCode}');
+  return [];
+}
 
      
    } catch (e) {
@@ -97,4 +149,5 @@ return data.map((json) => BookingModelUser.fromJson(json)).toList();
       rethrow;
    }
    }
+   
 }
