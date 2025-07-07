@@ -131,7 +131,7 @@ if (userId != null) {
 
         errorMessage = '';
       } else {
-        errorMessage = "No location found for the given address.";
+        errorMessage = "No  location found for the given address.";
       }
     } catch (e) {
       errorMessage = "Failed to get location from address: $e";
